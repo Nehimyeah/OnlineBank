@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class Address {
     private String street;
     private int zip;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
     @JoinColumn(name = "branch_id")
     private Branch branch;

@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,7 +12,7 @@ public class Branch {
     private String branchName;
     private Long branchManagerId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Address address;
 
     public Branch(String branchName, Long branchManagerId) {
