@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.UserCredentials;
 import com.example.model.User;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,11 @@ public class UserController {
     @GetMapping
     public Iterable<User> getAll() {
         return userService.getAll();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserCredentials user) {
+        System.out.println(user);
+        return ResponseEntity.ok(userService.login(user));
     }
 }

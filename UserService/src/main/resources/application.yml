@@ -1,6 +1,7 @@
 spring:
   application:
     name: user-service
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -23,7 +24,7 @@ spring:
 
 
 server:
-  port: 0
+  port: 9000
 
 eureka:
   client:
