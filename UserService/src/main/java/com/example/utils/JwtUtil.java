@@ -29,38 +29,22 @@ public class JwtUtil {
 
     public TokenData generateToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
+        claims.put("role", String.valueOf(user.getRole()));
+        claims.put("id", String.valueOf(user.getId()));
+        claims.put("isActive", String.valueOf(user.isActive()));
+        claims.put("firstName", user.getFirstName());
+        claims.put("lastName", user.getLastName());
         long nowMillis = System.currentTimeMillis();
         long expMillis = nowMillis + VALIDITY * 1000 * 60 * 10;
         Date exp = new Date(expMillis);
 
-        String a = Jwts.builder().setClaims(claims).setIssuedAt(new Date(nowMillis)).setExpiration(exp)
-                .signWith(SignatureAlgorithm.HS512, KEY).compact();
+        String a = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date(nowMillis))
+                .setExpiration(exp)
+                .signWith(SignatureAlgorithm.HS512, KEY)
+                .compact();
         return new TokenData(a);
-//        Claims claims = Jwts.claims().setSubject(user.getEmail())
-////        Map<String, String> claims = new HashMap<>();
-//        claims.put("role", String.valueOf(user.getRole()));
-//        claims.put("id", String.valueOf(user.getId()));
-//        claims.put("isActive", String.valueOf(user.isActive()));
-//        claims.put("firstName", user.getFirstName());
-//        claims.put("lastName", user.getLastName());
-//        long nowMillis = System.currentTimeMillis();
-//        long expMillis = nowMillis + VALIDITY * 1000 * 60 * 10;
-//        Date exp = new Date(expMillis);
-//
-//
-//
-//        return Jwts.builder()
-//                .setSubject(user.getEmail())
-//                .setClaims(claims)
-////                .claim("role", user.getRole())
-////                .claim("id", user.getId())
-////                .claim("isActive", user.isActive())
-////                .claim("firstName", user.getFirstName())
-////                .claim("lastName", user.getLastName())
-//                .setIssuedAt(new Date(nowMillis))
-//                .setExpiration(exp)
-//                .signWith(SignatureAlgorithm.HS512, KEY)
-//                .compact();
     }
 
     public User parseToken(String token) {
