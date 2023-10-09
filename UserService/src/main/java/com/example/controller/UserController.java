@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(
+        origins = "http://127.0.0.1:5173/",
+        allowedHeaders = "*", maxAge = 3600,
+        allowCredentials = "true"
+
+)
 public class UserController {
 
     private final UserService userService;
