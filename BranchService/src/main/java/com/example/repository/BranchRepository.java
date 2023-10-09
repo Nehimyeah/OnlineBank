@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public interface BranchRepository extends JpaRepository<Branch, Long> {
 
-//    @Query("Select b from Branch b")
-//    public List<Branch> getAllBranches();
-
     @Query("Select b from Branch b where b.branchId = :id")
     public Optional<Branch> findById(@Param("id") Long id);
 
     @Query("SELECT b FROM Branch b")
     public List<Branch> getAllBranches();
+
+    @Query("Select b from Branch b where b.branchManagerId = :id")
+    public Optional<Branch> findByBranchManagerId(@Param("id") Long id);
 
 }

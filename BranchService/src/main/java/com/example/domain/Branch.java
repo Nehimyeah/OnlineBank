@@ -12,7 +12,7 @@ public class Branch {
     private String branchName;
     private Long branchManagerId;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Address address;
 
     public Branch(String branchName, Long branchManagerId) {
