@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.Message;
 import com.example.dto.TokenData;
 import com.example.dto.UserCredentials;
 import com.example.model.User;
@@ -42,5 +43,31 @@ public class UserController {
         userService.createTeam(user, token);
         return ResponseEntity.ok().build();
 
+    }
+
+    @PutMapping("/{userId}/disable")
+    public ResponseEntity<?> disableCustomer(
+            @PathVariable long userId,
+            @RequestHeader("Authorization") String token
+    ) {
+        userService.disable(userId, token);
+        return ResponseEntity.ok(
+                Message.builder()
+                        .message("User account is disabled")
+                        .build()
+        );
+    }
+
+    @PutMapping("/{userId}/enable")
+    public ResponseEntity<?> enableCustomer(
+            @PathVariable long userId,
+            @RequestHeader("Authorization") String token
+    ) {
+        userService.enable(userId, token);
+        return ResponseEntity.ok(
+                Message.builder()
+                        .message("User account enabled")
+                        .build()
+        );
     }
 }

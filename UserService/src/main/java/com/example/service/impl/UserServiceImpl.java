@@ -26,18 +26,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
+        String encodedPassword = encodePassword(user);
+        user.setPassword(encodedPassword);
+        user.disable();
+        user.setRole(Role.CUSTOMER);
+        repository.save(user);
+    }
+
+    private String encodePassword(User user) {
         try {
-            String encodedPassword = this.passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
-            repository.save(user);
+            return this.passwordEncoder.encode(user.getPassword());
         } catch (Exception e){
             log.error("User already exists with this email address: " + LocalDateTime.now());
             throw new RuntimeException("User already exists with this email address: " + user.getEmail());
         }
-        user.setActive(false);
-        user.setRole(Role.CUSTOMER);
+    }
+
+    @Override
+    public void saveAdmins(User user) {
+        String encodedPassword = encodePassword(user);
+        user.setPassword(encodedPassword);
         repository.save(user);
     }
+
 
     @Override
     public User findUserByEmail(String email) {
@@ -63,15 +74,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createTeam(User user, String token) {
-            String[] parts = token.split(" ");
-
-            if (parts.length != 2 || !"Bearer".equals(parts[0])) {
-                log.error("Invalid header: Incorrect Authentication Structure at:" + LocalDateTime.now());
-                throw new RuntimeException("Incorrect Authentication Structure");
-            }
-            User loggedInUser = jwtUtil.parseToken(parts[1]);
+            User loggedInUser = getPrincipal(token);
             if (!Role.ADMIN.equals(loggedInUser.getRole()))
                 throw new RuntimeException("No sufficient Access for this operation");
             repository.save(user);
+    }
+
+    private User getPrincipal(String token) {
+        String[] parts = token.split(" ");
+
+        if (parts.length != 2 || !"Bearer".equals(parts[0])) {
+            log.error("Invalid header: Incorrect Authentication Structure at:" + LocalDateTime.now());
+            throw new RuntimeException("Incorrect Authentication Structure");
+        }
+        return jwtUtil.parseToken(parts[1]);
+    }
+
+    @Override
+    public void disable(long userId, String token) {
+        User principal = getPrincipal(token);
+        if (!principal.getRole().equals(Role.MANAGER))
+            throw new RuntimeException("No sufficient privilege for this operation");
+        User user = repository.findUserById(userId).orElseThrow(() -> new RuntimeException("Invalid User"));
+        user.disable();
+    }
+
+    @Override
+    public void enable(long userId, String token) {
+        User principal = getPrincipal(token);
+        if (!principal.getRole().equals(Role.MANAGER))
+            throw new RuntimeException("No sufficient privilege for this operation");
     }
 }

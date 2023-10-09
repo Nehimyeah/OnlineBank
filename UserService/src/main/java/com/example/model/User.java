@@ -25,8 +25,17 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Setter(AccessLevel.NONE)
     private boolean isActive;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Address address;
+
+    public void enable() {
+        this.isActive = true;
+    }
+
+    public void disable() {
+        this.isActive = false;
+    }
 }
