@@ -49,7 +49,7 @@ const LoginPage = () => {
 
     try {
       const response = await axiosClient
-        .post("/users/login", data, { withCredentials: true })
+        .post("/users/login", data)
         .finally(() => {
           setIsLoading(false);
           resetField("password");
