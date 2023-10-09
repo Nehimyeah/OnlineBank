@@ -10,14 +10,28 @@ import Button from "../../components/elements/button";
 import { Link } from "react-router-dom";
 
 type LoginFields = {
-  username: string;
+  email: string;
   password: string;
   confirmPassword: string;
+  firstname: string,
+  lastname: string,
+  street1: string,
+  street2: string,
+  city: string,
+  state: string,
+  zipcode: string,
 };
 
 const schema = yup
   .object({
-    username: yup.string().required(),
+    firstname: yup.string().required(),
+    lastname: yup.string().required(),
+    street1: yup.string().required(),
+    street2: yup.string(),
+    city: yup.string().required(),
+    state: yup.string().required(),
+    zipcode: yup.string().required(),
+    email: yup.string().required(),
     password: yup.string().required(),
     confirmPassword: yup
       .string()
@@ -40,8 +54,14 @@ const SignupPage = () => {
     resetField,
     formState: { errors },
   } = useForm<LoginFields>({ resolver: yupResolver(schema) });
-
-  const { ref: usernameRef, ...usernameRest } = register("username");
+  const { ref: firstnameRef, ...firstnameRest } = register("firstname");
+  const { ref: lastnameRef, ...lastnameRest } = register("lastname");
+  const { ref: street1Ref, ...street1Rest } = register("street1");
+  const { ref: street2Ref, ...street2Rest } = register("street2");
+  const { ref: cityRef, ...cityRest } = register("city");
+  const { ref: stateRef, ...stateRest } = register("state");
+  const { ref: zipcodeRef, ...zipcodeRest } = register("zipcode");
+  const { ref: emailRef, ...emailRest } = register("email");
   const { ref: passwordRef, ...passwordRest } = register("password");
   const { ref: confirmPasswordRef, ...confirmPasswordRest } =
     register("confirmPassword");
@@ -78,9 +98,9 @@ const SignupPage = () => {
       <form
         noValidate
         onSubmit={handleSubmit(onsubmit)}
-        className="bg-white/20 p-8 shadow-sm min-h-[400px] min-w-[400px]"
+        className="bg-white/20"
       >
-        <h1 className="text-center font-bold text-slate-800 text-3xl mb-4">
+        <h1 className="text-center font-bold text-slate-800 text-3xl mb-4 text-indigo-900">
           Registration
         </h1>
         {submissionErrors.length > 0 ? (
@@ -114,12 +134,36 @@ const SignupPage = () => {
           <div className="flex flex-col space-y-6">
             <div className="flex flex-col space-y-3">
               <ClientInput
-                placeholder="Username"
-                reference={usernameRef}
-                {...usernameRest}
+                  placeholder="First name"
+                  reference={firstnameRef}
+                  {...firstnameRest}
               />
-              {errors.username?.message ? (
-                <FormFieldError errorMessage={errors.username.message} />
+              {errors.firstname?.message ? (
+                  <FormFieldError errorMessage={errors.firstname.message} />
+              ) : (
+                  ""
+              )}
+            </div>
+            <div className="flex flex-col space-y-3">
+              <ClientInput
+                  placeholder="Last name"
+                  reference={lastnameRef}
+                  {...lastnameRest}
+              />
+              {errors.lastname?.message ? (
+                  <FormFieldError errorMessage={errors.lastname.message} />
+              ) : (
+                  ""
+              )}
+            </div>
+            <div className="flex flex-col space-y-3">
+              <ClientInput
+                placeholder="Email"
+                reference={emailRef}
+                {...emailRest}
+              />
+              {errors.email?.message ? (
+                <FormFieldError errorMessage={errors.email.message} />
               ) : (
                 ""
               )}
@@ -150,7 +194,71 @@ const SignupPage = () => {
                 ""
               )}
             </div>
-            <Button isLoading={isLoading} value="Signup!" type="submit" />
+            <div className="flex flex-col space-y-1">
+              <ClientInput
+                  placeholder="Street 1"
+                  reference={street1Ref}
+                  {...street1Rest}
+              />
+              {errors.street1?.message ? (
+                  <FormFieldError errorMessage={errors.street1.message} />
+              ) : (
+                  ""
+              )}
+            </div>
+            <div className="flex flex-col space-y-1">
+              <ClientInput
+                  placeholder="Street 2"
+                  reference={street2Ref}
+                  {...street2Rest}
+              />
+              {errors.street2?.message ? (
+                  <FormFieldError errorMessage={errors.street2.message} />
+              ) : (
+                  ""
+              )}
+            </div>
+            <div className="flex flex-col space-y-1">
+              <ClientInput
+                  placeholder="City"
+                  reference={cityRef}
+                  {...cityRest}
+              />
+              {errors.city?.message ? (
+                  <FormFieldError errorMessage={errors.city.message} />
+              ) : (
+                  ""
+              )}
+            </div>
+            <div className="flex flex-col space-y-1">
+              <ClientInput
+                  placeholder="State"
+                  reference={stateRef}
+                  {...stateRest}
+              />
+              {errors.state?.message ? (
+                  <FormFieldError errorMessage={errors.state.message} />
+              ) : (
+                  ""
+              )}
+            </div>
+            <div className="flex flex-col space-y-1">
+              <ClientInput
+                  placeholder="Zipcode"
+                  reference={zipcodeRef}
+                  {...zipcodeRest}
+              />
+              {errors.zipcode?.message ? (
+                  <FormFieldError errorMessage={errors.zipcode.message} />
+              ) : (
+                  ""
+              )}
+            </div>
+            <Button className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
+                                font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
+                                shadow-lg" isLoading={isLoading} value="Register" type="submit">
+              Sing up
+            </Button>
           </div>
         )}
       </form>

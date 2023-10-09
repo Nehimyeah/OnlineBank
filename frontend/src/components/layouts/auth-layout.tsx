@@ -30,7 +30,7 @@ const AuthLayout = ({ children }: IAuthLayoutProps) => {
   const login = <Link to="/auth/login">login</Link>;
 
   return (
-    <main>
+    <main className="container mx-auto">
       {children}
       <div className="text-center my-4 font-bold text-slate-600">
         <span>

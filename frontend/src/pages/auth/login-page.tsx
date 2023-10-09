@@ -12,6 +12,7 @@ import AuthLayout from "../../components/layouts/auth-layout";
 import * as yup from "yup";
 import { setUser } from "../../app/authSlice";
 import Cookies from "js-cookie";
+import {Link} from "react-router-dom";
 
 type LoginFields = {
   username: string;
@@ -114,7 +115,11 @@ const LoginPage = () => {
                   </div>
                 </form>
                 <div className="mt-12 text-sm font-display font-semibold text-gray-700 text-center">
-                  Don't have an account ? <a className="cursor-pointer text-indigo-600 hover:text-indigo-800">Sign up</a>
+                  Don't have an account ? <a className="cursor-pointer text-indigo-600 hover:text-indigo-800">
+                  <Link to="/auth/signup">
+                    Sign up
+                  </Link>
+                </a>
                 </div>
               </div>
             </div>
