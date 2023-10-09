@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  min-height: 100vh;
+}
+.options {
+  display: flex;
+}
+.options .option img {
+  width: 20px;
+}
+
+.app {
+  min-height: calc(100vh - 84px - 64px);
+}
