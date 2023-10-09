@@ -14,4 +14,6 @@ public interface UserService {
     Iterable<User> getAll();
 
     TokenData login(UserCredentials user);
+
+    void createTeam(User user, String token);
 }

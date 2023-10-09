@@ -61,7 +61,7 @@ public class JwtUtil {
                     .role(Role.valueOf((String)body.get("role")))
                     .build();
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException("Not a valid token");
         }
     }
 

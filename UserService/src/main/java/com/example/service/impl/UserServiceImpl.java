@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -52,13 +50,28 @@ public class UserServiceImpl implements UserService {
 
     public TokenData login(UserCredentials userCredentials) {
         User user = repository.findUserByEmail(userCredentials.getEmail());
-        System.out.println(user);
+//        System.out.println(user);
         if (user == null) {
+            System.out.println("here");
             throw new RuntimeException("User not found");
         }
         if (!passwordEncoder.matches(userCredentials.getPassword(), user.getPassword())) {
             throw new RuntimeException("Password is incorrect");
         }
         return jwtUtil.generateToken(user);
+    }
+
+    @Override
+    public void createTeam(User user, String token) {
+            String[] parts = token.split(" ");
+
+            if (parts.length != 2 || !"Bearer".equals(parts[0])) {
+                log.error("Invalid header: Incorrect Authentication Structure at:" + LocalDateTime.now());
+                throw new RuntimeException("Incorrect Authentication Structure");
+            }
+            User loggedInUser = jwtUtil.parseToken(parts[1]);
+            if (!Role.ADMIN.equals(loggedInUser.getRole()))
+                throw new RuntimeException("No sufficient Access for this operation");
+            repository.save(user);
     }
 }
