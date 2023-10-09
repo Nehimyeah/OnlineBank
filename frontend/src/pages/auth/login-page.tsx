@@ -15,13 +15,13 @@ import Cookies from "js-cookie";
 import {Link} from "react-router-dom";
 
 type LoginFields = {
-  username: string;
+  email: string;
   password: string;
 };
 
 const schema = yup
   .object({
-    username: yup.string().required(),
+    email: yup.string().required(),
     password: yup.string().required(),
   })
   .required();
@@ -40,7 +40,7 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<LoginFields>({ resolver: yupResolver(schema) });
 
-  const { ref: usernameRef, ...usernameRest } = register("username");
+  const { ref: emailRef, ...emailRest } = register("email");
   const { ref: passwordRef, ...passwordRest } = register("password");
 
   const onsubmit = async (data: LoginFields) => {
@@ -57,7 +57,7 @@ const LoginPage = () => {
 
       Cookies.set("token", response.data.accessToken);
 
-      dispatch(setUser({ username: response.data.username }));
+      dispatch(setUser({ email: response.data.email }));
       setSuccess(true);
     } catch (error) {
       setErrorMessage((error as any).response.data.message);
@@ -77,12 +77,12 @@ const LoginPage = () => {
                   <div>
                     <div className="text-sm font-bold text-gray-700 tracking-wide">Email Address</div>
                     <ClientInput
-                        placeholder="Username"
-                        reference={usernameRef}
-                        {...usernameRest}
+                        placeholder="Email"
+                        reference={emailRef}
+                        {...emailRest}
                     />
-                    {errors.username?.message ? (
-                        <FormFieldError errorMessage={errors.username.message} />
+                    {errors.email?.message ? (
+                        <FormFieldError errorMessage={errors.email.message} />
                     ) : (
                         ""
                     )}

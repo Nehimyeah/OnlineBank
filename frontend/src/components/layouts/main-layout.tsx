@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import Navbar from "../header/navbar";
+import {useLocation} from "react-router-dom";
 
 interface IMainLayoutProps {
   children: ReactNode;
@@ -8,10 +9,13 @@ interface IMainLayoutProps {
 const MainLayout = ({ children }: IMainLayoutProps) => {
   return (
     <>
-      <header>
-        <Navbar />
-      </header>
-      <main className="app">{children}</main>
+        {
+            useLocation().pathname.includes("auth") &&
+            <header>
+                <Navbar />
+            </header>
+        }
+        <main className="app">{children}</main>
     </>
   );
 };

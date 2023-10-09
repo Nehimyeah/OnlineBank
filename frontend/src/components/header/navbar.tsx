@@ -4,7 +4,7 @@ import { selectUser, setUser } from "../../app/authSlice";
 import jwt from "jwt-decode";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux/es/hooks/useDispatch";
-import { Link } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import Button from "../elements/button";
 import { axiosClient } from "../../service/axios.service";
 import useRefreshToken from "../../hooks/use-refresh-token";
@@ -57,15 +57,14 @@ const Navbar = () => {
                 <i className="fas fa-bars"></i>
               </button>
             </div>
-
-            <div className="hidden md:flex flex-col md:flex-row md:ml-auto mt-3 md:mt-0" id="navbar-collapse">
-              <Link to="/auth/login" className='mt-2'>
-                <a href="#" className="p-2 lg:px-4 md:mx-2 text-indigo-600 text-center border border-transparent rounded hover:bg-indigo-100 hover:text-indigo-700 transition-colors duration-300 active:text-white active:rounded active:bg-indigo-600">Login</a>
-              </Link>
-              <Link to="/auth/signup" className='mt-2'>
-                <a href="#" className="p-2 lg:px-4 md:mx-2 text-indigo-600 text-center border border-solid border-indigo-600 rounded hover:bg-indigo-600 hover:text-white transition-colors duration-300 mt-1 md:mt-0 md:ml-1">Signup</a>
-              </Link>
-            </div>
+                <div className="hidden md:flex flex-col md:flex-row md:ml-auto mt-3 md:mt-0" id="navbar-collapse">
+                  <Link to="/auth/login" className='mt-2'>
+                    <a href="#" className="p-2 lg:px-4 md:mx-2 text-indigo-600 text-center border border-transparent rounded hover:bg-indigo-100 hover:text-indigo-700 transition-colors duration-300 active:text-white active:rounded active:bg-indigo-600">Login</a>
+                  </Link>
+                  <Link to="/auth/signup" className='mt-2'>
+                    <a href="#" className="p-2 lg:px-4 md:mx-2 text-indigo-600 text-center border border-solid border-indigo-600 rounded hover:bg-indigo-600 hover:text-white transition-colors duration-300 mt-1 md:mt-0 md:ml-1">Signup</a>
+                  </Link>
+                </div>
           </div>
         </nav>
 

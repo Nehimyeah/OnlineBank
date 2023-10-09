@@ -31,7 +31,7 @@ const schema = yup
     city: yup.string().required(),
     state: yup.string().required(),
     zipcode: yup.string().required(),
-    email: yup.string().required(),
+    email: yup.string().required().email(),
     password: yup.string().required(),
     confirmPassword: yup
       .string()
