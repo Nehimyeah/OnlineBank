@@ -2,17 +2,16 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { axiosClient } from "../../service/axios.service";
-import { Navigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { useDispatch } from "react-redux";
 import ClientInput from "../../components/auth/inputs/client-input";
-import ErrorSubmit from "../../components/auth/form/error-submit";
 import Button from "../../components/elements/button";
 import FormFieldError from "../../components/auth/form/form-field-error";
-import AuthLayout from "../../components/layouts/auth-layout";
 import * as yup from "yup";
-import { setUser } from "../../app/authSlice";
+import {AuthStore, setUser} from "../../app/authSlice";
 import Cookies from "js-cookie";
 import {Link} from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 type LoginFields = {
   email: string;
@@ -32,6 +31,7 @@ const LoginPage = () => {
   const [success, setSuccess] = useState<boolean>(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -55,10 +55,12 @@ const LoginPage = () => {
           resetField("password");
         });
 
-      Cookies.set("token", response.data.accessToken);
+      const decodedData: AuthStore = jwtDecode(response.data.token);
 
-      dispatch(setUser({ email: response.data.email }));
+      dispatch(setUser(decodedData));
+      Cookies.set("token", response.data.token);
       setSuccess(true);
+      navigate("/");
     } catch (error) {
       setErrorMessage((error as any).response.data.message);
     }

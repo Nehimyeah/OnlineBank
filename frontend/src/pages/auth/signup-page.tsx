@@ -71,7 +71,7 @@ const SignupPage = () => {
     setIsLoading(true);
 
     try {
-      await axiosClient.post("/auth/signup", data).finally(() => {
+      await axiosClient.post("/users", data).finally(() => {
         setIsLoading(false);
         resetField("password");
         resetField("confirmPassword");
@@ -115,7 +115,7 @@ const SignupPage = () => {
           ""
         )}
         {success ? (
-          <div className="flex flex-col justify-center text-slate-800 items-center space-y-6 max-w-sm">
+          <div className="flex flex-col justify-center text-slate-800 items-center space-y-6 mx-auto container">
             <h1 className="text-3xl font-light">
               You've successfully signed up!
             </h1>
