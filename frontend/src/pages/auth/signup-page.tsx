@@ -13,8 +13,8 @@ type LoginFields = {
   email: string;
   password: string;
   confirmPassword: string;
-  firstname: string,
-  lastname: string,
+  firstName: string,
+  lastName: string,
   street1: string,
   street2: string,
   city: string,
@@ -54,8 +54,8 @@ const SignupPage = () => {
     resetField,
     formState: { errors },
   } = useForm<LoginFields>({ resolver: yupResolver(schema) });
-  const { ref: firstnameRef, ...firstnameRest } = register("firstname");
-  const { ref: lastnameRef, ...lastnameRest } = register("lastname");
+  const { ref: firstnameRef, ...firstnameRest } = register("firstName");
+  const { ref: lastnameRef, ...lastnameRest } = register("lastName");
   const { ref: street1Ref, ...street1Rest } = register("street1");
   const { ref: street2Ref, ...street2Rest } = register("street2");
   const { ref: cityRef, ...cityRest } = register("city");
@@ -120,8 +120,7 @@ const SignupPage = () => {
               You've successfully signed up!
             </h1>
             <p className="text-xl font-light text-center">
-              You can now go and login to your new account and get our
-              hot-special-delivery cookies suggestions!
+              You can now go and login to your new account!
             </p>
             <Link to="/auth/login">
               <Button
@@ -138,8 +137,8 @@ const SignupPage = () => {
                   reference={firstnameRef}
                   {...firstnameRest}
               />
-              {errors.firstname?.message ? (
-                  <FormFieldError errorMessage={errors.firstname.message} />
+              {errors.firstName?.message ? (
+                  <FormFieldError errorMessage={errors.firstName.message} />
               ) : (
                   ""
               )}
@@ -150,8 +149,8 @@ const SignupPage = () => {
                   reference={lastnameRef}
                   {...lastnameRest}
               />
-              {errors.lastname?.message ? (
-                  <FormFieldError errorMessage={errors.lastname.message} />
+              {errors.lastName?.message ? (
+                  <FormFieldError errorMessage={errors.lastName.message} />
               ) : (
                   ""
               )}

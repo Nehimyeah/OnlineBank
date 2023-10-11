@@ -15,3 +15,24 @@ body {
 .app {
   min-height: calc(100vh - 84px - 64px);
 }
+
+.sidebar li {
+  position: relative;
+}
+
+.sidebar li.active{
+  background-color: rgba(31, 41, 55);
+}
+.sidebar li.active span{
+  color:white;
+}
+.sidebar li.active::after{
+  content: '';
+  background: #00d0ff;
+  height: 100%;
+  width: 5px;
+  position: absolute;
+  left: 0;
+  top: 0;
+
+}
