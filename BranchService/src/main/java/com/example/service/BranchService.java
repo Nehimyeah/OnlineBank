@@ -1,13 +1,19 @@
 package com.example.service;
 
-import com.example.error.BranchNotFoundException;
 import com.example.domain.Address;
 import com.example.domain.Branch;
 import com.example.repository.AddressRepository;
 import com.example.repository.BranchRepository;
+import com.mysql.cj.xdevapi.JsonParser;
+import com.mysql.cj.xdevapi.JsonString;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -15,6 +21,9 @@ public class BranchService implements IBranchService {
 
     @Autowired
     private BranchRepository branchRepository;
+
+    private final static String KEY = "Super_Secret_Key";
+
     @Autowired
     private AddressRepository addressRepository;
 
@@ -55,4 +64,49 @@ public class BranchService implements IBranchService {
 
         branchRepository.delete(branchOptional.get());
     }
+
+    @Override
+    public Optional<Branch> findById(Long id) {
+
+        return branchRepository.findById(id);
+
+    }
+
+    @Override
+    public Optional<Branch> findByManagerId(Long branchManagerId) {
+
+        return branchRepository.findByBranchManagerId(branchManagerId);
+    }
+
+    @Override
+    public List<Branch> getAllBranches() {
+
+        return branchRepository.getAllBranches();
+    }
+
+    @Override
+    public String parseToken(String token) {
+
+        try {
+            Claims body = Jwts.parser()
+                    .setSigningKey(KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String role = (String) body.get("role");
+
+            if("ADMIN".equals(role)){
+
+                return role;
+            }
+            else {
+                throw new RuntimeException("Role is not ADMIN"); // Role doesn't match "ADMIN"
+            }
+
+
+        } catch (Exception e) {
+            throw new RuntimeException("Not a valid token");
+        }
+    }
+
 }
