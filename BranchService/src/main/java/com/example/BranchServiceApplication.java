@@ -1,6 +1,7 @@
 package com.example;
 
 import com.example.service.BranchService;
+import com.example.service.IBranchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +20,7 @@ public class BranchServiceApplication implements CommandLineRunner{
 
 
     @Autowired
-    private BranchService branchService;
+    private IBranchService branchService;
 
     public static void main( String[] args ){
         SpringApplication.run(BranchServiceApplication.class, args);
