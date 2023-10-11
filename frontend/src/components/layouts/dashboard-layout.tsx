@@ -111,7 +111,7 @@ const DashboardLayout = ({ children }: IAuthLayoutProps) => {
                 </div>
                 <section className="flex-1">
                     <div className="bg-gray-900 p-4 text-white flex justify-end align-bottom gap-2">
-                        <p className="capitalize flex align-center leading-2 mt-3">{loggedUser}</p>
+                        <p className="capitalize flex align-center leading-2 mt-1.5">{loggedUser}</p>
                         <Button onClick={logout} style={{width: '120px'}} value="Logout" className="px-6 text-sm py-2" />
                     </div>
                     <div>{children}</div>

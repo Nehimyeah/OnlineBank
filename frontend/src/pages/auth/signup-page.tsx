@@ -8,19 +8,7 @@ import ClientInput from "../../components/auth/inputs/client-input";
 import FormFieldError from "../../components/auth/form/form-field-error";
 import Button from "../../components/elements/button";
 import { Link } from "react-router-dom";
-
-type LoginFields = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  firstName: string,
-  lastName: string,
-  street1: string,
-  street2: string,
-  city: string,
-  state: string,
-  zipcode: string,
-};
+import {UserDetails} from "../../components/type/types";
 
 const schema = yup
     .object({
@@ -53,7 +41,7 @@ const SignupPage = () => {
     register,
     resetField,
     formState: { errors },
-  } = useForm<LoginFields>({ resolver: yupResolver(schema) });
+  } = useForm<UserDetails>({ resolver: yupResolver(schema) });
   const { ref: firstnameRef, ...firstnameRest } = register("firstName");
   const { ref: lastnameRef, ...lastnameRest } = register("lastName");
   const { ref: street1Ref, ...street1Rest } = register("street1");
@@ -66,7 +54,7 @@ const SignupPage = () => {
   const { ref: confirmPasswordRef, ...confirmPasswordRest } =
       register("confirmPassword");
 
-  const onsubmit = async (data: LoginFields) => {
+  const onsubmit = async (data: UserDetails) => {
     setSubmissionErrors([]);
     setIsLoading(true);
 

@@ -25,4 +25,5 @@ public interface UserService {
     void enable(long userId, String token);
 
 
+    Iterable<User> getAllManagers();
 }

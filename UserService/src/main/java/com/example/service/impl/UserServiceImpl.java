@@ -105,4 +105,9 @@ public class UserServiceImpl implements UserService {
         if (!principal.getRole().equals(Role.MANAGER))
             throw new RuntimeException("No sufficient privilege for this operation");
     }
+
+    @Override
+    public Iterable<User> getAllManagers() {
+        return repository.getAllByRole(Role.MANAGER);
+    }
 }
