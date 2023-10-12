@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { useSelector } from "react-redux/es/exports";
-import { selectUser, setUser } from "../../app/authSlice";
+import {AuthStore, selectUser, setUser} from "../../app/authSlice";
 import jwt from "jwt-decode";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux/es/hooks/useDispatch";

@@ -10,7 +10,7 @@ interface IAuthLayoutProps {
     children: ReactNode;
 }
 const DashboardLayout = ({ children }: IAuthLayoutProps) => {
-    const loggedUser = useSelector(selectUser);
+    let loggedUser = useSelector(selectUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -19,7 +19,6 @@ const DashboardLayout = ({ children }: IAuthLayoutProps) => {
 
     useEffect(() => {
         setRoute(location.pathname);
-        console.log(`The current route is ${location.pathname}`);
     }, [location.pathname]);
 
     const logout = () => {

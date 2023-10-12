@@ -14,7 +14,6 @@ const HomePage = () => {
         try {
              axiosPrivate.get("/users/teams").then((res) => {
                  setUsers(res.data);
-                 console.log(users)
             })
         } catch (err) {
             console.error(err);

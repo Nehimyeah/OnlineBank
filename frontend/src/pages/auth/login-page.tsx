@@ -57,6 +57,8 @@ const LoginPage = () => {
 
       const decodedData: AuthStore = jwtDecode(response.data.token);
 
+      Cookies.set("user",JSON.stringify(decodedData));
+
       dispatch(setUser(decodedData));
       Cookies.set("token", response.data.token);
       setSuccess(true);

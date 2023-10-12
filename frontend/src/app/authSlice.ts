@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit/dist/createAction";
 import { RootState } from "./store";
+import Cookie from "js-cookie";
 export type AuthStore = {
   exp: number;
   firstName: string | null;
@@ -32,9 +33,13 @@ const authSlice = createSlice({
       state.email = null;
     },
   },
+
 });
 
 export const { setUser, logoutUser } = authSlice.actions;
 export default authSlice.reducer;
 
-export const selectUser = (state: RootState) => state.firstName + " " + state.lastName;
+export const selectUser = (state: RootState) => {
+  const user:AuthStore = JSON.parse(<string>Cookie.get("user"));
+  return user.firstName + " " + user.lastName
+};
