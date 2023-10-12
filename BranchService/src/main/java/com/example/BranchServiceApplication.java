@@ -1,7 +1,9 @@
 package com.example;
 
+import com.example.domain.Address;
+import com.example.domain.Branch;
 import com.example.service.IBranchService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,11 +17,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EntityScan("com.example.domain")
 @EnableJpaRepositories("com.example.repository")
+@RequiredArgsConstructor
 public class BranchServiceApplication implements CommandLineRunner{
 
 
-    @Autowired
-    private IBranchService branchService;
+    private final IBranchService branchService;
 
     public static void main( String[] args ){
         SpringApplication.run(BranchServiceApplication.class, args);
@@ -27,6 +29,17 @@ public class BranchServiceApplication implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-
+        Address address = Address.builder()
+                .zip(52557)
+                .city("Fairfield")
+                .state("Iowa")
+                .street1("1000 N 4th St")
+                .build();
+        Branch branch = Branch.builder()
+                .branchManagerId(10L)
+                .branchName("Fairfield")
+                .address(address)
+                .build();
+        branchService.saveInternal(branch);
     }
 }

@@ -62,6 +62,16 @@ public class BranchService implements IBranchService {
         branchRepository.delete(branch.orElseThrow(() -> new RuntimeException("Branch doesn't exist")));
     }
 
+    @Override
+    public void saveInternal(Branch branch) {
+        Optional<Branch> branchOptional = branchRepository.findByBranchName(branch.getBranchName());
+        if (branchOptional.isEmpty()) {
+            branchRepository.save(branch);
+            return;
+        }
+        throw new RuntimeException("Branch already exists");
+    }
+
     private void authenticate(String bearerToken) {
         String token = jwtUtil.extractToken(bearerToken);
         User principal = jwtUtil.parseToken(token);

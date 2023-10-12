@@ -16,4 +16,6 @@ public interface IBranchService {
     void update(long id, Branch branch, String token);
 
     void delete(Long id, String token);
+
+    void saveInternal(Branch branch);
 }
