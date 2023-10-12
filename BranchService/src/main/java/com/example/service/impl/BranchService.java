@@ -89,6 +89,18 @@ public class BranchService implements IBranchService {
         return branchRepository.findAll();
     }
 
+    @Override
+    public void update(long id, Branch branch, String token) {
+        authenticate(token);
+        Optional<Branch> branchFromDB = branchRepository.findById(id);
+        if (branchFromDB.isPresent()) {
+            branch.setBranchId(id);
+            branchRepository.save(branch);
+            return;
+        }
+        throw new RuntimeException("Branch data doesn't exist");
+    }
+
     private void authenticate(String bearerToken) {
         String token = jwtUtil.extractToken(bearerToken);
         User principal = jwtUtil.parseToken(token);

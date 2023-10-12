@@ -36,6 +36,16 @@ public class BranchController {
         return ResponseEntity.ok("Branch created successfully!");
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(
+            @PathVariable long id,
+            @RequestBody Branch branch,
+            @RequestHeader("Authorization") String token
+    ) {
+        branchService.update(id, branch, token);
+        return ResponseEntity.ok("Branch data updated successfully");
+    }
+
     @DeleteMapping
     public ResponseEntity<?> deleteBranch(@PathVariable Long id) {
 

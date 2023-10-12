@@ -21,4 +21,5 @@ public interface IBranchService {
     List<Branch> getAllBranches(String token);
 
 
+    void update(long id, Branch branch, String token);
 }
