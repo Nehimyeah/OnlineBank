@@ -12,8 +12,6 @@ public interface IBranchService {
     void create(Branch branch, String bearerToken);
     String branchInfo(Branch branch);
 
-    void deleteBranchInfo(Long id);
-
     Branch findById(Long id, String token);
 
     Optional<Branch> findByManagerId(Long branchManagerId);
@@ -22,4 +20,6 @@ public interface IBranchService {
 
 
     void update(long id, Branch branch, String token);
+
+    void delete(Long id, String token);
 }

@@ -63,14 +63,6 @@ public class BranchService implements IBranchService {
     }
 
     @Override
-    public void deleteBranchInfo(Long id) {
-
-        Optional<Branch> branchOptional = branchRepository.findById(id);
-
-        branchRepository.delete(branchOptional.get());
-    }
-
-    @Override
     public Branch findById(Long id, String bearerToken) {
         authenticate(bearerToken);
         Optional<Branch> branch = branchRepository.findById(id);
@@ -99,6 +91,13 @@ public class BranchService implements IBranchService {
             return;
         }
         throw new RuntimeException("Branch data doesn't exist");
+    }
+
+    @Override
+    public void delete(Long id, String bearerToken) {
+        authenticate(bearerToken);
+        Optional<Branch> branch = branchRepository.findById(id);
+        branchRepository.delete(branch.orElseThrow(() -> new RuntimeException("Branch doesn't exist")));
     }
 
     private void authenticate(String bearerToken) {

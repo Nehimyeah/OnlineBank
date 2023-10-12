@@ -46,19 +46,14 @@ public class BranchController {
         return ResponseEntity.ok("Branch data updated successfully");
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteBranch(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBranch(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String token
 
-//        Optional<?> branchOptional = branchService.findById(id);
-
-//        if (branchOptional.isPresent()) {
-
-//            branchService.deleteBranchInfo(id);
-//            return ResponseEntity.ok("Branch successfully deleted");
-
-//        }
-//        return ResponseEntity.status(404).body("Branch does not exist.");
-    return ResponseEntity.ok().build();
+        ) {
+        branchService.delete(id, token);
+        return ResponseEntity.ok("Branch successfully deleted");
     }
 
 //    @PutMapping("/update-manager-id")
