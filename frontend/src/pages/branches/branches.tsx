@@ -1,14 +1,15 @@
 import DashboardLayout from "../../components/layouts/dashboard-layout";
 import {useEffect, useState} from "react";
 import {axiosPrivate} from "../../service/axios.service";
+import BranchList from "../../components/branch/branch-list";
 const BranchPage = () => {
 
-    const [branches, setUsers] = useState([]);
+    const [branches, setBranches] = useState([]);
 
     const fetchData = () => {
         try {
-            axiosPrivate.get("/branch/branches").then((res) => {
-                setUsers(res.data);
+            axiosPrivate.get("/branches").then((res) => {
+                setBranches(res.data);
             })
         } catch (err) {
             console.error(err);
@@ -21,7 +22,7 @@ const BranchPage = () => {
 
     return (
         <DashboardLayout>
-            branches
+            <BranchList branches={branches}/>
         </DashboardLayout>
     )
 }
