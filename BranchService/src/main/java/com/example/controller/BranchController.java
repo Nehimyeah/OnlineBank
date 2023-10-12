@@ -18,8 +18,8 @@ public class BranchController {
     private final IBranchService branchService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){
-        return ResponseEntity.ok(branchService.findById(id));
+    public ResponseEntity<?> findById(@PathVariable Long id, @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(branchService.findById(id, token));
     }
 
     @GetMapping
@@ -48,15 +48,16 @@ public class BranchController {
     @DeleteMapping
     public ResponseEntity<?> deleteBranch(@PathVariable Long id) {
 
-        Optional<?> branchOptional = branchService.findById(id);
+//        Optional<?> branchOptional = branchService.findById(id);
 
-        if (branchOptional.isPresent()) {
+//        if (branchOptional.isPresent()) {
 
-            branchService.deleteBranchInfo(id);
-            return ResponseEntity.ok("Branch successfully deleted");
+//            branchService.deleteBranchInfo(id);
+//            return ResponseEntity.ok("Branch successfully deleted");
 
-        }
-        return ResponseEntity.status(404).body("Branch does not exist.");
+//        }
+//        return ResponseEntity.status(404).body("Branch does not exist.");
+    return ResponseEntity.ok().build();
     }
 
 //    @PutMapping("/update-manager-id")

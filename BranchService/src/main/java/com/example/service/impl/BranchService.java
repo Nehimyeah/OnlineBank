@@ -60,7 +60,8 @@ public class BranchService implements IBranchService {
     }
 
     @Override
-    public Branch findById(Long id) {
+    public Branch findById(Long id, String bearerToken) {
+        authenticate(bearerToken);
         Optional<Branch> branch = branchRepository.findById(id);
         return branch.orElseThrow(() -> new RuntimeException("Branch with this information doesn't exist"));
     }
@@ -73,12 +74,14 @@ public class BranchService implements IBranchService {
 
     @Override
     public List<Branch> getAllBranches(String bearerToken) {
+        authenticate(bearerToken);
+        return branchRepository.findAll();
+    }
+
+    private void authenticate(String bearerToken) {
         String token = jwtUtil.extractToken(bearerToken);
         User principal = jwtUtil.parseToken(token);
         if (!principal.getRole().equals("ADMIN"))
             throw new RuntimeException("User can't perform this operation");
-
-        return branchRepository.findAll();
     }
-
 }

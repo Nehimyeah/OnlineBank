@@ -14,7 +14,7 @@ public interface IBranchService {
 
     void deleteBranchInfo(Long id);
 
-    Branch findById(Long id);
+    Branch findById(Long id, String token);
 
     Optional<Branch> findByManagerId(Long branchManagerId);
 
