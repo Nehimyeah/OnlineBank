@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface IBranchService {
 
     void createBranchInfo(String branchName, Long branchManagerId);
-    void createAddressInfo(Long branchId, String city, String state, String street, int zip);
+//    void createAddressInfo(Long branchId, String city, String state, String street, int zip);
 
     String branchInfo(Branch branch);
 
@@ -18,9 +18,7 @@ public interface IBranchService {
 
     Optional<Branch> findByManagerId(Long branchManagerId);
 
-    List<Branch> getAllBranches();
-
-    public String parseToken(String token);
+    List<Branch> getAllBranches(String token);
 
 
 }

@@ -1,6 +1,5 @@
 package com.example;
 
-import com.example.service.BranchService;
 import com.example.service.IBranchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -33,8 +32,8 @@ public class BranchServiceApplication implements CommandLineRunner{
         branchService.createBranchInfo("XYZ", 202L);
 
 
-        branchService.createAddressInfo(1L, "Fairfield", "IA", "123 St", 52556);
-        branchService.createAddressInfo(2L, "Rochester", "MN", "789 Dr", 55901);
+//        branchService.createAddressInfo(1L, "Fairfield", "IA", "123 St", 52556);
+//        branchService.createAddressInfo(2L, "Rochester", "MN", "789 Dr", 55901);
 
 
 

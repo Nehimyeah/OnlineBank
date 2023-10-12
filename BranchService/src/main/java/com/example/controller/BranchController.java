@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.domain.Branch;
 import com.example.service.IBranchService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/branch")
+@RequestMapping("/branches")
+@RequiredArgsConstructor
 public class BranchController {
-    @Autowired
-    private IBranchService branchService;
+
+    private final IBranchService branchService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findBranchById(@PathVariable Long id){
@@ -29,16 +31,14 @@ public class BranchController {
 
     }
 
-    @GetMapping("/branches")
-    public ResponseEntity<?> getAllBranches(){
-
-        return new ResponseEntity<>(branchService.getAllBranches(), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<?> getAllBranches(@RequestHeader("Authorization") String bearerToken){
+        return ResponseEntity.ok(branchService.getAllBranches(bearerToken));
     }
 
-    @PostMapping("/addBranch")
+    @PostMapping
     public ResponseEntity<?> addNewBranch(@RequestBody Branch branch, @RequestHeader("Authorization") String token){
 
-        branchService.parseToken(token);
 
         String branchName = branch.getBranchName();
         Long branchManagerId = branch.getBranchManagerId();
@@ -54,7 +54,7 @@ public class BranchController {
         return ResponseEntity.status(400).body("Error, there is already an existing branch.");
     }
 
-    @DeleteMapping("/removeBranch/{id}")
+    @DeleteMapping
     public ResponseEntity<?> deleteBranch(@PathVariable Long id) {
 
         Optional<?> branchOptional = branchService.findById(id);
