@@ -18,17 +18,8 @@ public class BranchController {
     private final IBranchService branchService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findBranchById(@PathVariable Long id){
-
-        Optional<?> branch = branchService.findById(id);
-
-        if(!branch.isPresent()){
-
-            return ResponseEntity.status(404).body("Could not find the branch with id: " + id);
-        }
-
-        return new ResponseEntity<>(branch.get(), HttpStatus.OK);
-
+    public ResponseEntity<?> findById(@PathVariable Long id){
+        return ResponseEntity.ok(branchService.findById(id));
     }
 
     @GetMapping

@@ -60,10 +60,9 @@ public class BranchService implements IBranchService {
     }
 
     @Override
-    public Optional<Branch> findById(Long id) {
-
-        return branchRepository.findById(id);
-
+    public Branch findById(Long id) {
+        Optional<Branch> branch = branchRepository.findById(id);
+        return branch.orElseThrow(() -> new RuntimeException("Branch with this information doesn't exist"));
     }
 
     @Override
