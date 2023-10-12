@@ -15,7 +15,7 @@ const ManagersList = (props) => {
                             <div className="flex items-center py-2">
                                 <Link to={"/managers/create"}
                                    className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
-                                    Create Manager
+                                    Create User
                                 </Link>
                             </div>
                         </div>

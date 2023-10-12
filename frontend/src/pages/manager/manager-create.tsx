@@ -7,6 +7,9 @@ import ClientInput from "../../components/auth/inputs/client-input";
 import FormFieldError from "../../components/auth/form/form-field-error";
 import Button from "../../components/elements/button";
 import DashboardLayout from "../../components/layouts/dashboard-layout";
+import {useNavigate} from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type UserDetails = {
     email: string;
@@ -14,11 +17,13 @@ type UserDetails = {
     confirmPassword: string;
     firstName: string,
     lastName: string,
-    street1: string,
-    street2: string,
-    city: string,
-    state: string,
-    zipcode: string,
+    address: {
+        street1: string,
+        street2: string,
+        city: string,
+        state: string,
+        zip: string,
+    }
     role: string;
 };
 
@@ -26,11 +31,13 @@ const schema = yup
     .object({
         firstName: yup.string().required(),
         lastName: yup.string().required(),
-        street1: yup.string().required(),
-        street2: yup.string(),
-        city: yup.string().required(),
-        state: yup.string().required(),
-        zipcode: yup.string().required(),
+        address: yup.object({
+            street1: yup.string().required(),
+            street2: yup.string(),
+            city: yup.string().required(),
+            state: yup.string().required(),
+            zip: yup.string().required(),
+        }),
         email: yup.string().required().email(),
         password: yup.string().required(),
         confirmPassword: yup
@@ -44,10 +51,7 @@ const CreateManager = () => {
     const [success, setSuccess] = useState<boolean>(false);
     const [submissionErrors, setSubmissionErrors] = useState<string[]>([]);
     const [roleType, setRoleType] = useState("CUSTOMER");
-    console.log(
-        "🚀 ~ file: signup-page.tsx:32 ~ SignupPage ~ submissionErrors",
-        submissionErrors
-    );
+    const navigate = useNavigate();
 
     const {
         handleSubmit,
@@ -58,15 +62,17 @@ const CreateManager = () => {
     const { ref: firstnameRef, ...firstnameRest } = register("firstName");
     const { ref: role, ...roleRest } = register("role");
     const { ref: lastnameRef, ...lastnameRest } = register("lastName");
-    const { ref: street1Ref, ...street1Rest } = register("street1");
-    const { ref: street2Ref, ...street2Rest } = register("street2");
-    const { ref: cityRef, ...cityRest } = register("city");
-    const { ref: stateRef, ...stateRest } = register("state");
-    const { ref: zipcodeRef, ...zipcodeRest } = register("zipcode");
+    const { ref: street1Ref, ...street1Rest } = register("address.street1");
+    const { ref: street2Ref, ...street2Rest } = register("address.street2");
+    const { ref: cityRef, ...cityRest } = register("address.city");
+    const { ref: stateRef, ...stateRest } = register("address.state");
+    const { ref: zipcodeRef, ...zipcodeRest } = register("address.zip");
     const { ref: emailRef, ...emailRest } = register("email");
     const { ref: passwordRef, ...passwordRest } = register("password");
     const { ref: confirmPasswordRef, ...confirmPasswordRest } =
         register("confirmPassword");
+
+    const notify = () => toast("User has successfully been created!");
 
     const onsubmit = async (data: UserDetails) => {
         setSubmissionErrors([]);
@@ -79,6 +85,10 @@ const CreateManager = () => {
                 setIsLoading(false);
                 resetField("password");
                 resetField("confirmPassword");
+                notify();
+                setTimeout(() => {
+                    navigate("/managers")
+                }, 1000);
             });
 
             setSuccess(true);
@@ -187,8 +197,8 @@ const CreateManager = () => {
                                 reference={street1Ref}
                                 {...street1Rest}
                             />
-                            {errors.street1?.message ? (
-                                <FormFieldError errorMessage={errors.street1.message} />
+                            {errors.address?.street1?.message ? (
+                                <FormFieldError errorMessage={errors.address?.street1?.message} />
                             ) : (
                                 ""
                             )}
@@ -199,8 +209,8 @@ const CreateManager = () => {
                                 reference={street2Ref}
                                 {...street2Rest}
                             />
-                            {errors.street2?.message ? (
-                                <FormFieldError errorMessage={errors.street2.message} />
+                            {errors.address?.street2?.message ? (
+                                <FormFieldError errorMessage={errors.address?.street2.message} />
                             ) : (
                                 ""
                             )}
@@ -211,8 +221,8 @@ const CreateManager = () => {
                                 reference={cityRef}
                                 {...cityRest}
                             />
-                            {errors.city?.message ? (
-                                <FormFieldError errorMessage={errors.city.message} />
+                            {errors.address?.city?.message ? (
+                                <FormFieldError errorMessage={errors.address.city.message} />
                             ) : (
                                 ""
                             )}
@@ -223,20 +233,20 @@ const CreateManager = () => {
                                 reference={stateRef}
                                 {...stateRest}
                             />
-                            {errors.state?.message ? (
-                                <FormFieldError errorMessage={errors.state.message} />
+                            {errors.address?.state?.message ? (
+                                <FormFieldError errorMessage={errors.address?.state.message} />
                             ) : (
                                 ""
                             )}
                         </div>
                         <div className="flex flex-col space-y-1">
                             <ClientInput
-                                placeholder="Zipcode"
+                                placeholder="zip"
                                 reference={zipcodeRef}
                                 {...zipcodeRest}
                             />
-                            {errors.zipcode?.message ? (
-                                <FormFieldError errorMessage={errors.zipcode.message} />
+                            {errors.address?.zip?.message ? (
+                                <FormFieldError errorMessage={errors.address.zip.message} />
                             ) : (
                                 ""
                             )}
@@ -308,6 +318,18 @@ const CreateManager = () => {
                         </Button>
                     </div>
             </form>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </DashboardLayout>
     );
 };

@@ -40,6 +40,10 @@ export const { setUser, logoutUser } = authSlice.actions;
 export default authSlice.reducer;
 
 export const selectUser = (state: RootState) => {
-  const user:AuthStore = JSON.parse(<string>Cookie.get("user"));
-  return user.firstName + " " + user.lastName
+  const user = <string>Cookie.get("user");
+  if (user) {
+    const decodedUser:AuthStore = JSON.parse(user);
+    return decodedUser.firstName + " " + decodedUser.lastName
+  }
+  return ''
 };

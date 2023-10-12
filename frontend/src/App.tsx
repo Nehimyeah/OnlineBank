@@ -2,7 +2,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import LoginPage from "./pages/auth/login-page";
 import MainLayout from "./components/layouts/main-layout";
 import HomePage from "./pages/manager/home";
-import BranchPage from "./pages/branches";
+import BranchPage from "./pages/branches/branches";
 import SignupPage from "./pages/auth/signup-page";
 import CreateManager from "./pages/manager/manager-create";
 import { store } from "./app/store";
