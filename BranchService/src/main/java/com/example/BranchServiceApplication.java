@@ -28,8 +28,8 @@ public class BranchServiceApplication implements CommandLineRunner{
     @Override
     public void run(String... args) throws Exception {
 
-        branchService.createBranchInfo("ABC", 101L);
-        branchService.createBranchInfo("XYZ", 202L);
+//        branchService.createBranchInfo("ABC", 101L);
+//        branchService.createBranchInfo("XYZ", 202L);
 
 
 //        branchService.createAddressInfo(1L, "Fairfield", "IA", "123 St", 52556);

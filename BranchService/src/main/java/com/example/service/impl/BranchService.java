@@ -21,13 +21,13 @@ public class BranchService implements IBranchService {
     private final BranchRepository branchRepository;
     private final JwtUtil jwtUtil;
 
-    @Override
-    public void createBranchInfo(String branchName, Long branchManagerId){
-
-        Branch branch = new Branch(branchName, branchManagerId);
-
-        branchRepository.save(branch);
-    }
+//    @Override
+//    public void createBranchInfo(String branchName, Long branchManagerId){
+//
+//        Branch branch = new Branch(branchName, branchManagerId);
+//
+//        branchRepository.save(branch);
+//    }
 
 //    @Override
 //    public void createAddressInfo(Long branchId, String city, String state, String street, int zip){
@@ -44,6 +44,17 @@ public class BranchService implements IBranchService {
 //        }
 //
 //    }
+
+    @Override
+    public void create(Branch branch, String bearerToken) {
+        authenticate(bearerToken);
+        Optional<Branch> branchOptional = branchRepository.findByBranchName(branch.getBranchName());
+        if (branchOptional.isEmpty()) {
+            branchRepository.save(branch);
+            return;
+        }
+        throw new RuntimeException("Branch already exists");
+    }
 
     @Override
     public String branchInfo(Branch branch){

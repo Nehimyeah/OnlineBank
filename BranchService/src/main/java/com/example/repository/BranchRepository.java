@@ -14,4 +14,5 @@ public interface BranchRepository extends JpaRepository<Branch, Long> {
     @Query("Select b from Branch b where b.branchManagerId = :id")
     public Optional<Branch> findByBranchManagerId(@Param("id") Long id);
 
+    Optional<Branch> findByBranchName(String branchName);
 }

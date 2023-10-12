@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface IBranchService {
 
-    void createBranchInfo(String branchName, Long branchManagerId);
+//    void createBranchInfo(String branchName, Long branchManagerId);
 //    void createAddressInfo(Long branchId, String city, String state, String street, int zip);
-
+    void create(Branch branch, String bearerToken);
     String branchInfo(Branch branch);
 
     void deleteBranchInfo(Long id);

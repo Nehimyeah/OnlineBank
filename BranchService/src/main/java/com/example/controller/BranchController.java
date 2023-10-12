@@ -18,7 +18,10 @@ public class BranchController {
     private final IBranchService branchService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id, @RequestHeader("Authorization") String token){
+    public ResponseEntity<?> findById(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String token
+    ) {
         return ResponseEntity.ok(branchService.findById(id, token));
     }
 
@@ -28,21 +31,9 @@ public class BranchController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addNewBranch(@RequestBody Branch branch, @RequestHeader("Authorization") String token){
-
-
-        String branchName = branch.getBranchName();
-        Long branchManagerId = branch.getBranchManagerId();
-        Optional<?> branchOptional = branchService.findByManagerId(branchManagerId);
-
-
-        if(!branchOptional.isPresent() && !branchName.isEmpty()){
-
-            branchService.createBranchInfo(branchName, branchManagerId);
-            return ResponseEntity.status(200).body("New branch successfully created");
-        }
-
-        return ResponseEntity.status(400).body("Error, there is already an existing branch.");
+    public ResponseEntity<?> create(@RequestBody Branch branch, @RequestHeader("Authorization") String token){
+        branchService.create(branch, token);
+        return ResponseEntity.ok("Branch created successfully!");
     }
 
     @DeleteMapping
