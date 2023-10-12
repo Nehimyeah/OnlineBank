@@ -3,12 +3,9 @@ package com.example.controller;
 import com.example.domain.Branch;
 import com.example.service.IBranchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/branches")
@@ -55,11 +52,5 @@ public class BranchController {
         branchService.delete(id, token);
         return ResponseEntity.ok("Branch successfully deleted");
     }
-
-//    @PutMapping("/update-manager-id")
-//    public ResponseEntity<?> updateManageID(){
-//
-//        return null;
-//    }
 
 }
