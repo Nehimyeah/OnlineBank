@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import {UserDetails} from "../type/types";
-const ManagersList = (props) => {
+const ManagersList = (props: { users: UserDetails[]; }) => {
 
     return (
         <>

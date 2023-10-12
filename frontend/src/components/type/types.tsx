@@ -9,4 +9,6 @@ export type UserDetails = {
     city: string,
     state: string,
     zipcode: string,
+    active: boolean,
+    role: string
 }
