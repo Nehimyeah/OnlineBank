@@ -19,6 +19,7 @@ type UserDetails = {
     city: string,
     state: string,
     zipcode: string,
+    role: string;
 };
 
 const schema = yup
@@ -42,6 +43,7 @@ const CreateManager = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
     const [submissionErrors, setSubmissionErrors] = useState<string[]>([]);
+    const [roleType, setRoleType] = useState("CUSTOMER");
     console.log(
         "🚀 ~ file: signup-page.tsx:32 ~ SignupPage ~ submissionErrors",
         submissionErrors
@@ -54,6 +56,7 @@ const CreateManager = () => {
         formState: { errors },
     } = useForm<UserDetails>({ resolver: yupResolver(schema) });
     const { ref: firstnameRef, ...firstnameRest } = register("firstName");
+    const { ref: role, ...roleRest } = register("role");
     const { ref: lastnameRef, ...lastnameRest } = register("lastName");
     const { ref: street1Ref, ...street1Rest } = register("street1");
     const { ref: street2Ref, ...street2Rest } = register("street2");
@@ -68,6 +71,8 @@ const CreateManager = () => {
     const onsubmit = async (data: UserDetails) => {
         setSubmissionErrors([]);
         setIsLoading(true);
+        
+        data.role = roleType;
 
         try {
             await axiosPrivate.post("/users/teams", data).finally(() => {
@@ -100,7 +105,7 @@ const CreateManager = () => {
                 className="bg-white/20 container mx-auto mt-5"
             >
                 <h1 className="text-center font-bold text-3xl mb-4 text-indigo-900">
-                    Create Manager
+                    Create User
                 </h1>
                 {submissionErrors.length > 0 ? (
                     <ul className="p-4 border-[1px] border-red-500 rounded-xl mb-5 max-w-sm flex items-center justify-center flex-col space-y-3">
@@ -235,6 +240,66 @@ const CreateManager = () => {
                             ) : (
                                 ""
                             )}
+                        </div>
+                        <div className="flex flex-col space-y-1">
+                            <div className="radio-btn-container">
+                                <div
+                                    className="radio-btn"
+                                    onClick={() => {
+                                        setRoleType("CUSTOMER");
+                                    }}
+                                >
+                                    <input
+                                        type="radio"
+                                        value={roleType}
+                                        name="roleType"
+                                        checked={roleType == "CUSTOMER"}
+                                    />
+                                    Customer
+                                </div>
+                                <div
+                                    className="radio-btn"
+                                    onClick={() => {
+                                        setRoleType("MANAGER");
+                                    }}
+                                >
+                                    <input
+                                        type="radio"
+                                        value={roleType}
+                                        name="roleType"
+                                        checked={roleType == "MANAGER"}
+                                    />
+                                    Manager
+                                </div>
+                                <div
+                                    className="radio-btn"
+                                    onClick={() => {
+                                        setRoleType("ADMIN");
+                                    }}
+                                >
+                                    <input
+                                        type="radio"
+                                        value={roleType}
+                                        name="roleType"
+                                        checked={roleType == "ADMIN"}
+                                    />
+                                    Admin
+                                </div>
+                                <div
+                                    className="radio-btn"
+                                    onClick={() => {
+                                        setRoleType("TELLER");
+                                    }}
+                                >
+                                    <input
+                                        type="radio"
+                                        value={roleType}
+                                        name="roleType"
+                                        checked={roleType == "TELLER"}
+                                    />
+                                    Teller
+                                </div>
+                            </div>
                         </div>
                         <Button className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
                                 font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600

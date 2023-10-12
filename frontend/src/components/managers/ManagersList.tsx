@@ -10,7 +10,7 @@ const ManagersList = (props) => {
 
                         <div className="-mb-2 py-4 flex flex-wrap justify-between flex-grow">
                             <div className="mb-4">
-                                <h1 className="text-3xl font-bolder leading-tight text-gray-900 mt-5">Managers List</h1>
+                                <h1 className="text-3xl font-bolder leading-tight text-gray-900 mt-5">Users List</h1>
                             </div>
                             <div className="flex items-center py-2">
                                 <Link to={"/managers/create"}
@@ -35,6 +35,9 @@ const ManagersList = (props) => {
                                         </th>
                                         <th className="px-6 py-3 text-left font-medium">
                                             Status
+                                        </th>
+                                        <th className="px-6 py-3 text-left font-medium">
+                                            Role
                                         </th>
                                         <th className="px-6 py-3 text-left font-medium">
                                         </th>
@@ -73,6 +76,11 @@ const ManagersList = (props) => {
                                                  : (<span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-500 text-white">Disabled</span>)
 
                                                 }
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <div className="text-sm leading-5 text-gray-900">
+                                                    {user.role}
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                                                 <a href="#"
