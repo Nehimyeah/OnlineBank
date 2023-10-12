@@ -5,15 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
+import java.math.BigDecimal;
+
 @NoArgsConstructor
+@Getter
+@Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AnnualInterestRequest {
-    private Long userId;
-    private String rateType;
-    private Long year;
-    private Double annualInterest;
-    private int months;
-    private String description;
+public class OperationRequest {
+    private String accountId;
+    private BigDecimal amount;
 }

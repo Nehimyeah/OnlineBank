@@ -36,7 +36,7 @@ public class LoanAccountService {
             if (loanAccountRequest.getAprRateId() != null) {
                 Optional<AnnualAPR> optionalAnnualAPR = aprRepository.findById(loanAccountRequest.getAprRateId());
                 if (!optionalAnnualAPR.isPresent()) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APR has not been provided");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APR id has not been provided");
                 }
                 loanAccount.setAnnualAPR(optionalAnnualAPR.get().getAnnualAPR());
             }

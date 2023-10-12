@@ -1,10 +1,14 @@
 package com.example.controller;
 
+import com.example.dto.ResponseModel;
 import com.example.dto.request.TransactionRequest;
+import com.example.entity.Transaction;
 import com.example.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/transaction")
@@ -13,12 +17,10 @@ public class TransactionController {
     @Autowired
     TransactionService transactionService;
 
-    @PostMapping("/deposit")
-    public ResponseEntity<?> deposit(@RequestBody TransactionRequest transactionRequest){
-        return transactionService.deposit(transactionRequest);
+    @GetMapping("/list/{userid}")
+    public ResponseModel<List<Transaction>> listOfTransactions(@PathVariable Long userid){
+        return transactionService.getAllTransactionsByAccountNum(userid);
     }
-    @PostMapping("/withdraw")
-    public ResponseEntity<?> withdraw(@RequestBody TransactionRequest transactionRequest){
-        return transactionService.withdraw(transactionRequest);
-    }
+
+
 }

@@ -36,7 +36,7 @@ public class SavingsAccountService {
             if (savingsAccountRequest.getApyRateId() != null) {
                 Optional<AnnualAPY> optionalAnnualAPY = apyRepository.findById(savingsAccountRequest.getApyRateId());
                 if (!optionalAnnualAPY.isPresent()) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APY has not been provided");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APY id has not been provided");
                 }
                 savingsAccount.setAnnualAPY(optionalAnnualAPY.get().getAnnualAPY());
             }

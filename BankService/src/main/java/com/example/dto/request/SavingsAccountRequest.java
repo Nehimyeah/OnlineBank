@@ -19,11 +19,9 @@ public class SavingsAccountRequest {
     private UUID accountId;
     private Long userId;
     private Long branchId;
-    @Column(columnDefinition = "status by default is pending")
-    private AccountStatus accountStatus = AccountStatus.PENDING;
+    private AccountStatus accountStatus;
     private LocalDateTime createdDate;
-    @Column(columnDefinition = "boolean default false")
-    private Boolean isDeleted = false;
+    private Boolean isDeleted;
     private LocalDateTime deletedDate;
     private Long createdBy;
     private Long deletedBy;

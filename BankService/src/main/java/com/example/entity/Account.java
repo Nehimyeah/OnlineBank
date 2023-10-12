@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,12 +28,14 @@ public abstract class Account {
     private Long branchId;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate;
-    @Column(columnDefinition = "boolean default false")
     private Boolean isDeleted = false;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deletedDate;
     private Long createdBy;
     private Long deletedBy;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "account")
+    List<Transaction> transactions = new ArrayList<>();
+
 
 
 }

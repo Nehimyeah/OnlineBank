@@ -1,6 +1,9 @@
 package com.example.controller;
 
+import com.example.dto.ResponseModel;
 import com.example.dto.request.CheckingAccountRequest;
+import com.example.dto.request.OperationRequest;
+import com.example.dto.response.CheckingAccountResponseModel;
 import com.example.entity.CheckingAccount;
 import com.example.services.CheckingAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +29,19 @@ public class CheckingAccountController {
     public ResponseEntity<?> deleteCheckingAccount(@RequestBody CheckingAccountRequest checkingAccountRequest){
         return checkingAccountService.update(checkingAccountRequest);
     }
+    @PostMapping("/withdraw")
+    public ResponseModel<CheckingAccount> withdraw(@RequestBody OperationRequest operationRequest){
+        return checkingAccountService.withdraw(operationRequest);
+    }
+    @PostMapping("/deposit")
+    public ResponseModel<CheckingAccount>deposit(@RequestBody OperationRequest operationRequest){
+        return checkingAccountService.deposit(operationRequest);
+    }
+    @GetMapping("/{id}")
+    public ResponseModel<CheckingAccountResponseModel> getCheckingAccount(@PathVariable Long id){
+        return checkingAccountService.getCheckingAccount(id);
+    }
+
+
 
 }

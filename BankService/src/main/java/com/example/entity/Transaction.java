@@ -1,13 +1,14 @@
 package com.example.entity;
 
 import com.example.enums.TransactionStatus;
+import com.example.enums.AccountType;
+import com.example.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 
 @Setter
@@ -17,11 +18,17 @@ public class Transaction{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
+    private BigDecimal previousBalance;
+    private BigDecimal currentBalance;
     private BigDecimal amount;
-    private Date CreatedDate;
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
+    private LocalDateTime createdDate;
+    @Enumerated(EnumType.STRING)
     private TransactionStatus transactionStatus;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Account account;
 
 

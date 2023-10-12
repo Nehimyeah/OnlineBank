@@ -19,4 +19,5 @@ public class AnnualAPY {
     private Double annualAPY;
     private int months;
     private String description;
+  //  private Long userId;
 }
