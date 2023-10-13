@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.domain;
 
 import com.example.enums.AccountStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,10 +37,6 @@ public abstract class Account {
     private Long deletedBy;
     @OneToMany(cascade = CascadeType.ALL)
     List<Transaction> transactions = new ArrayList<>();
-
-
-
-
 
 
 }

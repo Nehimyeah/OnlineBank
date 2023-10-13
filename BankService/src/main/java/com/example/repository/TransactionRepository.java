@@ -13,8 +13,8 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction,Long> {
 
-    @Query("SELECT t FROM Transaction t WHERE t.account = :account")
-    List<Transaction> findTransactionsByAccount(@Param("account") Account account);
+//    @Query("SELECT t FROM Transaction t WHERE t.account = :account")
+//    List<Transaction> findTransactionsByAccount(@Param("account") Account account);
 
 //    @Query(value = "select * from transaction t where t.account_id= :accountid", nativeQuery = true)
 //    List<Transaction> findAllByAccountId(UUID accountId);

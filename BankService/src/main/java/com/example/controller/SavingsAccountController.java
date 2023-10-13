@@ -1,10 +1,13 @@
 package com.example.controller;
 
 import com.example.dto.request.SavingsAccountRequest;
+import com.example.entity.Account;
 import com.example.services.SavingsAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/savings")
@@ -22,5 +25,11 @@ public class SavingsAccountController {
     public ResponseEntity<?> deleteCheckingAccount(@RequestBody SavingsAccountRequest savingsAccountRequest){
         return savingsAccountService.update(savingsAccountRequest);
 
+    }
+
+    @GetMapping("/{accountnumber}")
+    public ResponseEntity<?> getAccountById(@PathVariable String accountnumber){
+
+        return ResponseEntity.ok(savingsAccountService.findByAccountNumber(accountnumber));
     }
 }

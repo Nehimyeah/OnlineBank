@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final AccountService accountService;
-
-    @PostMapping
-    public ResponseEntity<?> createCheckingAccount(@RequestBody AccountRequest accountRequest){
-        accountService.create(accountRequest);
-        return ResponseEntity.ok().build();
-
-    }
+//    private final AccountService accountService;
+//
+//    @PostMapping
+//    public ResponseEntity<?> createCheckingAccount(@RequestBody AccountRequest accountRequest){
+//        accountService.create(accountRequest);
+//        return ResponseEntity.ok().build();
+//
+//    }
 
 }

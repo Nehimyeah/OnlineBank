@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 
-public class BankServiceApplication
+public class BankServiceApplications
 {
     public static void main( String[] args )
     {
 
-        SpringApplication.run(BankServiceApplication.class, args);
+        SpringApplication.run(BankServiceApplications.class, args);
 
     }
 

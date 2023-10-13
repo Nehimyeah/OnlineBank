@@ -1,8 +1,11 @@
 package com.example.services;
 
+import com.example.dto.ResponseModel;
 import com.example.dto.request.SavingsAccountRequest;
+import com.example.dto.response.SavingsResponse;
 import com.example.entity.*;
 import com.example.enums.AccountStatus;
+import com.example.repository.AccountRepository;
 import com.example.repository.AnnualAPYRepository;
 import com.example.repository.SavingsAccountRepository;
 import com.example.utils.Util;
@@ -14,17 +17,22 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SavingsAccountService {
     @Autowired
     SavingsAccountRepository savingsAccountRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
+
     @Autowired
     AnnualAPYRepository apyRepository;
 
     public ResponseEntity<?> create(SavingsAccountRequest savingsAccountRequest) {
         try {
-            SavingsAccount savingsAccount = new SavingsAccount();
+            Account savingsAccount = new SavingsAccount();
 
             savingsAccount.setAccountNumber(Util.generateAccountNum());
             savingsAccount.setAccountStatus(AccountStatus.PENDING);
@@ -41,7 +49,7 @@ public class SavingsAccountService {
             savingsAccount.setCreatedBy(savingsAccountRequest.getCreatedBy());
             savingsAccount.setCreatedDate(LocalDateTime.now());
             savingsAccount.setIsDeleted(false);
-            savingsAccountRepository.save(savingsAccount);
+            accountRepository.save(savingsAccount);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account has not been created");
         }
@@ -65,6 +73,34 @@ public class SavingsAccountService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account has not been updated");
         }
         return ResponseEntity.status(HttpStatus.OK).body("Savings account has been updated successfully");
+    }
+
+    public SavingsResponse findByAccountNumber(String accountNumber){
+
+      Optional<Account> account =  accountRepository.findByAccountNumber(accountNumber);
+      SavingsResponse savingsResponse = new SavingsResponse();
+
+      Account savingAccount = account.get();
+
+      try{
+
+          if(account.isPresent()){
+
+            savingsResponse.setAccountNumber(accountNumber);
+            savingsResponse.setAccountStatus(savingAccount.getAccountStatus());
+            savingsResponse.setBalance(savingAccount.getBalance());
+//            savingsResponse.setAnnualAPY(savingAccount.getAnnualAPY());
+
+            return savingsResponse;
+
+
+          }
+      } catch (Exception e){
+
+          throw new RuntimeException("Account does not exist");
+      }
+
+      return null;
     }
 
 
