@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/branches")
 @RequiredArgsConstructor
+@CrossOrigin(
+        origins = "http://127.0.0.1:5173/",
+        allowedHeaders = "*", maxAge = 3600,
+        allowCredentials = "true"
+)
 public class BranchController {
 
     private final IBranchService branchService;
