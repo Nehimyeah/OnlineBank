@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
-import {axiosClient, axiosPrivate} from "../../service/axios.service";
+import { axiosPrivate} from "../../service/axios.service";
 import ClientInput from "../../components/auth/inputs/client-input";
 import FormFieldError from "../../components/auth/form/form-field-error";
 import Button from "../../components/elements/button";
@@ -10,41 +10,8 @@ import DashboardLayout from "../../components/layouts/dashboard-layout";
 import {useNavigate} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-type UserDetails = {
-    email: string;
-    password: string;
-    confirmPassword: string;
-    firstName: string,
-    lastName: string,
-    address: {
-        street1: string,
-        street2: string,
-        city: string,
-        state: string,
-        zip: string,
-    }
-    role: string;
-};
-
-const schema = yup
-    .object({
-        firstName: yup.string().required(),
-        lastName: yup.string().required(),
-        address: yup.object({
-            street1: yup.string().required(),
-            street2: yup.string(),
-            city: yup.string().required(),
-            state: yup.string().required(),
-            zip: yup.string().required(),
-        }),
-        email: yup.string().required().email(),
-        password: yup.string().required(),
-        confirmPassword: yup
-            .string()
-            .oneOf([yup.ref("password"), null], "Passwords must match"),
-    })
-    .required();
+import {UserDetails} from "../../components/type/types";
+import {userSchema} from "../../components/mixins/userRelatedFunctions";
 
 const CreateManager = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -58,7 +25,7 @@ const CreateManager = () => {
         register,
         resetField,
         formState: { errors },
-    } = useForm<UserDetails>({ resolver: yupResolver(schema) });
+    } = useForm<UserDetails>({ resolver: yupResolver(userSchema) });
     const { ref: firstnameRef, ...firstnameRest } = register("firstName");
     const { ref: role, ...roleRest } = register("role");
     const { ref: lastnameRef, ...lastnameRest } = register("lastName");

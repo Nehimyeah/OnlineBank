@@ -36,3 +36,72 @@ body {
   top: 0;
 
 }
+select {
+  appearance:none;
+  outline:0;
+  height: 45px;
+  background: #fff;
+  flex: 1;
+  cursor:pointer;
+  font-size: 1.125em;
+  padding:10px 0;
+  border-bottom: 1px solid rgb(209 213 219);
+}
+select::-ms-expand {
+  display: none;
+}
+.select {
+  position: relative;
+  display: flex;
+  width: 20em;
+  height: 3em;
+  line-height: 3;
+  overflow: hidden;
+  border-radius: .25em;
+}
+.select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 1em;
+  cursor:pointer;
+  pointer-events:none;
+  transition:.25s all ease;
+}
+.select:hover::after {
+  color: #23b499;
+}
+select.round {
+  background-image:
+          linear-gradient(45deg, transparent 50%, gray 50%),
+          linear-gradient(135deg, gray 50%, transparent 50%),
+          radial-gradient(#ddd 70%, transparent 72%);
+  background-position:
+          calc(100% - 20px) calc(1em + 2px),
+          calc(100% - 15px) calc(1em + 2px),
+          calc(100% - .5em) .5em;
+  background-size:
+          5px 5px,
+          5px 5px,
+          1.5em 1.5em;
+  background-repeat: no-repeat;
+}
+
+select.round:focus {
+  background-image:
+          linear-gradient(45deg, white 50%, transparent 50%),
+          linear-gradient(135deg, transparent 50%, white 50%),
+          radial-gradient(gray 70%, transparent 72%);
+  background-position:
+          calc(100% - 15px) 1em,
+          calc(100% - 20px) 1em,
+          calc(100% - .5em) .5em;
+  background-size:
+          5px 5px,
+          5px 5px,
+          1.5em 1.5em;
+  background-repeat: no-repeat;
+  border-color: green;
+  outline: 0;
+}

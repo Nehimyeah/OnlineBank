@@ -9,23 +9,7 @@ import FormFieldError from "../../components/auth/form/form-field-error";
 import Button from "../../components/elements/button";
 import { Link } from "react-router-dom";
 import {UserDetails} from "../../components/type/types";
-
-const schema = yup
-    .object({
-      firstName: yup.string().required(),
-      lastName: yup.string().required(),
-      street1: yup.string().required(),
-      street2: yup.string(),
-      city: yup.string().required(),
-      state: yup.string().required(),
-      zipcode: yup.string().required(),
-      email: yup.string().required().email(),
-      password: yup.string().required(),
-      confirmPassword: yup
-          .string()
-          .oneOf([yup.ref("password"), null], "Passwords must match"),
-    })
-    .required();
+import {userSchema} from "../../components/mixins/userRelatedFunctions";
 
 const SignupPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -41,18 +25,19 @@ const SignupPage = () => {
     register,
     resetField,
     formState: { errors },
-  } = useForm<UserDetails>({ resolver: yupResolver(schema) });
-  const { ref: firstnameRef, ...firstnameRest } = register("firstName");
-  const { ref: lastnameRef, ...lastnameRest } = register("lastName");
-  const { ref: street1Ref, ...street1Rest } = register("street1");
-  const { ref: street2Ref, ...street2Rest } = register("street2");
-  const { ref: cityRef, ...cityRest } = register("city");
-  const { ref: stateRef, ...stateRest } = register("state");
-  const { ref: zipcodeRef, ...zipcodeRest } = register("zipcode");
-  const { ref: emailRef, ...emailRest } = register("email");
-  const { ref: passwordRef, ...passwordRest } = register("password");
-  const { ref: confirmPasswordRef, ...confirmPasswordRest } =
-      register("confirmPassword");
+  } = useForm<UserDetails>({ resolver: yupResolver(userSchema) });
+    const { ref: firstnameRef, ...firstnameRest } = register("firstName");
+    const { ref: role, ...roleRest } = register("role");
+    const { ref: lastnameRef, ...lastnameRest } = register("lastName");
+    const { ref: street1Ref, ...street1Rest } = register("address.street1");
+    const { ref: street2Ref, ...street2Rest } = register("address.street2");
+    const { ref: cityRef, ...cityRest } = register("address.city");
+    const { ref: stateRef, ...stateRest } = register("address.state");
+    const { ref: zipcodeRef, ...zipcodeRest } = register("address.zip");
+    const { ref: emailRef, ...emailRest } = register("email");
+    const { ref: passwordRef, ...passwordRest } = register("password");
+    const { ref: confirmPasswordRef, ...confirmPasswordRest } =
+        register("confirmPassword");
 
   const onsubmit = async (data: UserDetails) => {
     setSubmissionErrors([]);
@@ -88,7 +73,7 @@ const SignupPage = () => {
             onSubmit={handleSubmit(onsubmit)}
             className="bg-white/20"
         >
-          <h1 className="text-center font-bold text-slate-800 text-3xl mb-4 text-indigo-900">
+          <h1 className="text-center font-bold text-3xl mb-4 text-indigo-900">
             Registration
           </h1>
           {submissionErrors.length > 0 ? (
@@ -188,8 +173,8 @@ const SignupPage = () => {
                       reference={street1Ref}
                       {...street1Rest}
                   />
-                  {errors.street1?.message ? (
-                      <FormFieldError errorMessage={errors.street1.message} />
+                  {errors.address?.street1?.message ? (
+                      <FormFieldError errorMessage={errors.address.street1.message} />
                   ) : (
                       ""
                   )}
@@ -200,8 +185,8 @@ const SignupPage = () => {
                       reference={street2Ref}
                       {...street2Rest}
                   />
-                  {errors.street2?.message ? (
-                      <FormFieldError errorMessage={errors.street2.message} />
+                  {errors.address?.street2?.message ? (
+                      <FormFieldError errorMessage={errors.address.street2.message} />
                   ) : (
                       ""
                   )}
@@ -212,8 +197,8 @@ const SignupPage = () => {
                       reference={cityRef}
                       {...cityRest}
                   />
-                  {errors.city?.message ? (
-                      <FormFieldError errorMessage={errors.city.message} />
+                  {errors.address?.city?.message ? (
+                      <FormFieldError errorMessage={errors.address.city.message} />
                   ) : (
                       ""
                   )}
@@ -224,8 +209,8 @@ const SignupPage = () => {
                       reference={stateRef}
                       {...stateRest}
                   />
-                  {errors.state?.message ? (
-                      <FormFieldError errorMessage={errors.state.message} />
+                  {errors.address?.state?.message ? (
+                      <FormFieldError errorMessage={errors.address.state.message} />
                   ) : (
                       ""
                   )}
@@ -236,8 +221,8 @@ const SignupPage = () => {
                       reference={zipcodeRef}
                       {...zipcodeRest}
                   />
-                  {errors.zipcode?.message ? (
-                      <FormFieldError errorMessage={errors.zipcode.message} />
+                  {errors.address?.zip?.message ? (
+                      <FormFieldError errorMessage={errors.address.zip.message} />
                   ) : (
                       ""
                   )}
