@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {useEffect, useState} from "react";
-import { axiosPrivate} from "../../service/axios.service";
+import { axiosPrivateBranch, axiosPrivate } from "../../service/axios.service";
 import ClientInput from "../../components/auth/inputs/client-input";
 import FormFieldError from "../../components/auth/form/form-field-error";
 import Button from "../../components/elements/button";
@@ -66,7 +66,7 @@ const CreateBranch = () => {
         data.branchManagerId = selectedOption;
 
         try {
-            await axiosPrivate.post("/branches", data)
+            await axiosPrivateBranch.post("/branches", data)
                 .then(() => {
                     notify();
                     setTimeout(() => {

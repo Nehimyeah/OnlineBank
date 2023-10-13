@@ -11,6 +11,18 @@ export const axiosClient = axios.create({
 export const axiosPrivate = axios.create({
   baseURL: BACKEND_URL ?? "http://localhost:9000",
   headers: {
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${token}`,
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+  }
+});
+
+
+export const axiosPrivateBranch = axios.create({
+  baseURL: BACKEND_URL ?? "http://localhost:3300",
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
   }
 });
