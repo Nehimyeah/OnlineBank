@@ -25,8 +25,12 @@ public class AnnualAPRService {
             aprRepository.save(annualAPR);
 
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong. Not created");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("APR creation failed");
         }
         return ResponseEntity.status(HttpStatus.OK).body("APR rate saved");
+    }
+
+    public double findById(long id) {
+        return aprRepository.findById(id).get().getAnnualAPR();
     }
 }

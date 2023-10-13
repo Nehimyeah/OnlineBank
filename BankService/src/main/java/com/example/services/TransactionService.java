@@ -48,15 +48,10 @@ public class TransactionService {
         Transaction transaction;
         try {
             transaction = new Transaction();
-            transaction.setAccountType(transactionRequest.getAccountType());
-            transaction.setAccountNumber(transactionRequest.getAccountNumber());
-            transaction.setCurrentBalance(transactionRequest.getCurrentBalance());
             transaction.setPreviousBalance(transactionRequest.getPreviousBalance());
             transaction.setAmount(transactionRequest.getAmount());
             transaction.setTransactionType(transactionRequest.getTransactionType());
             transaction.setCreatedDate(LocalDateTime.now());
-            transaction.setTransactionStatus(transactionRequest.getTransactionStatus());
-            transaction.setAccount(transactionRequest.getAccount());
             transaction = transactionRepository.save(transaction);
 
         } catch (Exception e) {

@@ -24,7 +24,7 @@ public class CheckingAccountController {
     }
     //@PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/update")
-    public ResponseEntity<?> deleteCheckingAccount(@RequestBody CheckingAccountRequest checkingAccountRequest){
+    public ResponseEntity<?> update(@RequestBody CheckingAccountRequest checkingAccountRequest){
         return checkingAccountService.update(checkingAccountRequest);
     }
     @PostMapping("/withdraw")

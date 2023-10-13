@@ -78,7 +78,6 @@ public class CheckingAccountService {
                 responseModel.setMessage("Account doesn't exist");
                 return responseModel;
             }
-
             checkingAccount = checkingAccountOptional.get();
 
             // validate account
@@ -89,24 +88,11 @@ public class CheckingAccountService {
             }
             BigDecimal previousBalance = checkingAccount.getBalance();
             checkingAccount.setBalance(previousBalance.subtract(operationRequest.getAmount()));
+
+            Transaction transaction = new Transaction(null,previousBalance,operationRequest.getAmount(),TransactionType.WITHDRAW, LocalDateTime.now());
+            checkingAccount.getTransactions().add(transaction);
             checkingAccount = accountRepository.save(checkingAccount);
-            TransactionRequest transactionRequest = new TransactionRequest();
-            transactionRequest.setAccountNumber(checkingAccount.getAccountNumber());
-            transactionRequest.setAmount(operationRequest.getAmount());
-            transactionRequest.setPreviousBalance(previousBalance);
-            transactionRequest.setCurrentBalance(checkingAccount.getBalance());
-            transactionRequest.setAccountType(AccountType.CHECKING);
-            transactionRequest.setTransactionStatus(TransactionStatus.APPROVED);
-            transactionRequest.setTransactionType(TransactionType.WITHDRAW);
-            transactionRequest.setAccount(checkingAccount);
-            ResponseModel<Transaction> response = transactionService.save(transactionRequest);
-            if (!response.getSuccess()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Transaction failed");
-                return responseModel;
-            }
-            checkingAccount.getTransactions().add(response.getData());
-            checkingAccount = accountRepository.save(checkingAccount);
+
             responseModel.setSuccess(true);
             responseModel.setData(checkingAccount);
             responseModel.setMessage("Withdraw successfull");

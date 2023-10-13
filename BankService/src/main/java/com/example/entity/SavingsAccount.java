@@ -9,5 +9,4 @@ import lombok.Setter;
 @Entity
 public class SavingsAccount extends Account{
     private Double annualAPY;
-
 }

@@ -3,8 +3,7 @@ package com.example.entity;
 import com.example.enums.AccountStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,6 +14,10 @@ import java.util.UUID;
 @Entity
 @Setter
 @Getter
+@ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Account {
     @Id
@@ -35,6 +38,8 @@ public abstract class Account {
     private Long deletedBy;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "account")
     List<Transaction> transactions = new ArrayList<>();
+
+
 
 
 

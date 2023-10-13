@@ -30,4 +30,8 @@ public class AnnualAPYService {
         }
         return ResponseEntity.status(HttpStatus.OK).body("APY rate saved");
     }
+
+    public double findById(long id) {
+        return apyRepository.findById(id).get().getAnnualAPY();
+    }
 }

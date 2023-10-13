@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum AccountType {
 
-    LOAN(0, "loan"),
-    CHECKING(1, "checking"),
-    SAVINGS(2, "savings"),
+    LOAN(1001, "loan"),
+    CHECKING(1002, "checking"),
+    SAVINGS(1003, "savings"),
     ;
 
     private final long id;
@@ -35,4 +35,8 @@ public enum AccountType {
         }
         return null;
     }
+//    public static Boolean isValidId(Long id){
+//        for(Long i:AccountType.get)
+//        return
+//    }
 }
