@@ -13,6 +13,8 @@ public class GatewayConfig {
         return builder.routes()
                 .route(r -> r.path("/users/**")
                         .uri("lb://USER-SERVICE"))
+                .route(r -> r.path("/branches/**")
+                        .uri("lb://BRANCH-SERVICE"))
                 .build();
     }
 }
