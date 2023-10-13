@@ -17,10 +17,10 @@ public class TransactionController {
     @Autowired
     TransactionService transactionService;
 
-    @GetMapping("/list/{userid}")
-    public ResponseModel<List<Transaction>> listOfTransactions(@PathVariable Long userid){
-        return transactionService.getAllTransactionsByAccountNum(userid);
-    }
+//    @GetMapping("/list/{userid}")
+//    public ResponseModel<List<Transaction>> listOfTransactions(@PathVariable String accountNumber){
+//        return transactionService.getAllTransactionsByAccountNum(accountNumber);
+//    }
 
 
 }

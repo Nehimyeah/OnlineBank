@@ -10,7 +10,6 @@ import java.util.UUID;
 @Repository
 
 public interface CheckingAccountRepository extends JpaRepository<CheckingAccount, UUID> {
-    @Query(value = "select * from checking_account where user_id = :id",nativeQuery = true)
-    Optional<CheckingAccount> findByUserId(Long id);
+
 
 }

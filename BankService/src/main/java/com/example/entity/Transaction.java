@@ -20,6 +20,7 @@ public class Transaction{
     private Long id;
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
+    private String accountNumber;
     private BigDecimal previousBalance;
     private BigDecimal currentBalance;
     private BigDecimal amount;

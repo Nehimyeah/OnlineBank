@@ -1,8 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.request.LoanAccountRequest;
 import com.example.dto.request.SavingsAccountRequest;
-import com.example.services.LoanAccountService;
 import com.example.services.SavingsAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

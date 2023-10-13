@@ -1,12 +1,9 @@
 package com.example.services;
 
-import com.example.dto.request.LoanAccountRequest;
 import com.example.dto.request.SavingsAccountRequest;
 import com.example.entity.*;
 import com.example.enums.AccountStatus;
-import com.example.repository.AnnualAPRRepository;
 import com.example.repository.AnnualAPYRepository;
-import com.example.repository.LoanAccountRepository;
 import com.example.repository.SavingsAccountRepository;
 import com.example.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,6 @@ public class SavingsAccountService {
     AnnualAPYRepository apyRepository;
 
     public ResponseEntity<?> create(SavingsAccountRequest savingsAccountRequest) {
-
         try {
             SavingsAccount savingsAccount = new SavingsAccount();
 
@@ -38,7 +34,7 @@ public class SavingsAccountService {
                 if (!optionalAnnualAPY.isPresent()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APY id has not been provided");
                 }
-                savingsAccount.setAnnualAPY(optionalAnnualAPY.get().getAnnualAPY());
+                ((SavingsAccount) savingsAccount).setAnnualAPY(optionalAnnualAPY.get().getAnnualAPY());
             }
             savingsAccount.setUserId(savingsAccountRequest.getUserId());
             savingsAccount.setBranchId(savingsAccountRequest.getBranchId());

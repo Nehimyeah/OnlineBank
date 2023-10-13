@@ -1,12 +1,10 @@
 package com.example.controller;
 
 import com.example.dto.ResponseModel;
-import com.example.dto.request.CheckingAccountRequest;
+import com.example.dto.request.checking.CheckingAccountRequest;
 import com.example.dto.request.OperationRequest;
-import com.example.dto.response.CheckingAccountResponseModel;
-import com.example.entity.CheckingAccount;
+import com.example.entity.Account;
 import com.example.services.CheckingAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,17 +28,17 @@ public class CheckingAccountController {
         return checkingAccountService.update(checkingAccountRequest);
     }
     @PostMapping("/withdraw")
-    public ResponseModel<CheckingAccount> withdraw(@RequestBody OperationRequest operationRequest){
+    public ResponseModel<Account> withdraw(@RequestBody OperationRequest operationRequest){
         return checkingAccountService.withdraw(operationRequest);
     }
     @PostMapping("/deposit")
-    public ResponseModel<CheckingAccount>deposit(@RequestBody OperationRequest operationRequest){
+    public ResponseModel<Account>deposit(@RequestBody OperationRequest operationRequest){
         return checkingAccountService.deposit(operationRequest);
     }
-    @GetMapping("/{id}")
-    public ResponseModel<CheckingAccountResponseModel> getCheckingAccount(@PathVariable Long id){
-        return checkingAccountService.getCheckingAccount(id);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseModel<Account> getCheckingAccount(@PathVariable Long id){
+//        return checkingAccountService.getCheckingAccount(id);
+//    }
 
 
 

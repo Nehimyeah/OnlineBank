@@ -19,6 +19,5 @@ public class AnnualAPR {
     private Double annualAPR;
     private int months;
     private String description;
-  //  private Long userId;
 
 }
