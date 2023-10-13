@@ -1,9 +1,11 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import LoginPage from "./pages/auth/login-page";
 import MainLayout from "./components/layouts/main-layout";
-import HomePage from "./pages/home";
-import IceCreamPage from "./pages/icecream";
+import HomePage from "./pages/manager/home";
+import BranchPage from "./pages/branches/branches";
 import SignupPage from "./pages/auth/signup-page";
+import CreateManager from "./pages/manager/manager-create";
+import CreateBranch from "./pages/branches/branch-create";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 
@@ -17,7 +19,10 @@ function App() {
             <Route path="login" element={<LoginPage />} />
             <Route path="signup" element={<SignupPage />} />
           </Route>
-          <Route path="icecream" element={<IceCreamPage />} />
+          <Route path="managers" element={<HomePage />} />
+          <Route path="managers/create" element={<CreateManager />} />
+          <Route path="branches" element={<BranchPage />} />
+          <Route path="branches/create" element={<CreateBranch />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </MainLayout>

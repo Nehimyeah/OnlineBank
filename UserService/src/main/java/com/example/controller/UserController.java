@@ -51,6 +51,11 @@ public class UserController {
 
     }
 
+    @GetMapping("/teams")
+    public Iterable<User> getAllManagers() {
+        return userService.getAllManagers();
+    }
+
     @PutMapping("/{userId}/disable")
     public ResponseEntity<?> disableCustomer(
             @PathVariable long userId,

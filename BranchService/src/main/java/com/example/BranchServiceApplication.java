@@ -1,11 +1,14 @@
 package com.example;
 
-import com.example.service.BranchService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.domain.Address;
+import com.example.domain.Branch;
+import com.example.service.IBranchService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
@@ -15,11 +18,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EntityScan("com.example.domain")
 @EnableJpaRepositories("com.example.repository")
+@RequiredArgsConstructor
+@EnableDiscoveryClient
 public class BranchServiceApplication implements CommandLineRunner{
 
 
-    @Autowired
-    private BranchService branchService;
+    private final IBranchService branchService;
 
     public static void main( String[] args ){
         SpringApplication.run(BranchServiceApplication.class, args);
@@ -27,16 +31,17 @@ public class BranchServiceApplication implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-
-        branchService.createBranchInfo("ABC", 101L);
-        branchService.createBranchInfo("XYZ", 202L);
-
-
-        branchService.createAddressInfo(1L, "Fairfield", "IA", "123 St", 52556);
-        branchService.createAddressInfo(2L, "Rochester", "MN", "789 Dr", 55901);
-
-
-
-
+        Address address = Address.builder()
+                .zip(52557)
+                .city("Fairfield")
+                .state("Iowa")
+                .street1("1000 N 4th St")
+                .build();
+        Branch branch = Branch.builder()
+                .branchManagerId(10L)
+                .branchName("Fairfield")
+                .address(address)
+                .build();
+        branchService.saveInternal(branch);
     }
 }
