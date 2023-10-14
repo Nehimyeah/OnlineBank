@@ -1,4 +1,4 @@
-package service;
+package com.example.service;
 
 import com.example.Util.Util;
 import com.example.domain.Account;
@@ -25,7 +25,6 @@ public class CheckingService {
         Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountDTO.getAccountNumber());
 
         CheckingAccount checkingAccount = new CheckingAccount();
-
 
        while((Util.generateAccountNum().compareTo(accountOptional.get().getAccountNumber()) == 0)){
 
