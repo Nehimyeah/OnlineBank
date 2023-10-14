@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AnnualAPYService {
     @Autowired
@@ -33,5 +36,11 @@ public class AnnualAPYService {
 
     public double findById(long id) {
         return apyRepository.findById(id).get().getAnnualAPY();
+    }
+
+    public ResponseEntity<?> getAPYList() {
+        List<AnnualAPY> list;
+        list = apyRepository.findAll();
+        return ResponseEntity.ok().body(list);
     }
 }

@@ -2,7 +2,9 @@ package com.example.services;
 
 import com.example.dto.ResponseModel;
 import com.example.dto.request.OperationRequest;
-import com.example.dto.request.TransactionRequest;
+import com.example.dto.request.account.AccountRequest;
+import com.example.dto.request.account.AccountUpdateRequest;
+import com.example.dto.request.transaction.TransactionCreateRequest;
 import com.example.dto.request.loan.LoanCreateRequest;
 import com.example.dto.request.loan.LoanUpdateRequest;
 import com.example.entity.Account;
@@ -15,6 +17,7 @@ import com.example.enums.TransactionStatus;
 import com.example.enums.TransactionType;
 import com.example.repository.AccountRepository;
 import com.example.repository.AnnualAPRRepository;
+import com.example.repository.LoanAccountRepository;
 import com.example.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,23 +38,22 @@ public class LoanAccountService {
     @Autowired
     TransactionService transactionService;
 
-    public ResponseEntity<?> create(LoanCreateRequest loanCreateRequest) {
+    public ResponseEntity<?> create(AccountRequest accountRequest) {
 
         try {
             Account loanAccount = new LoanAccount();
             loanAccount.setAccountNumber(Util.generateAccountNum());
             loanAccount.setAccountStatus(AccountStatus.PENDING);
             loanAccount.setBalance(loanAccount.getBalance()==null? BigDecimal.ZERO:loanAccount.getBalance());
-            if (loanCreateRequest.getAprRateId() != null) {
-                Optional<AnnualAPR> optionalAnnualAPR = aprRepository.findById(loanCreateRequest.getAprRateId());
+            if (accountRequest.getInterestRateId() != null) {
+                Optional<AnnualAPR> optionalAnnualAPR = aprRepository.findById(accountRequest.getInterestRateId());
                 if (!optionalAnnualAPR.isPresent()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APR id has not been provided");
                 }
                 ((LoanAccount) loanAccount).setAnnualAPR(optionalAnnualAPR.get().getAnnualAPR());
             }
-            loanAccount.setUserId(loanCreateRequest.getUserId());
-            loanAccount.setBranchId(loanCreateRequest.getBranchId());
-    //        loanAccount.setCreatedBy(loanCreateRequest.getCreatedBy());
+            loanAccount.setUserId(accountRequest.getUserId());
+            loanAccount.setBranchId(accountRequest.getBranchId());
             loanAccount.setCreatedDate(LocalDateTime.now());
             loanAccount.setIsDeleted(false);
             accountRepository.save(loanAccount);
@@ -62,20 +64,20 @@ public class LoanAccountService {
 
     }
 
-    public ResponseEntity<?> update(LoanUpdateRequest loanUpdateRequest) {
+    public ResponseEntity<?> update(String accountNumber, AccountUpdateRequest accountUpdateRequest) {
         try {
-            Optional<Account> loanAccountOptional = accountRepository.findById(loanUpdateRequest.getAccountId());
+            Optional<Account> loanAccountOptional = accountRepository.findByAccountNumber(accountNumber);
             if (!loanAccountOptional.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account doesn't exist");
             }
             Account loanAccount = loanAccountOptional.get();
-            loanAccount.setAccountStatus(loanUpdateRequest.getAccountStatus());
-            loanAccount.setBranchId(loanUpdateRequest.getBranchId());
-            loanAccount.setIsDeleted(loanUpdateRequest.getIsDeleted());
+            loanAccount.setAccountStatus(accountUpdateRequest.getAccountStatus());
+            loanAccount.setBranchId(accountUpdateRequest.getBranchId());
+        //  loanAccount.setIsDeleted(accountUpdateRequest.getIsDeleted());
         //  loanAccount.setDeletedBy(loanAccountRequest.getDeletedBy());
             loanAccount.setDeletedDate(LocalDateTime.now());
-            if (loanUpdateRequest.getAprRateId() != null) {
-                Optional<AnnualAPR> optionalAnnualAPR = aprRepository.findById(loanUpdateRequest.getAprRateId());
+            if (accountUpdateRequest.getInterestRateId() != null) {
+                Optional<AnnualAPR> optionalAnnualAPR = aprRepository.findById(accountUpdateRequest.getInterestRateId());
                 if (!optionalAnnualAPR.isPresent()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APR id has not been provided");
                 }
@@ -91,7 +93,7 @@ public class LoanAccountService {
         ResponseModel<Account> responseModel = new ResponseModel<>();
         try {
             Account loanAccount;
-            Optional<Account> loanAccountOptional = accountRepository.findById(UUID.fromString(operationRequest.getAccountId()));
+            Optional<Account> loanAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
             if (loanAccountOptional.isPresent()) {
                 responseModel.setSuccess(false);
                 responseModel.setMessage("Account doesn't exist");
@@ -109,16 +111,13 @@ public class LoanAccountService {
             BigDecimal previousBalance = loanAccount.getBalance();
             loanAccount.setBalance(previousBalance.subtract(operationRequest.getAmount()));
             loanAccount = accountRepository.save(loanAccount);
-            TransactionRequest transactionRequest = new TransactionRequest();
-            transactionRequest.setAccountNumber(loanAccount.getAccountNumber());
-            transactionRequest.setAmount(operationRequest.getAmount());
-            transactionRequest.setPreviousBalance(previousBalance);
-            transactionRequest.setCurrentBalance(loanAccount.getBalance());
-            transactionRequest.setAccountType(AccountType.CHECKING);
-            transactionRequest.setTransactionStatus(TransactionStatus.APPROVED);
-            transactionRequest.setTransactionType(TransactionType.WITHDRAW);
-            transactionRequest.setAccount(loanAccount);
-            ResponseModel<Transaction> response = transactionService.save(transactionRequest);
+            TransactionCreateRequest transactionCreateRequest = new TransactionCreateRequest();
+            transactionCreateRequest.setAccountNumber(loanAccount.getAccountNumber());
+            transactionCreateRequest.setAmount(operationRequest.getAmount());
+            transactionCreateRequest.setPreviousBalance(previousBalance);
+            transactionCreateRequest.setTransactionType(TransactionType.WITHDRAW);
+
+            ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
             if (!response.getSuccess()) {
                 responseModel.setSuccess(false);
                 responseModel.setMessage("Transaction failed");
@@ -142,7 +141,7 @@ public class LoanAccountService {
         Account loanAccount;
         ResponseModel<Account> responseModel = new ResponseModel<>();
         try {
-            Optional<Account> loanAccountOptional = accountRepository.findById(UUID.fromString(operationRequest.getAccountId()));
+            Optional<Account> loanAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
             if (!loanAccountOptional.isPresent()) {
                 responseModel.setSuccess(false);
                 responseModel.setMessage("Account doesn't exist");
@@ -152,16 +151,16 @@ public class LoanAccountService {
             BigDecimal previousBalance = loanAccount.getBalance();
             loanAccount.setBalance(previousBalance.add(operationRequest.getAmount()));
             loanAccount = accountRepository.save(loanAccount);
-            TransactionRequest transactionRequest = new TransactionRequest();
-            transactionRequest.setAccountNumber(loanAccount.getAccountNumber());
-            transactionRequest.setAmount(operationRequest.getAmount());
-            transactionRequest.setPreviousBalance(previousBalance);
-            transactionRequest.setCurrentBalance(loanAccount.getBalance());
-            transactionRequest.setAccountType(AccountType.CHECKING);
-            transactionRequest.setTransactionType(TransactionType.DEPOSIT);
-            transactionRequest.setTransactionStatus(TransactionStatus.APPROVED);
-            transactionRequest.setAccount(loanAccount);
-            ResponseModel<Transaction> response = transactionService.save(transactionRequest);
+            TransactionCreateRequest transactionCreateRequest = new TransactionCreateRequest();
+            transactionCreateRequest.setAccountNumber(loanAccount.getAccountNumber());
+            transactionCreateRequest.setAmount(operationRequest.getAmount());
+            transactionCreateRequest.setPreviousBalance(previousBalance);
+            transactionCreateRequest.setCurrentBalance(loanAccount.getBalance());
+            transactionCreateRequest.setAccountType(AccountType.LOAN);
+            transactionCreateRequest.setTransactionType(TransactionType.DEPOSIT);
+            transactionCreateRequest.setTransactionStatus(TransactionStatus.APPROVED);
+
+            ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
             if (!response.getSuccess()) {
                 responseModel.setSuccess(false);
                 responseModel.setMessage("Transaction was not created");

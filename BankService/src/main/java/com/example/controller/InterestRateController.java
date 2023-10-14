@@ -23,4 +23,12 @@ public class InterestRateController {
     public ResponseEntity<?> createApy(@RequestBody AnnualInterestRequest annualInterestRequest){
         return apyService.create(annualInterestRequest);
     }
+    @GetMapping("/aprlist")
+    public ResponseEntity<?> getAPRList(){
+        return aprService.getAPRList();
+    }
+    @GetMapping("/apylist")
+    public ResponseEntity<?> getAPYList(){
+        return apyService.getAPYList();
+    }
 }

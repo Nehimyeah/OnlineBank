@@ -1,77 +1,99 @@
 package com.example.services;
-
+import com.example.dto.ResponseModel;
+import com.example.dto.request.OperationRequest;
 import com.example.dto.request.account.AccountRequest;
-import com.example.entity.*;
-import com.example.enums.AccountStatus;
-import com.example.enums.AccountType;
+import com.example.dto.request.account.AccountUpdateRequest;
+import com.example.entity.Account;
 import com.example.repository.AccountRepository;
-import com.example.utils.Util;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
 public class AccountService{
     private final AccountRepository accountRepository;
-    private final AnnualAPYService apyService;
-    private final AnnualAPRService aprService;
+    private final CheckingAccountService checkingAccountService;
+    private final LoanAccountService loanAccountService;
+    private final SavingsAccountService savingsAccountService;
 
-    private final ModelMapper modelMapper;
-/**
-    public void create(AccountRequest accountRequest) {
-        switch(accountRequest.getAccountType()){
-            case "saving":
-                SavingsAccount account = modelMapper.map(accountRequest, SavingsAccount.class);
-                SavingsAccount sAccount = account;
-                sAccount.setAnnualAPY(apyService.findById(accountRequest.getInterestRateId()));
-                accountRepository.save(sAccount);
-                break;
+    public ResponseEntity<?> create(AccountRequest accountRequest) {
+        switch (accountRequest.getAccountType()){
+            case "checking" :
+                return checkingAccountService.create(accountRequest);
             case "loan":
-                LoanAccount lAccount = (LoanAccount) account;
-                lAccount.setAnnualAPR(aprService.findById(accountRequest.getInterestRateId()));
-                accountRepository.save(lAccount);
-                break;
-            case "checking":
-                accountRepository.save(account);
-
-
-            account.setAccountNumber(Util.generateAccountNum());
-            account.setAccountStatus(AccountStatus.PENDING);
-            account.setBalance(account.getBalance() == null ? BigDecimal.ZERO : account.getBalance());
-//            checkingAccount.setUserId(accountRequest.getUserId());
-//            checkingAccount.setBranchId(accountRequest.getBranchId());
-//            checkingAccount.setCreatedBy(accountRequest.getCreatedBy());
-            account.setCreatedDate(LocalDateTime.now());
-            account.setIsDeleted(false);
-
-
-
+                return loanAccountService.create(accountRequest);
+            case "savings":
+                return savingsAccountService.create(accountRequest);
         }
-        accountRepository.save(account);
-//        = modelMapper.map(accountRequest, Account.class);
-//        if(AccountType.getByCode(accountRequest.getAccountType()))
+        return ResponseEntity.badRequest().body("Account type is not correct ");
 
-        accountRepository.save(account);
-        System.out.println(account);
+    }
+    public ResponseEntity<?> update(String accountNum, AccountUpdateRequest accountUpdateRequest) {
+        switch (accountUpdateRequest.getAccountType()){
+            case "checking" :
+                return checkingAccountService.update(accountNum, accountUpdateRequest);
+            case "loan":
+                return loanAccountService.update(accountNum, accountUpdateRequest);
+            case "savings":
+                return savingsAccountService.update(accountNum, accountUpdateRequest);
+        }
+        return ResponseEntity.badRequest().body("Account type is not correct ");
 
     }
 
-
-
-    void a() {
-        if (savingsAccountRequest.getApyRateId() != null) {
-            Optional<AnnualAPY> optionalAnnualAPY = apyRepository.findById(savingsAccountRequest.getApyRateId());
-            if (!optionalAnnualAPY.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APY id has not been provided");
-            }
-            ((SavingsAccount) savingsAccount).setAnnualAPY(optionalAnnualAPY.get().getAnnualAPY());
+    public ResponseModel<?> withdraw(OperationRequest operationRequest) {
+        switch (operationRequest.getAccountType()){
+            case "checking" :
+                return checkingAccountService.withdraw(operationRequest);
+            case "loan":
+                return loanAccountService.withdraw(operationRequest);
+            case "savings":
+                return savingsAccountService.withdraw(operationRequest);
         }
-    }  */
+        ResponseModel<?> responseModel = new ResponseModel<>();
+        responseModel.setSuccess(false);
+        responseModel.setMessage("Account type is not correct");
+        return responseModel;
+
+    }
+
+    public ResponseModel<?> deposit(OperationRequest operationRequest) {
+        switch (operationRequest.getAccountType()){
+            case "checking" :
+                return checkingAccountService.deposit(operationRequest);
+            case "loan":
+                return loanAccountService.deposit(operationRequest);
+            case "savings":
+                return savingsAccountService.deposit(operationRequest);
+        }
+        ResponseModel<?> responseModel = new ResponseModel<>();
+        responseModel.setSuccess(false);
+        responseModel.setMessage("Account type is not correct");
+        return responseModel;
+    }
+
+    public ResponseModel<Account> getAccountById(String accountNumber) {
+        ResponseModel<Account> responseModel = new ResponseModel<>();
+        Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountNumber);
+        if (!accountOptional.isPresent()) {
+            responseModel.setMessage("Account doesn't exist");
+            responseModel.setSuccess(false);
+            return responseModel;
+        }
+        Account account = accountOptional.get();
+        responseModel.setSuccess(true);
+        responseModel.setData(account);
+        return responseModel;
+    }
+
+    public List<Account> getList(Long id) {
+        return accountRepository.findByUserId(id);
+
+
+    }
 }

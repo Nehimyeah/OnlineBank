@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OperationRequest {
-    private String accountId;
+    private String accountNum;
     private BigDecimal amount;
+    private String accountType;
 }

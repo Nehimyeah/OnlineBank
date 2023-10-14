@@ -18,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Account {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
