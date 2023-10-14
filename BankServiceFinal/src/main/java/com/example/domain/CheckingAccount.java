@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import com.example.annotation.EntityHandler;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.ToString;
 @Entity
 @ToString
 @DiscriminatorValue("checking")
+@EntityHandler("checkingService")
 public class CheckingAccount extends Account{
 
 

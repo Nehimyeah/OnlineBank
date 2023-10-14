@@ -1,19 +1,10 @@
 package com.example.dto;
 
-import com.example.domain.CheckingAccount;
-import com.example.domain.SavingsAccount;
 import com.example.domain.Transaction;
 import com.example.enums.AccountStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
-import lombok.Getter;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -27,16 +18,15 @@ import java.util.UUID;
 @ToString
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = AccountDTO.class, name = "saving"),
-        @JsonSubTypes.Type(value = AccountDTO.class, name = "checking"),
-        @JsonSubTypes.Type(value = AccountDTO.class, name = "loan")
+        @JsonSubTypes.Type(value = SavingsAccountDto.class, name = "saving"),
+        @JsonSubTypes.Type(value = CheckingAccountDto.class, name = "checking"),
+        @JsonSubTypes.Type(value = LoanAccountDto.class, name = "loan")
 })
 
-public class AccountDTO implements Serializable {
+public class AccountDto implements Serializable {
 
     private UUID id;
     private String accountNumber;

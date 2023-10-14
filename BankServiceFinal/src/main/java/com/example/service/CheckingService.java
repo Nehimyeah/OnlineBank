@@ -3,7 +3,7 @@ package com.example.service;
 import com.example.Util.Util;
 import com.example.domain.Account;
 import com.example.domain.CheckingAccount;
-import com.example.dto.AccountDTO;
+import com.example.dto.AccountDto;
 import com.example.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,7 +20,7 @@ public class CheckingService {
     private ModelMapper mapper;
 
 
-    public void create(AccountDTO accountDTO){
+    public void create(AccountDto accountDTO){
 
         Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountDTO.getAccountNumber());
 
