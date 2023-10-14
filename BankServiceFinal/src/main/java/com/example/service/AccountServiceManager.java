@@ -16,13 +16,10 @@ public class AccountServiceManager  {
     private final AccountRepository accountRepository;
     private final ApplicationContext appcontext;
 
-//    public AccountDto get(long accountNumber) {
+//    public AccountDto get(String accountNumber) {
 //        Optional<Account> optAccount = accountRepository.findByAccountNumber(accountNumber);
-//
 //        Account acc = optAccount.orElseThrow(() -> new RuntimeException("The account doesn't exist"));
-//
 //        EntityHandler annotation = acc.getClass().getAnnotation(EntityHandler.class);
-//
 //        AccountService<AccountDto, Account> accountService = appcontext.getBean(annotation.value(), AccountService.class);
 //
 //        return accountService.get(acc);
