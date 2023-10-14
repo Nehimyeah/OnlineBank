@@ -18,16 +18,15 @@ import java.util.UUID;
 @ToString
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = AccountDTO.class, name = "saving"),
-        @JsonSubTypes.Type(value = AccountDTO.class, name = "checking"),
-        @JsonSubTypes.Type(value = AccountDTO.class, name = "loan")
+        @JsonSubTypes.Type(value = SavingsAccountDto.class, name = "saving"),
+        @JsonSubTypes.Type(value = CheckingAccountDto.class, name = "checking"),
+        @JsonSubTypes.Type(value = LoanAccountDto.class, name = "loan")
 })
 
-public class AccountDTO implements Serializable {
+public class AccountDto implements Serializable {
 
     private UUID id;
     private String accountNumber;
