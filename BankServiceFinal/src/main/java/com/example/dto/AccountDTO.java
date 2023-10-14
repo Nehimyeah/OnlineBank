@@ -1,19 +1,10 @@
 package com.example.dto;
 
-import com.example.domain.CheckingAccount;
-import com.example.domain.SavingsAccount;
 import com.example.domain.Transaction;
 import com.example.enums.AccountStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
-import lombok.Getter;
 import lombok.ToString;
 
 import java.io.Serializable;
