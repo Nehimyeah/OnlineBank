@@ -29,7 +29,7 @@ import java.util.UUID;
 public class AccountDto implements Serializable {
 
     private UUID id;
-    private String accountNumber;
+    private long accountNumber;
     private AccountStatus accountStatus;
     private BigDecimal balance;
     private Long userId;
