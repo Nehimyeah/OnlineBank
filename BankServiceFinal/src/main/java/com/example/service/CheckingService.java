@@ -20,16 +20,16 @@ public class CheckingService {
     private ModelMapper mapper;
 
 
-    public void create(AccountDto accountDTO){
-
-        Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountDTO.getAccountNumber());
-
-        CheckingAccount checkingAccount = new CheckingAccount();
-
-       while((Util.generateAccountNum().compareTo(accountOptional.get().getAccountNumber()) == 0)){
-
-
-       }
-
-    }
+//    public void create(AccountDto accountDTO){
+//
+//        Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountDTO.getAccountNumber());
+//
+//        CheckingAccount checkingAccount = new CheckingAccount();
+//
+//       while((Util.generateAccountNum().compareTo(accountOptional.get().getAccountNumber()) == 0)){
+//
+//
+//       }
+//
+//    }
 }

@@ -1,23 +1,19 @@
-package com.example.dto.request;
+package com.example.dto.request.transaction;
 
 import com.example.entity.Account;
 import com.example.enums.TransactionStatus;
 import com.example.enums.AccountType;
 import com.example.enums.TransactionType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class TransactionRequest {
+@AllArgsConstructor
+@Builder
+public class TransactionCreateRequest {
     private String accountNumber;
     private BigDecimal amount;
     private BigDecimal previousBalance;
@@ -25,8 +21,6 @@ public class TransactionRequest {
     private AccountType accountType;
     private TransactionType transactionType;
     private TransactionStatus transactionStatus;
-    private Account account;
-
 
 
 }

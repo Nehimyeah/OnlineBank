@@ -1,10 +1,14 @@
 package com.example.services;
 
 import com.example.dto.ResponseModel;
-import com.example.dto.request.SavingsAccountRequest;
+import com.example.dto.request.OperationRequest;
+import com.example.dto.request.account.AccountRequest;
+import com.example.dto.request.account.AccountUpdateRequest;
+import com.example.dto.request.transaction.TransactionCreateRequest;
 import com.example.dto.response.SavingsResponse;
 import com.example.entity.*;
 import com.example.enums.AccountStatus;
+import com.example.enums.TransactionType;
 import com.example.repository.AccountRepository;
 import com.example.repository.AnnualAPYRepository;
 import com.example.repository.SavingsAccountRepository;
@@ -13,16 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 public class SavingsAccountService {
-    @Autowired
-    SavingsAccountRepository savingsAccountRepository;
 
     @Autowired
     AccountRepository accountRepository;
@@ -30,23 +31,25 @@ public class SavingsAccountService {
     @Autowired
     AnnualAPYRepository apyRepository;
 
-    public ResponseEntity<?> create(SavingsAccountRequest savingsAccountRequest) {
+    @Autowired
+    TransactionService transactionService;
+
+    public ResponseEntity<?> create(AccountRequest accountRequest) {
         try {
             Account savingsAccount = new SavingsAccount();
 
             savingsAccount.setAccountNumber(Util.generateAccountNum());
             savingsAccount.setAccountStatus(AccountStatus.PENDING);
             savingsAccount.setBalance(savingsAccount.getBalance()==null? BigDecimal.ZERO:savingsAccount.getBalance());
-            if (savingsAccountRequest.getApyRateId() != null) {
-                Optional<AnnualAPY> optionalAnnualAPY = apyRepository.findById(savingsAccountRequest.getApyRateId());
+            if (accountRequest.getInterestRateId() != null) {
+                Optional<AnnualAPY> optionalAnnualAPY = apyRepository.findById(accountRequest.getInterestRateId());
                 if (!optionalAnnualAPY.isPresent()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APY id has not been provided");
                 }
                 ((SavingsAccount) savingsAccount).setAnnualAPY(optionalAnnualAPY.get().getAnnualAPY());
             }
-            savingsAccount.setUserId(savingsAccountRequest.getUserId());
-            savingsAccount.setBranchId(savingsAccountRequest.getBranchId());
-            savingsAccount.setCreatedBy(savingsAccountRequest.getCreatedBy());
+            savingsAccount.setUserId(accountRequest.getUserId());
+            savingsAccount.setBranchId(accountRequest.getBranchId());
             savingsAccount.setCreatedDate(LocalDateTime.now());
             savingsAccount.setIsDeleted(false);
             accountRepository.save(savingsAccount);
@@ -55,19 +58,19 @@ public class SavingsAccountService {
         }
         return ResponseEntity.status(HttpStatus.OK).body("Savings account has been created successfully");
     }
-    public ResponseEntity<?> update(SavingsAccountRequest savingsAccountRequest) {
+    public ResponseEntity<?> update(String accountNumber, AccountUpdateRequest accountUpdateRequest) {
         try {
-            Optional<SavingsAccount> optionalSavingsAccount = savingsAccountRepository.findById(savingsAccountRequest.getAccountId());
+            Optional<Account> optionalSavingsAccount = accountRepository.findByAccountNumber(accountNumber);
             if (!optionalSavingsAccount.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account doesn't exist");
             }
-            SavingsAccount savingsAccount = optionalSavingsAccount.get();
-            savingsAccount.setAccountStatus(savingsAccountRequest.getAccountStatus());
-            savingsAccount.setBranchId(savingsAccountRequest.getBranchId());
-            savingsAccount.setIsDeleted(savingsAccountRequest.getIsDeleted());
-            savingsAccount.setDeletedBy(savingsAccountRequest.getDeletedBy());
+            Account savingsAccount = optionalSavingsAccount.get();
+            savingsAccount.setAccountStatus(accountUpdateRequest.getAccountStatus());
+            savingsAccount.setBranchId(accountUpdateRequest.getBranchId());
+//            savingsAccount.setIsDeleted(savingsAccountRequest.getIsDeleted());
+//            savingsAccount.setDeletedBy(savingsAccountRequest.getDeletedBy());
             savingsAccount.setDeletedDate(LocalDateTime.now());
-            savingsAccountRepository.save(savingsAccount);
+            accountRepository.save(savingsAccount);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account has not been updated");
@@ -93,7 +96,6 @@ public class SavingsAccountService {
 
             return savingsResponse;
 
-
           }
       } catch (Exception e){
 
@@ -104,4 +106,98 @@ public class SavingsAccountService {
     }
 
 
+    public ResponseModel<Account> withdraw(OperationRequest operationRequest) {
+        ResponseModel<Account> responseModel = new ResponseModel<>();
+        try {
+            Account savingsAccount;
+            Optional<Account> checkingAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
+            if (checkingAccountOptional.isPresent()) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Account doesn't exist");
+                return responseModel;
+            }
+            savingsAccount = checkingAccountOptional.get();
+
+            // validate account
+            if (!Util.validate(savingsAccount, operationRequest.getAmount())) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Balance is not sufficient ");
+                return responseModel;
+            }
+            BigDecimal previousBalance = savingsAccount.getBalance();
+            savingsAccount.setBalance(previousBalance.subtract(operationRequest.getAmount()));
+            savingsAccount = accountRepository.save(savingsAccount);
+
+            TransactionCreateRequest transactionCreateRequest = new TransactionCreateRequest();
+            transactionCreateRequest.setAccountNumber(savingsAccount.getAccountNumber());
+            transactionCreateRequest.setAmount(operationRequest.getAmount());
+            transactionCreateRequest.setPreviousBalance(previousBalance);
+            transactionCreateRequest.setCurrentBalance(savingsAccount.getBalance());
+            transactionCreateRequest.setTransactionType(TransactionType.WITHDRAW);
+
+            ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
+            if (!response.getSuccess()) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Transaction was not created");
+                return responseModel;
+            }
+
+            savingsAccount.getTransactions().add(response.getData());
+            savingsAccount = accountRepository.save(savingsAccount);
+
+            responseModel.setSuccess(true);
+            responseModel.setData(savingsAccount);
+            responseModel.setMessage("Withdraw successfull");
+            return responseModel;
+        } catch (Exception e) {
+            responseModel.setSuccess(false);
+            responseModel.setMessage("Withdraw failed");
+            return responseModel;
+        }
+
+    }
+
+    public ResponseModel<Account> deposit(OperationRequest operationRequest) {
+        Account savings;
+        ResponseModel<Account> responseModel = new ResponseModel<>();
+        try {
+            Optional<Account> savingsAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
+            if (!savingsAccountOptional.isPresent()) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Account doesn't exist");
+                return responseModel;
+            }
+            savings = savingsAccountOptional.get();
+            BigDecimal previousBalance = savings.getBalance();
+            savings.setBalance(previousBalance.add(operationRequest.getAmount()));
+            savings = accountRepository.save(savings);
+
+            TransactionCreateRequest transactionCreateRequest = new TransactionCreateRequest();
+            transactionCreateRequest.setAccountNumber(savings.getAccountNumber());
+            transactionCreateRequest.setAmount(operationRequest.getAmount());
+            transactionCreateRequest.setPreviousBalance(previousBalance);
+            transactionCreateRequest.setCurrentBalance(savings.getBalance());
+            transactionCreateRequest.setTransactionType(TransactionType.DEPOSIT);
+
+            ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
+            if (!response.getSuccess()) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Transaction was not created");
+                return responseModel;
+            }
+            savings.getTransactions().add(response.getData());
+            savings = accountRepository.save(savings);
+
+        } catch (Exception e) {
+            responseModel.setSuccess(false);
+            responseModel.setMessage("Deposit failed");
+            return responseModel;
+        }
+        responseModel.setSuccess(true);
+        responseModel.setData(savings);
+        responseModel.setMessage("Deposit successfull");
+        return responseModel;
+
+
+    }
 }

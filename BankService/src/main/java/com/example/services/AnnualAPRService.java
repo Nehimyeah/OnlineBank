@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AnnualAPRService {
     @Autowired
@@ -32,5 +35,11 @@ public class AnnualAPRService {
 
     public double findById(long id) {
         return aprRepository.findById(id).get().getAnnualAPR();
+    }
+
+    public ResponseEntity<?> getAPRList() {
+        List<AnnualAPR> list;
+        list = aprRepository.findAll();
+        return ResponseEntity.ok().body(list);
     }
 }
