@@ -5,7 +5,10 @@ import com.example.domain.Account;
 import com.example.domain.CheckingAccount;
 import com.example.dto.AccountDto;
 import com.example.dto.CheckingAccountDto;
+import com.example.dto.ResponseModel;
+import com.example.error.Error;
 import com.example.repository.AccountRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +26,18 @@ public class CheckingService implements AccountService<CheckingAccountDto, Check
     @Autowired
     private ModelMapper mapper;
 
-    @Override
-    public CheckingAccountDto get(CheckingAccount entity) {
-        return null;
-    }
+        @Override
+        public CheckingAccountDto get(Long id) {
+
+            Optional<Account> accountOptional = accountRepository.findByAccountNumber(id);
+
+            if(accountOptional.isPresent()){
+
+                return mapper.map(accountOptional.get(), CheckingAccountDto.class);
+            }
+
+            throw new EntityNotFoundException("Account does not exist");
+        }
 
     @Override
     public CheckingAccountDto save(CheckingAccountDto dto) {

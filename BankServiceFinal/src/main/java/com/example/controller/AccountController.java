@@ -37,17 +37,9 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable String id){
+    public ResponseEntity<?> getById(@PathVariable Long id){
 
-        CheckingAccount entity = new CheckingAccount();
-        entity.setId(UUID.fromString(id));
-        CheckingAccountDto checkingAccountDto = checkingService.get(entity);
-
-        if (checkingAccountDto != null) {
-            return ResponseEntity.ok(checkingAccountDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(checkingService.get(id));
     }
 
 //    @PostMapping("/withdraw")
