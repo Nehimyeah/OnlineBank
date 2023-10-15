@@ -35,10 +35,10 @@ public class UserServiceApplication implements CommandLineRunner {
 
     private void createCustomer() {
         User customer = User.builder()
-                .email("customer@cus.com")
-                .firstName("customer")
-                .lastName("customer")
-                .role(Role.CUSTOMER)
+                .email("teller@tel.com")
+                .firstName("Teller")
+                .lastName("Teller")
+                .role(Role.TELLER)
                 .address(Address.builder()
                         .street1("1000 N 4th St")
                         .city("Fairfield")
@@ -54,8 +54,8 @@ public class UserServiceApplication implements CommandLineRunner {
     private void createTeller() {
         User teller = User.builder()
                 .email("customer@cus.com")
-                .firstName("customer")
-                .lastName("customer")
+                .firstName("Customer")
+                .lastName("Customer")
                 .role(Role.CUSTOMER)
                 .address(Address.builder()
                         .street1("1000 N 4th St")
