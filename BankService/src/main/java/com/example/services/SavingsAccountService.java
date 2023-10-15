@@ -2,16 +2,15 @@ package com.example.services;
 
 import com.example.dto.ResponseModel;
 import com.example.dto.request.OperationRequest;
-import com.example.dto.request.account.AccountRequest;
-import com.example.dto.request.account.AccountUpdateRequest;
-import com.example.dto.request.transaction.TransactionCreateRequest;
-import com.example.dto.response.SavingsResponse;
+import com.example.dto.account.AccountRequest;
+import com.example.dto.account.AccountUpdateRequest;
+import com.example.dto.transaction.TransactionCreateRequest;
+import com.example.dto.savings.SavingsResponse;
 import com.example.entity.*;
 import com.example.enums.AccountStatus;
 import com.example.enums.TransactionType;
 import com.example.repository.AccountRepository;
 import com.example.repository.AnnualAPYRepository;
-import com.example.repository.SavingsAccountRepository;
 import com.example.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,15 +57,10 @@ public class SavingsAccountService {
         }
         return ResponseEntity.status(HttpStatus.OK).body("Savings account has been created successfully");
     }
-    public ResponseEntity<?> update(String accountNumber, AccountUpdateRequest accountUpdateRequest) {
+    public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest) {
         try {
-            Optional<Account> optionalSavingsAccount = accountRepository.findByAccountNumber(accountNumber);
-            if (!optionalSavingsAccount.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account doesn't exist");
-            }
-            Account savingsAccount = optionalSavingsAccount.get();
+            Account savingsAccount = getByAccountNumber(accountUpdateRequest.getAccnumber());
             savingsAccount.setAccountStatus(accountUpdateRequest.getAccountStatus());
-            savingsAccount.setBranchId(accountUpdateRequest.getBranchId());
 //            savingsAccount.setIsDeleted(savingsAccountRequest.getIsDeleted());
 //            savingsAccount.setDeletedBy(savingsAccountRequest.getDeletedBy());
             savingsAccount.setDeletedDate(LocalDateTime.now());
@@ -78,31 +72,13 @@ public class SavingsAccountService {
         return ResponseEntity.status(HttpStatus.OK).body("Savings account has been updated successfully");
     }
 
-    public SavingsResponse findByAccountNumber(String accountNumber){
-
-      Optional<Account> account =  accountRepository.findByAccountNumber(accountNumber);
-      SavingsResponse savingsResponse = new SavingsResponse();
-
-      Account savingAccount = account.get();
-
-      try{
-
-          if(account.isPresent()){
-
-            savingsResponse.setAccountNumber(accountNumber);
-            savingsResponse.setAccountStatus(savingAccount.getAccountStatus());
-            savingsResponse.setBalance(savingAccount.getBalance());
-//            savingsResponse.setAnnualAPY(savingAccount.getAnnualAPY());
-
-            return savingsResponse;
-
-          }
-      } catch (Exception e){
-
-          throw new RuntimeException("Account does not exist");
-      }
-
-      return null;
+    public Account getByAccountNumber(String accountNumber){
+        Optional<Account> optionalSavingsAccount = accountRepository.findByAccountNumber(accountNumber);
+        if (!optionalSavingsAccount.isPresent()) {
+            throw new RuntimeException("Account doesn't exist");
+        }
+        Account account = optionalSavingsAccount.get();
+        return account;
     }
 
 
@@ -111,7 +87,7 @@ public class SavingsAccountService {
         try {
             Account savingsAccount;
             Optional<Account> checkingAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
-            if (checkingAccountOptional.isPresent()) {
+            if (!checkingAccountOptional.isPresent()) {
                 responseModel.setSuccess(false);
                 responseModel.setMessage("Account doesn't exist");
                 return responseModel;

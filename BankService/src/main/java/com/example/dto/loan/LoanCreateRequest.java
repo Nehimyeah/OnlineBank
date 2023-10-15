@@ -1,4 +1,4 @@
-package com.example.dto.response;
+package com.example.dto.loan;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -9,9 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GeneralResponseModel<T> {
-    private Boolean success;
-    private String message;
-    private Exception exception;
-    private T data;
+public class LoanCreateRequest {
+    private Long userId;
+    private Long branchId;
+    private Long aprRateId;
 }

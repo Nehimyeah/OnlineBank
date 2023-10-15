@@ -1,12 +1,11 @@
 package com.example.services;
 
-import com.example.ApplicationContextProvider;
 import com.example.dto.ResponseModel;
-import com.example.dto.request.account.AccountRequest;
-import com.example.dto.request.account.AccountUpdateRequest;
+import com.example.dto.account.AccountRequest;
+import com.example.dto.account.AccountUpdateRequest;
 import com.example.dto.request.OperationRequest;
-import com.example.dto.request.transaction.TransactionCreateRequest;
-import com.example.dto.response.CheckingAccountResponseModel;
+import com.example.dto.transaction.TransactionCreateRequest;
+import com.example.dto.checking.CheckingAccountResponseModel;
 import com.example.entity.Account;
 import com.example.entity.CheckingAccount;
 import com.example.entity.Transaction;
@@ -53,15 +52,14 @@ public class CheckingAccountService {
         return ResponseEntity.status(HttpStatus.OK).body("Checking account has been created successfully");
     }
 
-    public ResponseEntity<?> update(String accountNumber, AccountUpdateRequest accountUpdateRequest) {
+    public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest) {
         try {
-            Optional<Account> checkingAccountOptional = accountRepository.findByAccountNumber(accountNumber);
+            Optional<Account> checkingAccountOptional = accountRepository.findByAccountNumber(accountUpdateRequest.getAccnumber());
             if (!checkingAccountOptional.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account doesn't exist");
             }
             Account checkingAccount = checkingAccountOptional.get();
             checkingAccount.setAccountStatus(accountUpdateRequest.getAccountStatus());
-            checkingAccount.setBranchId(accountUpdateRequest.getBranchId());
             accountRepository.save(checkingAccount);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account has not been updated");

@@ -1,22 +1,20 @@
-package com.example.dto.response;
+package com.example.dto.checking;
 
 import com.example.enums.AccountStatus;
-import com.example.enums.AccountType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-
+import java.time.LocalDateTime;
+import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class SavingsResponse {
-
+public class CheckingAccountResponseModel {
+    private Long userId;
     private String accountNumber;
-    private AccountStatus accountStatus;
+    private String accountStatus;
     private BigDecimal balance;
-    private Double annualAPY;
 }

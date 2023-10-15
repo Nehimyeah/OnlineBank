@@ -16,19 +16,19 @@ public class InterestRateController {
     @Autowired
     AnnualAPRService aprService;
     @PostMapping("/apr")
-    public ResponseEntity<?> createApr(@RequestBody AnnualInterestRequest annualInterestRequest){
-        return aprService.create(annualInterestRequest);
+    public ResponseEntity<?> createApr(@RequestBody AnnualInterestRequest annualInterestRequest, @RequestHeader("Authorization") String token){
+        return aprService.create(annualInterestRequest,token);
     }
     @PostMapping("/apy")
-    public ResponseEntity<?> createApy(@RequestBody AnnualInterestRequest annualInterestRequest){
-        return apyService.create(annualInterestRequest);
+    public ResponseEntity<?> createApy(@RequestBody AnnualInterestRequest annualInterestRequest,@RequestHeader("Authorization") String token){
+        return apyService.create(annualInterestRequest,token);
     }
     @GetMapping("/aprlist")
-    public ResponseEntity<?> getAPRList(){
-        return aprService.getAPRList();
+    public ResponseEntity<?> getAPRList(@RequestHeader("Authorization") String token){
+        return aprService.getAPRList(token);
     }
     @GetMapping("/apylist")
-    public ResponseEntity<?> getAPYList(){
-        return apyService.getAPYList();
+    public ResponseEntity<?> getAPYList(@RequestHeader("Authorization") String token){
+        return apyService.getAPYList(token);
     }
 }

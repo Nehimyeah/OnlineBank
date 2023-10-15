@@ -1,7 +1,7 @@
 package com.example.services;
 
 import com.example.dto.ResponseModel;
-import com.example.dto.request.transaction.TransactionCreateRequest;
+import com.example.dto.transaction.TransactionCreateRequest;
 import com.example.entity.Account;
 import com.example.entity.Transaction;
 import com.example.repository.AccountRepository;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 
 @Service
@@ -45,6 +44,7 @@ public class TransactionService {
     }
 
     public List<Transaction> getAllTransactionsByAccountNum(String accountNumber) {
+
        Account account = accountRepository.findByAccountNumber(accountNumber).
                  orElseThrow(RuntimeException::new);
        return account.getTransactions();

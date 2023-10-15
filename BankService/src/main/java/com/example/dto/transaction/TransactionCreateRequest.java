@@ -1,6 +1,5 @@
-package com.example.dto.request.transaction;
+package com.example.dto.transaction;
 
-import com.example.entity.Account;
 import com.example.enums.TransactionStatus;
 import com.example.enums.AccountType;
 import com.example.enums.TransactionType;

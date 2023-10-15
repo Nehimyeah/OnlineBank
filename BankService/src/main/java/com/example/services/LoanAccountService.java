@@ -2,11 +2,9 @@ package com.example.services;
 
 import com.example.dto.ResponseModel;
 import com.example.dto.request.OperationRequest;
-import com.example.dto.request.account.AccountRequest;
-import com.example.dto.request.account.AccountUpdateRequest;
-import com.example.dto.request.transaction.TransactionCreateRequest;
-import com.example.dto.request.loan.LoanCreateRequest;
-import com.example.dto.request.loan.LoanUpdateRequest;
+import com.example.dto.account.AccountRequest;
+import com.example.dto.account.AccountUpdateRequest;
+import com.example.dto.transaction.TransactionCreateRequest;
 import com.example.entity.Account;
 import com.example.entity.AnnualAPR;
 import com.example.entity.LoanAccount;
@@ -17,7 +15,6 @@ import com.example.enums.TransactionStatus;
 import com.example.enums.TransactionType;
 import com.example.repository.AccountRepository;
 import com.example.repository.AnnualAPRRepository;
-import com.example.repository.LoanAccountRepository;
 import com.example.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class LoanAccountService {
@@ -64,15 +60,14 @@ public class LoanAccountService {
 
     }
 
-    public ResponseEntity<?> update(String accountNumber, AccountUpdateRequest accountUpdateRequest) {
+    public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest) {
         try {
-            Optional<Account> loanAccountOptional = accountRepository.findByAccountNumber(accountNumber);
+            Optional<Account> loanAccountOptional = accountRepository.findByAccountNumber(accountUpdateRequest.getAccnumber());
             if (!loanAccountOptional.isPresent()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account doesn't exist");
             }
             Account loanAccount = loanAccountOptional.get();
             loanAccount.setAccountStatus(accountUpdateRequest.getAccountStatus());
-            loanAccount.setBranchId(accountUpdateRequest.getBranchId());
         //  loanAccount.setIsDeleted(accountUpdateRequest.getIsDeleted());
         //  loanAccount.setDeletedBy(loanAccountRequest.getDeletedBy());
             loanAccount.setDeletedDate(LocalDateTime.now());

@@ -1,6 +1,6 @@
 //package com.example.controller.accounts;
 //
-//import com.example.dto.request.SavingsAccountRequest;
+//import com.example.dto.savings.SavingsAccountRequest;
 //import com.example.entity.Account;
 //import com.example.services.SavingsAccountService;
 //import org.springframework.beans.factory.annotation.Autowired;
