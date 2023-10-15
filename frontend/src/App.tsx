@@ -6,6 +6,7 @@ import BranchPage from "./pages/branches/branches";
 import SignupPage from "./pages/auth/signup-page";
 import CreateManager from "./pages/manager/manager-create";
 import CreateBranch from "./pages/branches/branch-create";
+import AccountsList from "./pages/account/accounts";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="managers/create" element={<CreateManager />} />
           <Route path="branches" element={<BranchPage />} />
           <Route path="branches/create" element={<CreateBranch />} />
+          <Route path="accounts" element={<AccountsList />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </MainLayout>
