@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    User findUserByEmail(String email);
+    Optional<User> findUserByEmail(String email);
     Optional<User> findUserById(long userId);
 
     List<User> getAllByRole(Role role);

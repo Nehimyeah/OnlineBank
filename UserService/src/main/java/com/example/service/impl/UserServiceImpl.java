@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
+        failIfUserExists(user);
         String encodedPassword = encodePassword(user);
         user.setPassword(encodedPassword);
         user.disable();
@@ -44,15 +46,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveAdmins(User user) {
+        failIfUserExists(user);
         String encodedPassword = encodePassword(user);
         user.setPassword(encodedPassword);
         repository.save(user);
     }
 
+    private void failIfUserExists(User user) {
+        repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("User already exists"));
+    }
+
 
     @Override
     public User findUserByEmail(String email) {
-        return repository.findUserByEmail(email);
+        return repository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("No user with this email"));
     }
 
     public Iterable<User> getAll() {
@@ -60,12 +67,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public TokenData login(UserCredentials userCredentials) {
-        User user = repository.findUserByEmail(userCredentials.getEmail());
-//        System.out.println(user);
-        if (user == null) {
-            System.out.println("here");
-            throw new RuntimeException("User not found");
-        }
+        Optional<User> optUser = repository.findUserByEmail(userCredentials.getEmail());
+        User user = optUser.orElseThrow(() -> new RuntimeException("User not found"));
         if (!passwordEncoder.matches(userCredentials.getPassword(), user.getPassword())) {
             throw new RuntimeException("Password is incorrect");
         }
@@ -77,7 +80,7 @@ public class UserServiceImpl implements UserService {
             User loggedInUser = getPrincipal(token);
             if (!Role.ADMIN.equals(loggedInUser.getRole()))
                 throw new RuntimeException("No sufficient Access for this operation");
-            repository.save(user);
+            saveAdmins(user);
     }
 
     private User getPrincipal(String token) {
