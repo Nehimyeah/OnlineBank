@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -29,17 +30,25 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<?> update(@RequestBody CheckingAccountDto checkingAccountDto){
-//        return checkingService.update(checkingAccountDto);
+        @PostMapping("/{id}/update")
+        public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CheckingAccountDto checkingAccountDto){
 
-        return null;
-    }
+
+            checkingService.update(checkingService.get(id), checkingAccountDto);
+
+            return ResponseEntity.status(200).body("Account updated successfully");
+        }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){
 
         return ResponseEntity.ok(checkingService.get(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllAccounts(){
+
+        return null;
     }
 
 //    @PostMapping("/withdraw")

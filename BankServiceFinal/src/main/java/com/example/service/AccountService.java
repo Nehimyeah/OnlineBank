@@ -3,12 +3,14 @@ package com.example.service;
 import com.example.domain.Account;
 import com.example.dto.AccountDto;
 
+import java.util.List;
+
 public interface AccountService<D extends AccountDto, E extends Account> {
 
     /**
      * converts the entity given as parameter to the correspending STO
      */
-    D get(Long id);
+    E get(Long id);
 
     /**
      * Saves DTO in database
@@ -24,4 +26,5 @@ public interface AccountService<D extends AccountDto, E extends Account> {
      * Deletes entity from databse
      */
     void delete(E entity);
+
 }
