@@ -29,3 +29,10 @@ export type BranchDetails = {
         zip: string
     }
 }
+
+export interface RolePolicy {
+    "CUSTOMER": string[],
+    "MANAGER": string[],
+    "TELLER": string[],
+    "ADMIN": string[]
+}
