@@ -35,8 +35,7 @@ public class UserServiceImpl implements UserService {
 
     private String encodePassword(User user) {
         try {
-            return user.getPassword();
-//            return this.passwordEncoder.encode(user.getPassword());
+            return this.passwordEncoder.encode(user.getPassword());
         } catch (Exception e){
             log.error("User already exists with this email address: " + LocalDateTime.now());
             throw new RuntimeException("User already exists with this email address: " + user.getEmail());
