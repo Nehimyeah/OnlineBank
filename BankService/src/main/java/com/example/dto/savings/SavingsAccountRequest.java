@@ -1,9 +1,7 @@
-package com.example.dto.request;
+package com.example.dto.savings;
 
 import com.example.enums.AccountStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

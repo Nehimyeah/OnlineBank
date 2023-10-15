@@ -1,11 +1,19 @@
 package com.example.service;
 
+import com.example.domain.Account;
 import com.example.domain.LoanAccount;
 import com.example.dto.LoanAccountDto;
 
+import java.util.List;
+
 public class LoanService implements AccountService<LoanAccountDto, LoanAccount> {
+//    @Override
+//    public LoanAccountDto get(LoanAccount entity) {
+//        return null;
+//    }
+
     @Override
-    public LoanAccountDto get(LoanAccount entity) {
+    public LoanAccount get(Long id) {
         return null;
     }
 
@@ -23,4 +31,5 @@ public class LoanService implements AccountService<LoanAccountDto, LoanAccount> 
     public void delete(LoanAccount entity) {
 
     }
+
 }

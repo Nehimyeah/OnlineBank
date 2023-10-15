@@ -1,4 +1,4 @@
-package com.example.dto.response;
+package com.example.dto.savings;
 
 import com.example.enums.AccountStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,14 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class CheckingAccountResponseModel {
-    private Long userId;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SavingsResponse {
+
     private String accountNumber;
-    private String accountStatus;
+    private AccountStatus accountStatus;
     private BigDecimal balance;
+    private Double annualAPY;
 }

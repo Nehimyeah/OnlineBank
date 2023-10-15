@@ -1,9 +1,11 @@
 package com.example;
 
-import org.modelmapper.ModelMapper;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 
 @SpringBootApplication
@@ -13,14 +15,17 @@ public class BankServiceApplications
     public static void main( String[] args )
     {
 
-        SpringApplication.run(BankServiceApplications.class, args);
+        ConfigurableApplicationContext context =  SpringApplication.run(BankServiceApplications.class, args);
+
+        ApplicationContextProvider.setContext(context);
+
 
     }
-
     @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
+    RestTemplate restTemplate(){
+        return new RestTemplate();
     }
+
 
 
 }

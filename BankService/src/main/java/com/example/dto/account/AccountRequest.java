@@ -1,16 +1,19 @@
-package com.example.dto.request.loan;
+package com.example.dto.account;
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@Getter
+
 @Setter
+@Getter
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LoanCreateRequest {
+public class AccountRequest {
     private Long userId;
     private Long branchId;
-    private Long aprRateId;
+    private String accountType;
+    private Long interestRateId;
 }

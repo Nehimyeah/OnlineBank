@@ -72,6 +72,7 @@ public class JwtUtil {
 
             if (parts.length != 2 || !"Bearer".equals(parts[0])) {
                 log.error("Invalid header: Incorrect Authentication Structure at:" + LocalDateTime.now());
+//                TODO: throw a correct exception here
 //                throw new JwtTokenIncorrectStructureException("Incorrect Authentication Structure");
                 return;
             }

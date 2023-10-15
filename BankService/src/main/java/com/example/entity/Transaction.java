@@ -1,7 +1,5 @@
 package com.example.entity;
 
-import com.example.enums.TransactionStatus;
-import com.example.enums.AccountType;
 import com.example.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

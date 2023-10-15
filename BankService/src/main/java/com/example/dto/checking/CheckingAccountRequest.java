@@ -1,4 +1,4 @@
-package com.example.dto.request.account;
+package com.example.dto.checking;
 
 import com.example.enums.AccountStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,13 +10,20 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Setter
-@Getter
 @NoArgsConstructor
+@Getter
+@Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AccountRequest {
+public class CheckingAccountRequest {
+    private UUID accountId;
     private Long userId;
     private Long branchId;
-    private String accountType;
-    private Long interestRateId;
+    private AccountStatus accountStatus;
+    private LocalDateTime createdDate;
+    private BigDecimal balance;
+    private Boolean isDeleted;
+    private LocalDateTime deletedDate;
+    private Long createdBy;
+    private Long deletedBy;
+
 }

@@ -1,5 +1,5 @@
-package com.example.enums;
+    package com.example.enums;
 
-public enum AccountStatus {
-    ACTIVE, PENDING, BLOCKED, NOT_ACTIVE
-}
+    public enum AccountStatus {
+        ACTIVE, PENDING, BLOCKED, NOT_ACTIVE
+    }

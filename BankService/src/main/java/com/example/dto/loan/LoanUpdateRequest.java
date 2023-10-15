@@ -1,4 +1,4 @@
-package com.example.dto.request.loan;
+package com.example.dto.loan;
 
 import com.example.enums.AccountStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
