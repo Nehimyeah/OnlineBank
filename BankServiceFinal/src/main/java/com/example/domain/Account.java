@@ -22,7 +22,7 @@ public abstract class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private long accountNumber;
+    private Long accountNumber;
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
     private BigDecimal balance;

@@ -4,8 +4,13 @@ import com.example.domain.LoanAccount;
 import com.example.dto.LoanAccountDto;
 
 public class LoanService implements AccountService<LoanAccountDto, LoanAccount> {
+//    @Override
+//    public LoanAccountDto get(LoanAccount entity) {
+//        return null;
+//    }
+
     @Override
-    public LoanAccountDto get(LoanAccount entity) {
+    public LoanAccountDto get(Long id) {
         return null;
     }
 

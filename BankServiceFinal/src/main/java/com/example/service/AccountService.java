@@ -8,7 +8,7 @@ public interface AccountService<D extends AccountDto, E extends Account> {
     /**
      * converts the entity given as parameter to the correspending STO
      */
-    D get(E entity);
+    D get(Long id);
 
     /**
      * Saves DTO in database
