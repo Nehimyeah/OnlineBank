@@ -87,7 +87,6 @@ public class CheckingService implements AccountService<CheckingAccountDto, Check
             }
 
         }
-
     @Override
     public void delete(CheckingAccount entity) {
 
