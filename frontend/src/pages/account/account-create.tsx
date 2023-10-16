@@ -53,7 +53,7 @@ const CreateAccount = () => {
 
         const data = {
             branchId: parseInt(selectedOption),
-            type: accountType
+            accountType: accountType
         }
 
         try {
