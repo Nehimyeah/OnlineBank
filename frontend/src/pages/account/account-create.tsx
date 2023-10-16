@@ -84,7 +84,7 @@ const CreateAccount = () => {
                 className="bg-white/20 container mx-auto mt-5"
             >
                 <h1 className="text-center font-bold text-3xl mb-4 text-indigo-900">
-                    Create Branch
+                    Create Account
                 </h1>
                 {submissionErrors.length > 0 ? (
                     <ul className="p-4 border-[1px] border-red-500 rounded-xl mb-5 max-w-sm flex items-center justify-center flex-col space-y-3">

@@ -2,9 +2,6 @@ import { Link } from "react-router-dom";
 import {BranchDetails} from "../type/types";
 const Accounts = (props:{accounts: Array<BranchDetails>} ) => {
 
-    function getFullAddress(branch: BranchDetails) {
-        return branch.address.street1 + " " + branch.address.street2 + " " + branch.address.city + " " + branch.address.state + ", " + branch.address.zip
-    }
 
     return (
         <>
@@ -28,24 +25,24 @@ const Accounts = (props:{accounts: Array<BranchDetails>} ) => {
                                     <thead>
                                     <tr className="bg-gray-50 border-b border-gray-200 text-xs leading-4 text-gray-500 uppercase tracking-wider">
                                         <th className="px-6 py-3 text-left font-medium">
-                                            Branch name
+                                            Account number
                                         </th>
                                         <th className="px-6 py-3 text-left font-medium">
-                                            Manager name
+                                            Status
                                         </th>
                                         <th className="px-6 py-3 text-left font-medium">
-                                            Address
+                                            Balance
                                         </th>
                                         <th className="px-6 py-3 text-left font-medium">
                                         </th>
                                     </tr>
                                     </thead>
                                     <tbody className="bg-white">
-                                    {props.accounts.map((branch:BranchDetails) => (
+                                    {props.accounts.map((branch) => (
                                         <tr>
                                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                                 <div className="text-sm leading-5 text-gray-900">
-                                                    {branch.branchName}
+                                                    {branch.accountNumber}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -53,7 +50,7 @@ const Accounts = (props:{accounts: Array<BranchDetails>} ) => {
                                                 <div className="flex items-center">
                                                     <div className="flex-shrink-0 h-10 w-10">
                                                         <div className="text-sm leading-5 text-gray-900">
-                                                            {branch.branchManagerId}
+                                                            {branch.accountStatus}
                                                         </div>
                                                     </div>
                                                     <div className="ml-4">
@@ -64,7 +61,7 @@ const Accounts = (props:{accounts: Array<BranchDetails>} ) => {
                                             </td>
                                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                                 <div className="text-sm leading-5 text-gray-900">
-                                                    {getFullAddress(branch)}
+                                                    $ {branch.balance}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
