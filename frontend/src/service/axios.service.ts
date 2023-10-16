@@ -26,3 +26,12 @@ export const axiosPrivateBranch = axios.create({
     "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
   }
 });
+
+export const axiosPrivateBank = axios.create({
+  baseURL: BACKEND_URL ?? "http://localhost:8181",
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+  }
+});
