@@ -43,9 +43,9 @@ public class AccountController {
     public ResponseModel<?> getAccountByAccNumber(@PathVariable String accnum,@RequestHeader("Authorization") String token){
         return accountService.getAccountByAccNumber(accnum,token);
     }
-    @GetMapping("/list{id}")
-    public ResponseEntity<?> getList(@PathVariable Long id,@RequestHeader("Authorization") String token){
-        return accountService.getList(id,token);
+    @GetMapping("/list")
+    public ResponseEntity<?> getList(@RequestHeader("Authorization") String token){
+        return accountService.getList(token);
     }
     @PutMapping("/status/{accountNumber}")
     public ResponseEntity<?> accountStatus(@PathVariable String accountNumber, @RequestBody StatusRequest statusRequest, @RequestHeader("Authorization") String token){

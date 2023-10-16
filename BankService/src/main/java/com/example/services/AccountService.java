@@ -126,8 +126,11 @@ public class AccountService{
         return responseModel;
     }
 
-    public ResponseEntity<?> getList(Long id,String token) {
+    public ResponseEntity<?> getList(String token) {
         try {
+            User loggedInUser = Util.getPrincipal(token);
+            long id = loggedInUser.getId();
+
             List<Account> accounts = accountRepository.findByUserId(id);
             List<AccountResponse> list = new ArrayList<>();
             BigDecimal sum =BigDecimal.ZERO;
