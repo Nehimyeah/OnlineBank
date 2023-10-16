@@ -20,8 +20,8 @@ function App() {
             <Route path="login" element={<LoginPage />} />
             <Route path="signup" element={<SignupPage />} />
           </Route>
-          <Route path="managers" element={<HomePage />} />
-          <Route path="managers/create" element={<CreateManager />} />
+          <Route path="users" element={<HomePage />} />
+          <Route path="users/create" element={<CreateManager />} />
           <Route path="branches" element={<BranchPage />} />
           <Route path="branches/create" element={<CreateBranch />} />
           <Route path="accounts" element={<AccountsList />} />
