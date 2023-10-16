@@ -8,7 +8,7 @@ export type UsersList = Array<UserDetails>;
 
 const HomePage = () => {
 
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<UserDetails[]>([]);
 
     const fetchData = () => {
         try {
@@ -20,6 +20,16 @@ const HomePage = () => {
         }
     }
 
+    const enableDisable = (userId: number):void => {
+        const newUsers:UserDetails[] = users.map(user => {
+            if (user.id == userId) {
+                user.active = !user.active
+            }
+            return user
+        })
+        setUsers(newUsers)
+    }
+
     useEffect(() => {
         fetchData()
     }, []);
@@ -27,7 +37,7 @@ const HomePage = () => {
 
     return (
         <DashboardLayout>
-            <ManagersList users={users}/>
+            <ManagersList users={users} onUserChanged={enableDisable}/>
         </DashboardLayout>
     )
 }
