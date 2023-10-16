@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import {UserDetails} from "../type/types";
-const ManagersList = (props: { users: UserDetails[]; }) => {
+const ManagersList = (props: { users: UserDetails[]; onUserChanged: any}) => {
+
+    const enableDisable = (userId: number) => {
+        props.onUserChanged(userId)
+    }
 
     return (
         <>
@@ -83,7 +87,7 @@ const ManagersList = (props: { users: UserDetails[]; }) => {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                                <button
+                                                <button onClick={() => enableDisable(user.id)}
                                                    className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline" >
                                                     {user.active ? 'Disable' : 'Enable'}
                                                 </button>
