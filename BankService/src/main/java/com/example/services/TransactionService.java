@@ -30,6 +30,7 @@ public class TransactionService {
             transaction.setAmount(transactionCreateRequest.getAmount());
             transaction.setTransactionType(transactionCreateRequest.getTransactionType());
             transaction.setCreatedDate(LocalDateTime.now());
+            transaction.setInfo(transactionCreateRequest.getInfo());
             transaction = transactionRepository.save(transaction);
 
         } catch (Exception e) {

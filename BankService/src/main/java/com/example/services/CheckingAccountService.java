@@ -219,7 +219,7 @@ public class CheckingAccountService {
             toAccountTransactionCreateRequest.setInfo("Money received from Account: " + fromAccount.getAccountNumber());
             toAccountTransactionCreateRequest.setTransactionType(TransactionType.RECEIVEFROM);
 
-            ResponseModel<Transaction> toAccountresponse = transactionService.save(fromAccountTransactionCreateRequest);
+            ResponseModel<Transaction> toAccountresponse = transactionService.save(toAccountTransactionCreateRequest);
             if (!toAccountresponse.getSuccess()) {
                 responseModel.setSuccess(false);
                 responseModel.setMessage("FromAccount sender transaction was not created");
