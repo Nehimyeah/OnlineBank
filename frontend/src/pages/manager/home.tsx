@@ -20,14 +20,23 @@ const HomePage = () => {
         }
     }
 
-    const enableDisable = (userId: number):void => {
-        const newUsers:UserDetails[] = users.map(user => {
-            if (user.id == userId) {
-                user.active = !user.active
-            }
-            return user
-        })
-        setUsers(newUsers)
+    const enableDisable = async (userId: number):Promise<void> => {
+        const user = users.find(user => user.id === userId);
+        let val =user?.active ? 'disable' : 'enable'
+        try {
+            await axiosPrivate.put(`/users/${userId}/${val}`)
+
+            const newUsers:UserDetails[] = users.map(user => {
+                if (user.id == userId) {
+                    user.active = !user.active
+                }
+                return user
+            })
+            setUsers(newUsers)
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 
     useEffect(() => {
