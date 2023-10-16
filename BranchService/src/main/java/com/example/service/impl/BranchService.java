@@ -39,7 +39,7 @@ public class BranchService implements IBranchService {
 
     @Override
     public List<Branch> getAllBranches(String bearerToken) {
-        authenticate(bearerToken);
+//        authenticate(bearerToken);
         return branchRepository.findAll();
     }
 
