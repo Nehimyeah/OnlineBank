@@ -51,6 +51,10 @@ public class AccountController {
     public ResponseEntity<?> accountStatus(@PathVariable String accountNumber, @RequestBody StatusRequest statusRequest, @RequestHeader("Authorization") String token){
         return accountService.approveAccount(accountNumber,statusRequest, token);
     }
+    @PutMapping("/verify/{accountNumber}")
+    public ResponseEntity<?> verifyAccount(@PathVariable String accountNumber, @RequestHeader("Authorization") String token){
+        return accountService.verifyAccount(accountNumber, token);
+    }
 
 
 }

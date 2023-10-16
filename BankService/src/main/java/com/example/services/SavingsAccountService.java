@@ -33,7 +33,7 @@ public class SavingsAccountService {
     @Autowired
     TransactionService transactionService;
 
-    public ResponseEntity<?> create(AccountRequest accountRequest) {
+    public ResponseEntity<?> create(AccountRequest accountRequest,Long userId) {
         try {
             Account savingsAccount = new SavingsAccount();
 
@@ -47,7 +47,7 @@ public class SavingsAccountService {
                 }
                 ((SavingsAccount) savingsAccount).setAnnualAPY(optionalAnnualAPY.get().getAnnualAPY());
             }
-            savingsAccount.setUserId(accountRequest.getUserId());
+            savingsAccount.setUserId(userId);
             savingsAccount.setBranchId(accountRequest.getBranchId());
             savingsAccount.setCreatedDate(LocalDateTime.now());
             savingsAccount.setIsDeleted(false);

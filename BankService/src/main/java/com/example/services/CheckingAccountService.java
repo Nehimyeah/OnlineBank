@@ -34,22 +34,22 @@ public class CheckingAccountService {
 
 
 
-    public ResponseEntity<?> create(AccountRequest accountRequest) {
+    public ResponseEntity<?> create(AccountRequest accountRequest,Long userId) {
 
         try {
             Account checkingAccount = new CheckingAccount();
             checkingAccount.setAccountNumber(Util.generateAccountNum());
             checkingAccount.setAccountStatus(AccountStatus.PENDING);
             checkingAccount.setBalance(checkingAccount.getBalance() == null ? BigDecimal.ZERO : checkingAccount.getBalance());
-            checkingAccount.setUserId(accountRequest.getUserId());
+            checkingAccount.setUserId(userId);
             checkingAccount.setBranchId(accountRequest.getBranchId());
             checkingAccount.setCreatedDate(LocalDateTime.now());
             checkingAccount.setIsDeleted(false);
             accountRepository.save(checkingAccount);
+            return ResponseEntity.status(HttpStatus.OK).body("Checking account has been created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account has not been created");
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Checking account has been created successfully");
     }
 
     public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest) {
@@ -61,10 +61,10 @@ public class CheckingAccountService {
             Account checkingAccount = checkingAccountOptional.get();
             checkingAccount.setAccountStatus(accountUpdateRequest.getAccountStatus());
             accountRepository.save(checkingAccount);
+            return ResponseEntity.status(HttpStatus.OK).body("Checking account has been updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account has not been updated");
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Checking account has been updated successfully");
     }
 
     public ResponseModel<Account> withdraw(OperationRequest operationRequest) {
@@ -72,7 +72,7 @@ public class CheckingAccountService {
         try {
             Account checkingAccount;
             Optional<Account> checkingAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
-            if (checkingAccountOptional.isPresent()) {
+            if (!checkingAccountOptional.isPresent()) {
                 responseModel.setSuccess(false);
                 responseModel.setMessage("Account doesn't exist");
                 return responseModel;

@@ -12,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccountRequest {
-    private Long userId;
     private Long branchId;
     private String accountType;
     private Long interestRateId;
