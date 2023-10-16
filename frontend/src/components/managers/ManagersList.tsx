@@ -83,10 +83,10 @@ const ManagersList = (props: { users: UserDetails[]; }) => {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                                <a href="#"
+                                                <button
                                                    className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline" >
-                                                    Delete
-                                                </a>
+                                                    {user.active ? 'Disable' : 'Enable'}
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
