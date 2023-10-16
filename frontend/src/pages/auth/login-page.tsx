@@ -50,19 +50,19 @@ const LoginPage = () => {
     try {
       const response = await axiosClient
         .post("/users/login", data)
+          .then((res) => {
+            const d = jwtDecode(res.data.token)
+            Cookies.set("user",JSON.stringify(d));
+            dispatch(setUser(d))
+            Cookies.set("token", res.data.token)
+            console.log(d);
+            setSuccess(true);
+            navigate("/");
+          })
         .finally(() => {
           setIsLoading(false);
           resetField("password");
         });
-
-      const decodedData: AuthStore = jwtDecode(response.data.token);
-
-      Cookies.set("user",JSON.stringify(decodedData));
-
-      dispatch(setUser(decodedData));
-      Cookies.set("token", response.data.token);
-      setSuccess(true);
-      navigate("/");
     } catch (error) {
       setErrorMessage((error as any).response.data.message);
     }

@@ -51,7 +51,8 @@ const DashboardLayout = ({ children }: IAuthLayoutProps) => {
             id: '',
             isActive: false
         };
-        Cookie.set("token","");
+        Cookie.remove("token")
+        Cookie.remove("user")
         dispatch(setUser(user));
         navigate("/auth/login")
     }
