@@ -9,7 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/transaction")
-@CrossOrigin(origins = "*")
+@CrossOrigin(
+        origins = "http://127.0.0.1:5173/",
+        allowedHeaders = "*", maxAge = 3600,
+        allowCredentials = "true"
+)
 public class TransactionController {
     @Autowired
     TransactionService transactionService;

@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/interestrate")
-@CrossOrigin(origins = "*")
+@CrossOrigin(
+        origins = "http://127.0.0.1:5173/",
+        allowedHeaders = "*", maxAge = 3600,
+        allowCredentials = "true"
+)
 public class InterestRateController {
     @Autowired
     AnnualAPYService apyService;
