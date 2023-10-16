@@ -1,16 +1,6 @@
 import { Link } from "react-router-dom";
 import {UserDetails} from "../type/types";
-import {useEffect, useState} from "react";
-import Cookies from "js-cookie";
 const ManagersList = (props: { users: UserDetails[]; }) => {
-    const [role, setRole] = useState<string>('MANAGER');
-    useEffect(() => {
-        const user = Cookies.get('user')
-        if (user) {
-            const userJson = JSON.parse(user);
-            setRole(userJson.role);
-        }
-    }, []);
 
     return (
         <>
