@@ -42,8 +42,8 @@ public class AnnualAPRService {
         return aprRepository.findById(id).get().getAnnualAPR();
     }
 
-    public ResponseEntity<?> getAPRList() {
-     //   User loggedInUser = Util.getPrincipal(token);
+    public ResponseEntity<?> getAPRList(String token) {
+     // User loggedInUser = Util.getPrincipal(token);
         List<AnnualAPR> list;
         list = aprRepository.findAll();
         return ResponseEntity.ok().body(list);
