@@ -102,6 +102,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("No sufficient privilege for this operation");
         User user = repository.findUserById(userId).orElseThrow(() -> new RuntimeException("Invalid User"));
         user.disable();
+        repository.save(user);
     }
 
     @Override
@@ -109,6 +110,9 @@ public class UserServiceImpl implements UserService {
         User principal = getPrincipal(token);
         if (!principal.getRole().equals(Role.MANAGER))
             throw new RuntimeException("No sufficient privilege for this operation");
+        User user = repository.findUserById(userId).orElseThrow(() -> new RuntimeException("Invalid User"));
+        user.enable();
+        repository.save(user);
     }
 
     @Override
