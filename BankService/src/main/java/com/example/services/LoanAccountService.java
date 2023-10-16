@@ -34,7 +34,7 @@ public class LoanAccountService {
     @Autowired
     TransactionService transactionService;
 
-    public ResponseEntity<?> create(AccountRequest accountRequest) {
+    public ResponseEntity<?> create(AccountRequest accountRequest,Long userId) {
 
         try {
             Account loanAccount = new LoanAccount();
@@ -48,7 +48,7 @@ public class LoanAccountService {
                 }
                 ((LoanAccount) loanAccount).setAnnualAPR(optionalAnnualAPR.get().getAnnualAPR());
             }
-            loanAccount.setUserId(accountRequest.getUserId());
+            loanAccount.setUserId(userId);
             loanAccount.setBranchId(accountRequest.getBranchId());
             loanAccount.setCreatedDate(LocalDateTime.now());
             loanAccount.setIsDeleted(false);
@@ -89,7 +89,7 @@ public class LoanAccountService {
         try {
             Account loanAccount;
             Optional<Account> loanAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
-            if (loanAccountOptional.isPresent()) {
+            if (!loanAccountOptional.isPresent()) {
                 responseModel.setSuccess(false);
                 responseModel.setMessage("Account doesn't exist");
                 return responseModel;

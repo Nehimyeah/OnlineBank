@@ -13,6 +13,6 @@ public class AccountResponse {
     private String accountNumber;
     private String accountStatus;
     private BigDecimal balance;
-//    private Long branchId;
+
 
 }

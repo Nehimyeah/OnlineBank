@@ -37,20 +37,20 @@ public class AccountService{
 
     public ResponseEntity<?> create(AccountRequest accountRequest, String token) {
 
-            User loggedInUser = Util.getPrincipal(token);
-            long userId = loggedInUser.getId();
-            accountRequest.setUserId(userId);
+        User loggedInUser = Util.getPrincipal(token);
+        long userId = loggedInUser.getId();
+        if (!Role.CUSTOMER.equals(loggedInUser.getRole()))
+            throw new RuntimeException("No sufficient Access for this operation");
 
         switch (accountRequest.getAccountType()){
             case "checking" :
-                return checkingAccountService.create(accountRequest);
+                return checkingAccountService.create(accountRequest,userId);
             case "loan":
-                return loanAccountService.create(accountRequest);
+                return loanAccountService.create(accountRequest,userId);
             case "savings":
-                return savingsAccountService.create(accountRequest);
+                return savingsAccountService.create(accountRequest,userId);
         }
         return ResponseEntity.badRequest().body("Account type is not correct ");
-
     }
     public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest,String token) {
 
@@ -170,6 +170,10 @@ public class AccountService{
 
     public ResponseEntity<?> approveAccount(String accountNumber, StatusRequest statusRequest, String token) {
         try{
+        User loggedInUser = Util.getPrincipal(token);
+        if (!Role.ADMIN.equals(loggedInUser.getRole()) && !Role.MANAGER.equals(loggedInUser.getRole()))
+            throw new RuntimeException("No sufficient Access for this operation");
+
         Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountNumber);
         if (!accountOptional.isPresent()) {
             return ResponseEntity.badRequest().body("Account has not been found!");
@@ -178,11 +182,29 @@ public class AccountService{
         account.setAccountStatus(AccountStatus.ACTIVE);
         accountRepository.save(account);
 
-        return ResponseEntity.badRequest().body("Account has been updated");
+        return ResponseEntity.ok().body("Account has been updated");
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Account has been updated");
+            return ResponseEntity.badRequest().body("Account has not been updated");
         }
 
     }
 
+    public ResponseEntity<?> verifyAccount(String accountNumber, String token) {
+        try{
+            User loggedInUser = Util.getPrincipal(token);
+            if (!Role.ADMIN.equals(loggedInUser.getRole()) && !Role.MANAGER.equals(loggedInUser.getRole()))
+                throw new RuntimeException("No sufficient Access for this operation");
+
+            Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountNumber);
+            if (!accountOptional.isPresent()) {
+                return ResponseEntity.badRequest().body("Account has not been found!");
+            }
+            Account account = accountOptional.get();
+            account.setAccountStatus(AccountStatus.ACTIVE);
+            accountRepository.save(account);
+            return ResponseEntity.ok().body("Account has been verified");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Account has not been verified");
+        }
+    }
 }
