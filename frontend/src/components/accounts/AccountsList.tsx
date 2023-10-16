@@ -12,10 +12,18 @@ const Accounts = (props:{accounts: Array<BranchDetails>} ) => {
                             <div className="mb-4">
                                 <h1 className="text-3xl font-bolder leading-tight text-gray-900 mt-5">Accounts List</h1>
                             </div>
-                            <div className="flex items-center py-2">
+                            <div className="flex flex-row-reverse items-center py-2 gap-2">
                                 <Link to={"/accounts/create"}
                                       className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
                                     Create Account
+                                </Link>
+                                <Link to={"/accounts/create"}
+                                      className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
+                                    Withdraw
+                                </Link>
+                                <Link to={"/accounts/create"}
+                                      className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
+                                    Transfer
                                 </Link>
                             </div>
                         </div>
