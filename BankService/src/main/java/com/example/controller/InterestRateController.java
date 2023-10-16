@@ -28,11 +28,11 @@ public class InterestRateController {
         return apyService.create(annualInterestRequest,token);
     }
     @GetMapping("/aprlist")
-    public ResponseEntity<?> getAPRList(@RequestHeader("Authorization") String token){
-        return aprService.getAPRList(token);
+    public ResponseEntity<?> getAPRList(){
+        return aprService.getAPRList();
     }
     @GetMapping("/apylist")
-    public ResponseEntity<?> getAPYList(@RequestHeader("Authorization") String token){
-        return apyService.getAPYList(token);
+    public ResponseEntity<?> getAPYList(){
+        return apyService.getAPYList();
     }
 }

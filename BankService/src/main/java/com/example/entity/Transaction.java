@@ -25,5 +25,6 @@ public class Transaction{
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
     private LocalDateTime createdDate;
+    private String info;
 
 }

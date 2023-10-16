@@ -2,12 +2,9 @@ package com.example.services;
 import com.example.dto.BranchDto;
 import com.example.dto.ResponseModel;
 import com.example.dto.StatusRequest;
-import com.example.dto.account.AcountResponseDTO;
+import com.example.dto.account.*;
 import com.example.dto.request.OperationRequest;
 import com.example.dto.User;
-import com.example.dto.account.AccountRequest;
-import com.example.dto.account.AccountResponse;
-import com.example.dto.account.AccountUpdateRequest;
 import com.example.entity.Account;
 import com.example.enums.AccountStatus;
 import com.example.enums.Role;
@@ -210,5 +207,15 @@ public class AccountService{
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Account has not been verified");
         }
+    }
+
+    public ResponseModel<?> transferMoney(AccountTransferRequest accountTransferRequest, String token) {
+        User loggedInUser = Util.getPrincipal(token);
+        if (!Role.CUSTOMER.equals(loggedInUser.getRole()))
+            throw new RuntimeException("No sufficient Access for this operation");
+
+        return checkingAccountService.transferMoney(accountTransferRequest);
+
+
     }
 }

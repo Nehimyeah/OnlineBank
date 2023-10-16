@@ -4,6 +4,8 @@ public enum TransactionType {
     DEPOSIT(0, "deposit"),
     WITHDRAW(1, "withdraw"),
     PAYMENTTOLOAN(2, "paymenttoloan"),
+    TRANSFERTO(3, "transferto"),
+    RECEIVEFROM(4, "receivefrom"),
     ;
 
     private final long id;

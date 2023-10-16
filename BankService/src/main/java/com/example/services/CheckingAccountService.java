@@ -2,6 +2,7 @@ package com.example.services;
 
 import com.example.dto.ResponseModel;
 import com.example.dto.account.AccountRequest;
+import com.example.dto.account.AccountTransferRequest;
 import com.example.dto.account.AccountUpdateRequest;
 import com.example.dto.request.OperationRequest;
 import com.example.dto.transaction.TransactionCreateRequest;
@@ -159,6 +160,86 @@ public class CheckingAccountService {
         }
 
 
+
+    }
+    public ResponseModel<Account> transferMoney(AccountTransferRequest accountTransferRequest) {
+        ResponseModel<Account> responseModel = new ResponseModel<>();
+        try {
+            Account fromAccount;
+            Optional<Account> fromAccountOptional = accountRepository.findByAccountNumber(accountTransferRequest.getFromAccountNum());
+            if (!fromAccountOptional.isPresent()) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Account doesn't exist");
+                return responseModel;
+            }
+            fromAccount = fromAccountOptional.get();
+
+            Account toAccount;
+            Optional<Account> toAccountOptional = accountRepository.findByAccountNumber(accountTransferRequest.getToAccountNum());
+            if (!toAccountOptional.isPresent()) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Account doesn't exist");
+                return responseModel;
+            }
+            toAccount = toAccountOptional.get();
+
+            // validate account
+            if (!Util.validate(fromAccount, accountTransferRequest.getAmount())) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Balance is not sufficient in Account: "+ fromAccount.getAccountNumber());
+                return responseModel;
+            }
+            BigDecimal previousFromAccountBalance = fromAccount.getBalance();
+            fromAccount.setBalance(previousFromAccountBalance.subtract(accountTransferRequest.getAmount()));
+            fromAccount = accountRepository.save(fromAccount);
+
+            BigDecimal previoustoAccountBalance = toAccount.getBalance();
+            toAccount.setBalance(previoustoAccountBalance.add(accountTransferRequest.getAmount()));
+            toAccount = accountRepository.save(toAccount);
+
+            TransactionCreateRequest fromAccountTransactionCreateRequest = new TransactionCreateRequest();
+            fromAccountTransactionCreateRequest.setAccountNumber(fromAccount.getAccountNumber());
+            fromAccountTransactionCreateRequest.setAmount(accountTransferRequest.getAmount());
+            fromAccountTransactionCreateRequest.setPreviousBalance(previousFromAccountBalance);
+            fromAccountTransactionCreateRequest.setCurrentBalance(fromAccount.getBalance());
+            fromAccountTransactionCreateRequest.setInfo("Money transfer from Account: " + fromAccount.getAccountNumber() + " to Account: " + toAccount.getAccountNumber());
+            fromAccountTransactionCreateRequest.setTransactionType(TransactionType.TRANSFERTO);
+
+            ResponseModel<Transaction> fromAccountresponse = transactionService.save(fromAccountTransactionCreateRequest);
+            if (!fromAccountresponse.getSuccess()) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("FromAccount sender transaction was not created");
+                return responseModel;
+            }
+            TransactionCreateRequest toAccountTransactionCreateRequest = new TransactionCreateRequest();
+            toAccountTransactionCreateRequest.setAccountNumber(toAccount.getAccountNumber());
+            toAccountTransactionCreateRequest.setAmount(accountTransferRequest.getAmount());
+            toAccountTransactionCreateRequest.setPreviousBalance(previoustoAccountBalance);
+            toAccountTransactionCreateRequest.setCurrentBalance(toAccount.getBalance());
+            toAccountTransactionCreateRequest.setInfo("Money received from Account: " + fromAccount.getAccountNumber());
+            toAccountTransactionCreateRequest.setTransactionType(TransactionType.RECEIVEFROM);
+
+            ResponseModel<Transaction> toAccountresponse = transactionService.save(fromAccountTransactionCreateRequest);
+            if (!toAccountresponse.getSuccess()) {
+                responseModel.setSuccess(false);
+                responseModel.setMessage("FromAccount sender transaction was not created");
+                return responseModel;
+            }
+
+            fromAccount.getTransactions().add(fromAccountresponse.getData());
+            fromAccount = accountRepository.save(fromAccount);
+
+            toAccount.getTransactions().add(toAccountresponse.getData());
+            toAccount = accountRepository.save(toAccount);
+
+            responseModel.setSuccess(true);
+            responseModel.setMessage("Money transfer was successful");
+            return responseModel;
+        } catch (Exception e) {
+            responseModel.setSuccess(false);
+            responseModel.setMessage("Money transfer failed");
+            return responseModel;
+        }
 
     }
 

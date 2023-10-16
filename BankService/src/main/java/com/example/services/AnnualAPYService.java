@@ -41,10 +41,10 @@ public class AnnualAPYService {
         return apyRepository.findById(id).get().getAnnualAPY();
     }
 
-    public ResponseEntity<?> getAPYList(String token) {
-        User loggedInUser = Util.getPrincipal(token);
-        if (!Role.ADMIN.equals(loggedInUser.getRole()))
-            throw new RuntimeException("No sufficient Access for this operation");
+    public ResponseEntity<?> getAPYList() {
+//          User loggedInUser = Util.getPrincipal(token);
+//        if (!Role.ADMIN.equals(loggedInUser.getRole()))
+//            throw new RuntimeException("No sufficient Access for this operation");
         List<AnnualAPY> list;
         list = apyRepository.findAll();
         return ResponseEntity.ok().body(list);

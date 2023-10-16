@@ -20,6 +20,7 @@ public class TransactionCreateRequest {
     private AccountType accountType;
     private TransactionType transactionType;
     private TransactionStatus transactionStatus;
+    private String info;
 
 
 }

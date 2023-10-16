@@ -42,10 +42,8 @@ public class AnnualAPRService {
         return aprRepository.findById(id).get().getAnnualAPR();
     }
 
-    public ResponseEntity<?> getAPRList(String token) {
-        User loggedInUser = Util.getPrincipal(token);
-        if (!Role.ADMIN.equals(loggedInUser.getRole()))
-            throw new RuntimeException("No sufficient Access for this operation");
+    public ResponseEntity<?> getAPRList() {
+     //   User loggedInUser = Util.getPrincipal(token);
         List<AnnualAPR> list;
         list = aprRepository.findAll();
         return ResponseEntity.ok().body(list);

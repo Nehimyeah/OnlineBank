@@ -3,6 +3,7 @@ package com.example.controller;
 
 import com.example.dto.ResponseModel;
 import com.example.dto.StatusRequest;
+import com.example.dto.account.AccountTransferRequest;
 import com.example.dto.request.OperationRequest;
 import com.example.dto.account.AccountRequest;
 import com.example.dto.account.AccountUpdateRequest;
@@ -38,6 +39,10 @@ public class AccountController {
     @PostMapping("/deposit")
     public ResponseModel<?> deposit(@RequestBody OperationRequest operationRequest,@RequestHeader("Authorization") String token){
         return accountService.deposit(operationRequest,token);
+    }
+    @PostMapping("/transfer")
+    public ResponseModel<?> transferMoney(@RequestBody AccountTransferRequest accountTransferRequest, @RequestHeader("Authorization") String token){
+        return accountService.transferMoney(accountTransferRequest,token);
     }
     @GetMapping("/{accnum}")
     public ResponseModel<?> getAccountByAccNumber(@PathVariable String accnum,@RequestHeader("Authorization") String token){
