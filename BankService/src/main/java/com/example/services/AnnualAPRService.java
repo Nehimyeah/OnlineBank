@@ -43,6 +43,9 @@ public class AnnualAPRService {
     }
 
     public ResponseEntity<?> getAPRList(String token) {
+        User loggedInUser = Util.getPrincipal(token);
+        if (!Role.ADMIN.equals(loggedInUser.getRole()))
+            throw new RuntimeException("No sufficient Access for this operation");
         List<AnnualAPR> list;
         list = aprRepository.findAll();
         return ResponseEntity.ok().body(list);

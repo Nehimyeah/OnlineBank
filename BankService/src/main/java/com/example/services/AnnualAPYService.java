@@ -21,7 +21,7 @@ public class AnnualAPYService {
     public ResponseEntity<?> create(AnnualInterestRequest annualInterestRequest,String token){
         try{
             User loggedInUser = Util.getPrincipal(token);
-            if (!Role.CUSTOMER.equals(loggedInUser.getRole()))
+            if (!Role.ADMIN.equals(loggedInUser.getRole()))
                 throw new RuntimeException("No sufficient Access for this operation");
             AnnualAPY annualAPY = new AnnualAPY();
             annualAPY.setRateType(annualInterestRequest.getRateType());

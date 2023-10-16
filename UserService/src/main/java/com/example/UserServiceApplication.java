@@ -33,7 +33,7 @@ public class UserServiceApplication implements CommandLineRunner {
         createTeller();
     }
 
-    private void createCustomer() {
+    private void createTeller() {
         User customer = User.builder()
                 .email("teller@tel.com")
                 .firstName("Teller")
@@ -51,7 +51,7 @@ public class UserServiceApplication implements CommandLineRunner {
         userService.saveAdmins(customer);
     }
 
-    private void createTeller() {
+    private void createCustomer() {
         User teller = User.builder()
                 .email("customer@cus.com")
                 .firstName("Customer")

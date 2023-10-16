@@ -1,6 +1,7 @@
 package com.example.services;
 import com.example.dto.BranchDto;
 import com.example.dto.ResponseModel;
+import com.example.dto.StatusRequest;
 import com.example.dto.account.AcountResponseDTO;
 import com.example.dto.request.OperationRequest;
 import com.example.dto.User;
@@ -8,6 +9,7 @@ import com.example.dto.account.AccountRequest;
 import com.example.dto.account.AccountResponse;
 import com.example.dto.account.AccountUpdateRequest;
 import com.example.entity.Account;
+import com.example.enums.AccountStatus;
 import com.example.enums.Role;
 import com.example.repository.AccountRepository;
 import com.example.utils.Util;
@@ -110,7 +112,7 @@ public class AccountService{
         return responseModel;
     }
 
-    public ResponseModel<Account> getAccountByAccNumber(String accountNumber) {
+    public ResponseModel<Account> getAccountByAccNumber(String accountNumber,String token) {
         ResponseModel<Account> responseModel = new ResponseModel<>();
         Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountNumber);
         if (!accountOptional.isPresent()) {
@@ -124,7 +126,7 @@ public class AccountService{
         return responseModel;
     }
 
-    public ResponseEntity<?> getList(Long id) {
+    public ResponseEntity<?> getList(Long id,String token) {
         try {
             List<Account> accounts = accountRepository.findByUserId(id);
             List<AccountResponse> list = new ArrayList<>();
@@ -157,9 +159,27 @@ public class AccountService{
     }
 
 
-//    private void authenticateUser(String token) {
-//        User loggedInUser = Util.getPrincipal(token);
-//        if (!Role.CUSTOMER.equals(loggedInUser.getRole()))
-//            throw new RuntimeException("No sufficient Access for this operation");
-//    }
+    private void authenticateUser(String token) {
+        User loggedInUser = Util.getPrincipal(token);
+        if (!Role.CUSTOMER.equals(loggedInUser.getRole()))
+            throw new RuntimeException("No sufficient Access for this operation");
+    }
+
+    public ResponseEntity<?> approveAccount(String accountNumber, StatusRequest statusRequest, String token) {
+        try{
+        Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountNumber);
+        if (!accountOptional.isPresent()) {
+            return ResponseEntity.badRequest().body("Account has not been found!");
+        }
+        Account account = accountOptional.get();
+        account.setAccountStatus(AccountStatus.ACTIVE);
+        accountRepository.save(account);
+
+        return ResponseEntity.badRequest().body("Account has been updated");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Account has been updated");
+        }
+
+    }
+
 }

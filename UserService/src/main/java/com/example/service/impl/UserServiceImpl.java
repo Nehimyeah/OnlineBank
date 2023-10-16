@@ -53,7 +53,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private void failIfUserExists(User user) {
-        repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("User already exists"));
+        Optional<User> optUser = repository.findUserByEmail(user.getEmail());
+        if (optUser.isPresent())
+            throw new RuntimeException("Account already available");
     }
 
 
