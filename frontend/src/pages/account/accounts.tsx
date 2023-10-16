@@ -5,11 +5,13 @@ import Accounts from "../../components/accounts/AccountsList";
 const AccountsList = () => {
 
     const [accounts, setBranches] = useState([]);
+    const [totalBalance, setTotalBalance] = useState(0);
 
     const fetchData = () => {
         try {
             axiosPrivateBank.get(`/account/list`).then((res) => {
                 setBranches(res.data.list);
+                setTotalBalance(res.data.total)
             })
         } catch (err) {
             console.error(err);
@@ -22,7 +24,7 @@ const AccountsList = () => {
 
     return (
         <DashboardLayout>
-            <Accounts accounts={accounts}/>
+            <Accounts totalBalance={totalBalance} accounts={accounts}/>
         </DashboardLayout>
     )
 }

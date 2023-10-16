@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import {BranchDetails} from "../type/types";
-const Accounts = (props:{accounts: Array<BranchDetails>} ) => {
+const Accounts = (props:{accounts: Array<BranchDetails>, totalBalance: number} ) => {
 
 
     return (
@@ -17,11 +17,15 @@ const Accounts = (props:{accounts: Array<BranchDetails>} ) => {
                                       className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
                                     Create Account
                                 </Link>
-                                <Link to={"/accounts/create"}
+                                <Link to={"/accounts/withdraw"}
                                       className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
                                     Withdraw
                                 </Link>
-                                <Link to={"/accounts/create"}
+                                <Link to={"/accounts/deposit"}
+                                      className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
+                                    Deposit
+                                </Link>
+                                <Link to={"/accounts/transfer"}
                                       className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
                                     Transfer
                                 </Link>
@@ -85,6 +89,7 @@ const Accounts = (props:{accounts: Array<BranchDetails>} ) => {
                             </div>
                         </div>
                     </div>
+                    <p className="mt-3">Total balance: ${props.totalBalance}</p>
                 </div>
             </div>
         </>

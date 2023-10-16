@@ -32,3 +32,9 @@ export const branchSchema = yup
         })
     })
     .required();
+
+export const withdrawSchema = yup
+    .object({
+        amount: yup.number().required(),
+    })
+    .required();

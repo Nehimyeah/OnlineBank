@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {BranchDetails, UserDetails} from "../../components/type/types";
 import {branchSchema} from "../../components/mixins/userRelatedFunctions";
 
-const CreateAccount = () => {
+const TransferMoney = () => {
     const [branches,setBranches] = useState([])
     const [accountType, setAccountType] = useState("checking");
     const fetchData = () => {
@@ -61,7 +61,7 @@ const CreateAccount = () => {
                 .then(() => {
                     notify();
                     setTimeout(() => {
-                        navigate("/accounts")
+                        navigate("/branches")
                     }, 1000);
                 })
                 .finally(() => {
@@ -178,4 +178,4 @@ const CreateAccount = () => {
     );
 };
 
-export default CreateAccount;
+export default TransferMoney;

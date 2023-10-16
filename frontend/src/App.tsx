@@ -8,8 +8,11 @@ import CreateManager from "./pages/manager/manager-create";
 import CreateBranch from "./pages/branches/branch-create";
 import AccountsList from "./pages/account/accounts";
 import AccountCreate from "./pages/account/account-create";
+import WithdrawMoney from "./pages/account/withdraw-money";
+import TransferMoney from "./pages/account/transfer-money";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
+import DepositMoney from "./pages/account/deposit-money";
 
 function App() {
   return (
@@ -27,6 +30,9 @@ function App() {
           <Route path="branches/create" element={<CreateBranch />} />
           <Route path="accounts" element={<AccountsList />} />
           <Route path="accounts/create" element={<AccountCreate />} />
+          <Route path="accounts/transfer" element={<TransferMoney />} />
+          <Route path="accounts/withdraw" element={<WithdrawMoney />} />
+          <Route path="accounts/deposit" element={<DepositMoney />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </MainLayout>
