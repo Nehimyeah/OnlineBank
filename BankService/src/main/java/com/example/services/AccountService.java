@@ -49,8 +49,9 @@ public class AccountService{
                 return loanAccountService.create(accountRequest,userId);
             case "savings":
                 return savingsAccountService.create(accountRequest,userId);
+            default:
+                return ResponseEntity.badRequest().body("Account type is not correct ");
         }
-        return ResponseEntity.badRequest().body("Account type is not correct ");
     }
     public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest,String token) {
 
@@ -68,8 +69,9 @@ public class AccountService{
                 return loanAccountService.update(accountUpdateRequest);
             case "savings":
                 return savingsAccountService.update(accountUpdateRequest);
+            default:
+                return ResponseEntity.badRequest().body("Account type is not correct ");
         }
-        return ResponseEntity.badRequest().body("Account type is not correct ");
 
     }
 
@@ -85,12 +87,12 @@ public class AccountService{
                 return loanAccountService.withdraw(operationRequest);
             case "savings":
                 return savingsAccountService.withdraw(operationRequest);
+            default:
+                ResponseModel<?> responseModel = new ResponseModel<>();
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Account type is not correct");
+                return responseModel;
         }
-        ResponseModel<?> responseModel = new ResponseModel<>();
-        responseModel.setSuccess(false);
-        responseModel.setMessage("Account type is not correct");
-        return responseModel;
-
     }
 
     public ResponseModel<?> deposit(OperationRequest operationRequest,String token) {
@@ -105,11 +107,13 @@ public class AccountService{
                 return loanAccountService.deposit(operationRequest);
             case "savings":
                 return savingsAccountService.deposit(operationRequest);
+            default:
+                ResponseModel<?> responseModel = new ResponseModel<>();
+                responseModel.setSuccess(false);
+                responseModel.setMessage("Account type is not correct");
+                return responseModel;
         }
-        ResponseModel<?> responseModel = new ResponseModel<>();
-        responseModel.setSuccess(false);
-        responseModel.setMessage("Account type is not correct");
-        return responseModel;
+
     }
 
     public ResponseModel<Account> getAccountByAccNumber(String accountNumber,String token) {
@@ -140,7 +144,7 @@ public class AccountService{
                 accountResponse.setAccountNumber(account.getAccountNumber());
                 accountResponse.setBalance(account.getBalance());
                 list.add(accountResponse);
-                sum.add(account.getBalance());
+                sum=sum.add(account.getBalance());
     //            accountResponse.setBranchId(account.getBranchId());
             }
             AcountResponseDTO  acountResponseDTO = new AcountResponseDTO();

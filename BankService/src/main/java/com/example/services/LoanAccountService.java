@@ -53,11 +53,10 @@ public class LoanAccountService {
             loanAccount.setCreatedDate(LocalDateTime.now());
             loanAccount.setIsDeleted(false);
             accountRepository.save(loanAccount);
+            return ResponseEntity.status(HttpStatus.OK).body("Loan account has been created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(" Loan account creation failed");
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Loan account has been created successfully");
-
     }
 
     public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest) {
@@ -79,10 +78,11 @@ public class LoanAccountService {
                 ((LoanAccount) loanAccount).setAnnualAPR(optionalAnnualAPR.get().getAnnualAPR());
             }
             accountRepository.save(loanAccount);
+            return ResponseEntity.status(HttpStatus.OK).body("Loan account has been updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account has not been updated");
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Loan account has been updated successfully");
+
     }
     public ResponseModel<Account> withdraw(OperationRequest operationRequest) {
         ResponseModel<Account> responseModel = new ResponseModel<>();

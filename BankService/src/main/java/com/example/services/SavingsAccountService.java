@@ -52,10 +52,10 @@ public class SavingsAccountService {
             savingsAccount.setCreatedDate(LocalDateTime.now());
             savingsAccount.setIsDeleted(false);
             accountRepository.save(savingsAccount);
+            return ResponseEntity.status(HttpStatus.OK).body("Savings account has been created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account has not been created");
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Savings account has been created successfully");
     }
     public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest) {
         try {
@@ -65,11 +65,10 @@ public class SavingsAccountService {
 //            savingsAccount.setDeletedBy(savingsAccountRequest.getDeletedBy());
             savingsAccount.setDeletedDate(LocalDateTime.now());
             accountRepository.save(savingsAccount);
-
+            return ResponseEntity.status(HttpStatus.OK).body("Savings account has been updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account has not been updated");
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Savings account has been updated successfully");
     }
 
     public Account getByAccountNumber(String accountNumber){
