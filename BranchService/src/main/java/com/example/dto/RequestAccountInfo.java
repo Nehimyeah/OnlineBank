@@ -11,7 +11,5 @@ import java.math.BigDecimal;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequestAccountInfo {
 
-    private String accountNumber;
-    private String accountStatus;
-    private BigDecimal balance;
+    private Long id;
 }

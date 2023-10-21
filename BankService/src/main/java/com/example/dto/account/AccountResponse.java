@@ -10,7 +10,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class AccountResponse {
 
-    private List<RequestAccountInfo> requestAccountInfoList;
+    private String accountNumber;
+    private String accountStatus;
     private BigDecimal balance;
 
 
