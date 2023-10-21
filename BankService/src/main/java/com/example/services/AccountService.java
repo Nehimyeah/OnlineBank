@@ -49,6 +49,7 @@ public class AccountService{
             default:
                 return ResponseEntity.badRequest().body("Account type is not correct ");
         }
+
     }
     public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest,String token) {
 

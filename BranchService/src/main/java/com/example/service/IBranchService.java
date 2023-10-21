@@ -1,9 +1,9 @@
 package com.example.service;
 
 import com.example.domain.Branch;
+import com.example.dto.ResponseAccountInfo;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IBranchService {
 
@@ -18,4 +18,6 @@ public interface IBranchService {
     void delete(Long id, String token);
 
     void saveInternal(Branch branch);
+
+    ResponseAccountInfo getAllAccounts(Long id, String token);
 }

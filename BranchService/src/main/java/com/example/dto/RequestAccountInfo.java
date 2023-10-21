@@ -1,20 +1,17 @@
 package com.example.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GetAccountInfo {
+public class RequestAccountInfo {
 
     private String accountNumber;
     private String accountStatus;
     private BigDecimal balance;
-
 }

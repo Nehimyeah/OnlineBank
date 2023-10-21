@@ -1,7 +1,10 @@
 package com.example.service.impl;
 
 import com.example.domain.Branch;
+import com.example.dto.RequestAccountInfo;
+import com.example.dto.ResponseAccountInfo;
 import com.example.dto.User;
+import com.example.integration.BankIntegration;
 import com.example.repository.BranchRepository;
 import com.example.service.IBranchService;
 import com.example.util.JwtUtil;
@@ -16,6 +19,7 @@ import java.util.Optional;
 public class BranchService implements IBranchService {
 
     private final BranchRepository branchRepository;
+    private final BankIntegration bankIntegration;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -70,6 +74,21 @@ public class BranchService implements IBranchService {
             return;
         }
         throw new RuntimeException("Branch already exists");
+    }
+
+    @Override
+    public ResponseAccountInfo getAllAccounts(Long id, String token) {
+
+        Optional<Branch> branch = branchRepository.findById(id);
+
+        if(!branch.isPresent()){
+
+            throw new RuntimeException("Branch does not exist");
+        }
+
+        ResponseAccountInfo responseAccountInfo = bankIntegration.getAccountNumber(id, token);
+        return responseAccountInfo;
+
     }
 
     private void authenticate(String bearerToken) {
