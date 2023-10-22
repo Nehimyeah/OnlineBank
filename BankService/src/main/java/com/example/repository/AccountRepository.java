@@ -22,6 +22,9 @@ public interface AccountRepository extends JpaRepository<Account, UUID> {
     @Query("Select a from Account a where a.userId = :userId")
     List<Account> findByUserId(@Param("userId") Long userId);
 
+    @Query("Select a from Account a where a.branchId = :branchId")
+    List<Account> findByBranchId(@Param("branchId") Long branchId);
+
 
 
 }

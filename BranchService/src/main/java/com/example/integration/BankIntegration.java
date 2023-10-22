@@ -21,7 +21,7 @@ public class BankIntegration {
 
         HttpEntity<?> entity = new HttpEntity<>(id, headers);
 
-        String bankUrl = "http://localhost:8181/account/list";
+        String bankUrl = "http://localhost:8181/account/list/" + id;
 
         return restTemplate.exchange(
                 bankUrl,

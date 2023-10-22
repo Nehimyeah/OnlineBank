@@ -143,7 +143,7 @@ public class AccountService{
                 accountResponse.setBalance(account.getBalance());
                 list.add(accountResponse);
                 sum=sum.add(account.getBalance());
-    //            accountResponse.setBranchId(account.getBranchId());
+                accountResponse.setBranchId(account.getBranchId());
             }
             AcountResponseDTO  acountResponseDTO = new AcountResponseDTO();
             acountResponseDTO.setList(list);
@@ -162,6 +162,41 @@ public class AccountService{
         BranchDto branchDto = restTemplate.postForObject("http://localhost:8081/branch",httpEntity, BranchDto.class);
         return branchDto;
     }
+
+    public ResponseEntity<?> getAllAccountByBranch(Long branchId, String token) {
+        try {
+            // Fetch the accounts associated with the specified branch ID.
+            List<Account> branchAccounts = accountRepository.findByBranchId(branchId);
+
+            if (branchAccounts.isEmpty()) {
+                throw new RuntimeException("No accounts in the specified branch");
+            } else {
+                List<AccountResponse> list = new ArrayList<>();
+                BigDecimal sum = BigDecimal.ZERO;
+
+                for (Account account : branchAccounts) {
+                    AccountResponse accountResponse = new AccountResponse();
+                    accountResponse.setAccountStatus(String.valueOf(account.getAccountStatus()));
+                    accountResponse.setAccountNumber(account.getAccountNumber());
+                    accountResponse.setBalance(account.getBalance());
+                    list.add(accountResponse);
+                    sum = sum.add(account.getBalance());
+                    accountResponse.setBranchId(account.getBranchId());
+                }
+
+                AcountResponseDTO accountResponseDTO = new AcountResponseDTO();
+                accountResponseDTO.setList(list);
+                accountResponseDTO.setTotal(sum);
+
+                return ResponseEntity.ok(accountResponseDTO);
+            }
+        } catch (Exception e) {
+            log.info("Exception: " + e.getMessage());
+            return new ResponseEntity<>("Error in getting list of accounts", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 
     private void authenticateUser(String token) {

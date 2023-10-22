@@ -61,5 +61,11 @@ public class AccountController {
         return accountService.verifyAccount(accountNumber, token);
     }
 
+    @GetMapping("/list/{id}")
+    public ResponseEntity<?> getAllAccountsBranch(@PathVariable Long id, @RequestHeader("Authorization") String token){
+
+        return accountService.getAllAccountByBranch(id, token);
+    }
+
 
 }
