@@ -164,12 +164,13 @@ public class AccountService{
     }
 
     public ResponseEntity<?> getAllAccountByBranch(Long branchId, String token) {
-        try {
+            // Fetch the accounts associated with the specified branch ID.
 
             User loggedInUser = Util.getPrincipal(token);
 
             if(!loggedInUser.getRole().equals(Role.MANAGER)){
-                throw new RuntimeException("No sufficient Access for this operation");
+
+                throw new RuntimeException("No sufficient access for this operation");
             }
 
             List<Account> branchAccounts = accountRepository.findByBranchId(branchId);
@@ -196,11 +197,10 @@ public class AccountService{
 
                 return ResponseEntity.ok(accountResponseDTO);
             }
-        } catch (Exception e) {
-            log.info("Exception: " + e.getMessage());
-            return new ResponseEntity<>("Error in getting list of accounts", HttpStatus.BAD_REQUEST);
         }
-    }
+
+
+
 
     private void authenticateUser(String token) {
         User loggedInUser = Util.getPrincipal(token);
