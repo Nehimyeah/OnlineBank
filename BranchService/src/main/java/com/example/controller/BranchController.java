@@ -59,10 +59,9 @@ public class BranchController {
         return ResponseEntity.ok("Branch successfully deleted");
     }
 
-    @GetMapping("/getAccounts/{id}")
+    @GetMapping("/{id}/accounts")
     public ResponseEntity<?> getAllAccounts(@PathVariable Long id, @RequestHeader("Authorization") String token){
 
-        return ResponseEntity.ok(branchService.getAllAccounts(id, token));
+        return ResponseEntity.ok(branchService.getAllAccountsByBranch(id, token));
     }
-
 }
