@@ -7,6 +7,7 @@ import com.example.dto.request.OperationRequest;
 import com.example.dto.User;
 import com.example.entity.Account;
 import com.example.enums.AccountStatus;
+import com.example.enums.AccountType;
 import com.example.enums.Role;
 import com.example.repository.AccountRepository;
 import com.example.utils.Util;
@@ -168,7 +169,7 @@ public class AccountService{
 
             User loggedInUser = Util.getPrincipal(token);
 
-            if(!loggedInUser.getRole().equals(Role.MANAGER)){
+            if(!Role.MANAGER.equals(loggedInUser.getRole())){
 
                 throw new RuntimeException("No sufficient access for this operation");
             }
@@ -189,6 +190,11 @@ public class AccountService{
                     list.add(accountResponse);
                     sum = sum.add(account.getBalance());
                     accountResponse.setBranchId(account.getBranchId());
+
+//                    if(!accountResponse.getAccountType().equals(AccountType.LOAN.name())){
+//
+//                        throw new RuntimeException("No loan accounts exist");
+//                    }
                 }
 
                 AcountResponseDTO accountResponseDTO = new AcountResponseDTO();

@@ -36,14 +36,16 @@ public class BranchService implements IBranchService {
 
     @Override
     public Branch findById(Long id, String bearerToken) {
-        authenticate(bearerToken);
+        authenticateManager(bearerToken);
         Optional<Branch> branch = branchRepository.findById(id);
+
         return branch.orElseThrow(() -> new RuntimeException("Branch with this information doesn't exist"));
+
     }
 
     @Override
     public List<Branch> getAllBranches(String bearerToken) {
-//        authenticate(bearerToken);
+        authenticateManager(bearerToken);
         return branchRepository.findAll();
     }
 
@@ -77,7 +79,7 @@ public class BranchService implements IBranchService {
     }
 
     @Override
-    public ResponseAccountInfo getAllAccounts(Long id, String token) {
+    public ResponseAccountInfo getAllAccountsByBranch(Long id, String token) {
 
         Optional<Branch> branch = branchRepository.findById(id);
 
@@ -88,13 +90,19 @@ public class BranchService implements IBranchService {
 
         ResponseAccountInfo responseAccountInfo = bankIntegration.getAccountNumber(id, token);
         return responseAccountInfo;
-
     }
 
     private void authenticate(String bearerToken) {
         String token = jwtUtil.extractToken(bearerToken);
         User principal = jwtUtil.parseToken(token);
         if (!principal.getRole().equals("ADMIN"))
+            throw new RuntimeException("User can't perform this operation");
+    }
+
+    private void authenticateManager(String bearerToken) {
+        String token = jwtUtil.extractToken(bearerToken);
+        User principal = jwtUtil.parseToken(token);
+        if (!principal.getRole().equals("MANAGER"))
             throw new RuntimeException("User can't perform this operation");
     }
 }

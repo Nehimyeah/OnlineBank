@@ -1,5 +1,6 @@
 package com.example.integration;
 
+import com.example.domain.Branch;
 import com.example.dto.ResponseAccountInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
