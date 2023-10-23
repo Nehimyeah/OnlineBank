@@ -83,12 +83,15 @@ public class BranchService implements IBranchService {
 
         Optional<Branch> branch = branchRepository.findById(id);
 
-        if(!branch.isPresent()){
+        if(branch.isEmpty()){
 
             throw new RuntimeException("Branch does not exist");
         }
 
-        ResponseAccountInfo responseAccountInfo = bankIntegration.getAccountNumber(id, token);
+        Branch branchInfo = branch.get();
+
+        ResponseAccountInfo responseAccountInfo = bankIntegration.getAccountNumber(branchInfo.getBranchId(), token);
+        responseAccountInfo.setBranchName(branchInfo.getBranchName());
         return responseAccountInfo;
     }
 

@@ -18,6 +18,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseAccountInfo {
 
+
+    private String branchName;
     private BigDecimal total;
     private List<RequestAccountInfo> list;
 }

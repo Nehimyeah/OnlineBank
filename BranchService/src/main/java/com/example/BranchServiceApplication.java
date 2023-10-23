@@ -39,6 +39,7 @@ public class BranchServiceApplication implements CommandLineRunner{
                 .build();
         Branch branch = Branch.builder()
                 .branchManagerId(10L)
+                .branchManagerName("Henry Steinfeld")
                 .branchName("Fairfield")
                 .address(address)
                 .build();

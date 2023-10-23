@@ -191,10 +191,6 @@ public class AccountService{
                     sum = sum.add(account.getBalance());
                     accountResponse.setBranchId(account.getBranchId());
 
-//                    if(!accountResponse.getAccountType().equals(AccountType.LOAN.name())){
-//
-//                        throw new RuntimeException("No loan accounts exist");
-//                    }
                 }
 
                 AcountResponseDTO accountResponseDTO = new AcountResponseDTO();

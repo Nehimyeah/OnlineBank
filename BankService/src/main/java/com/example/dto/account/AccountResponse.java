@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 public class AccountResponse {
 
     private Long branchId;
-    private String accountType;
     private String accountNumber;
     private String accountStatus;
     private BigDecimal balance;

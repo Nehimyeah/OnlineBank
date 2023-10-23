@@ -14,5 +14,6 @@ public class RequestAccountInfo {
     private Long branchId;
     private String accountNumber;
     private String accountStatus;
+    private String accountType;
     private BigDecimal balance;
 }
