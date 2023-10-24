@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.domain.Branch;
+import com.example.integration.BankIntegration;
 import com.example.service.IBranchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -58,4 +59,9 @@ public class BranchController {
         return ResponseEntity.ok("Branch successfully deleted");
     }
 
+    @GetMapping("/{id}/accounts")
+    public ResponseEntity<?> getAllAccounts(@PathVariable Long id, @RequestHeader("Authorization") String token){
+
+        return ResponseEntity.ok(branchService.getAllAccountsByBranch(id, token));
+    }
 }

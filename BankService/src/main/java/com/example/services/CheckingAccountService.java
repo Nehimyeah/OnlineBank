@@ -32,9 +32,6 @@ public class CheckingAccountService {
     @Autowired
     TransactionService transactionService;
 
-
-
-
     public ResponseEntity<?> create(AccountRequest accountRequest,Long userId) {
 
         try {

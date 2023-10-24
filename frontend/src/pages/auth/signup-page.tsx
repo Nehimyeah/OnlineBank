@@ -93,8 +93,7 @@ const SignupPage = () => {
                   You've successfully signed up!
                 </h1>
                 <p className="text-xl font-light text-center">
-                  You can now go and login to your new account and get our
-                  hot-special-delivery cookies suggestions!
+                  You can now go and login to your new account
                 </p>
                 <Link to="/auth/login">
                   <Button

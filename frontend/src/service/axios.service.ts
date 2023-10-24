@@ -9,28 +9,52 @@ export const axiosClient = axios.create({
 
 export const axiosPrivate = axios.create({
   baseURL: BACKEND_URL ?? "http://localhost:9000",
-  headers: {
-    Authorization: `Bearer ${Cookie.get("token")}`,
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-  }
 });
 
 
 export const axiosPrivateBranch = axios.create({
   baseURL: BACKEND_URL ?? "http://localhost:3300",
-  headers: {
-    Authorization: `Bearer ${Cookie.get("token")}`,
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-  }
 });
 
 export const axiosPrivateBank = axios.create({
   baseURL: BACKEND_URL ?? "http://localhost:8181",
-  headers: {
-    Authorization: `Bearer ${Cookie.get("token")}`,
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-  }
 });
+
+axiosPrivate.interceptors.request.use(
+    function(config) {
+      const token = Cookie.get("token");
+      if (token) {
+        config.headers["Authorization"] = 'Bearer ' + token;
+      }
+      return config;
+    },
+    function(error) {
+      return Promise.reject(error);
+    }
+);
+
+axiosPrivateBranch.interceptors.request.use(
+    function(config) {
+      const token = Cookie.get("token");
+      if (token) {
+        config.headers["Authorization"] = 'Bearer ' + token;
+      }
+      return config;
+    },
+    function(error) {
+      return Promise.reject(error);
+    }
+);
+
+axiosPrivateBank.interceptors.request.use(
+    function(config) {
+      const token = Cookie.get("token");
+      if (token) {
+        config.headers["Authorization"] = 'Bearer ' + token;
+      }
+      return config;
+    },
+    function(error) {
+      return Promise.reject(error);
+    }
+);

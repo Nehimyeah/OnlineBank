@@ -1,7 +1,10 @@
 package com.example.service.impl;
 
 import com.example.domain.Branch;
+import com.example.dto.RequestAccountInfo;
+import com.example.dto.ResponseAccountInfo;
 import com.example.dto.User;
+import com.example.integration.BankIntegration;
 import com.example.repository.BranchRepository;
 import com.example.service.IBranchService;
 import com.example.util.JwtUtil;
@@ -16,6 +19,7 @@ import java.util.Optional;
 public class BranchService implements IBranchService {
 
     private final BranchRepository branchRepository;
+    private final BankIntegration bankIntegration;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -32,14 +36,16 @@ public class BranchService implements IBranchService {
 
     @Override
     public Branch findById(Long id, String bearerToken) {
-        authenticate(bearerToken);
+        authenticateManager(bearerToken);
         Optional<Branch> branch = branchRepository.findById(id);
+
         return branch.orElseThrow(() -> new RuntimeException("Branch with this information doesn't exist"));
+
     }
 
     @Override
     public List<Branch> getAllBranches(String bearerToken) {
-//        authenticate(bearerToken);
+        authenticateManager(bearerToken);
         return branchRepository.findAll();
     }
 
@@ -72,10 +78,34 @@ public class BranchService implements IBranchService {
         throw new RuntimeException("Branch already exists");
     }
 
+    @Override
+    public ResponseAccountInfo getAllAccountsByBranch(Long id, String token) {
+
+        Optional<Branch> branch = branchRepository.findById(id);
+
+        if(branch.isEmpty()){
+
+            throw new RuntimeException("Branch does not exist");
+        }
+
+        Branch branchInfo = branch.get();
+
+        ResponseAccountInfo responseAccountInfo = bankIntegration.getAccountNumber(branchInfo.getBranchId(), token);
+        responseAccountInfo.setBranchName(branchInfo.getBranchName());
+        return responseAccountInfo;
+    }
+
     private void authenticate(String bearerToken) {
         String token = jwtUtil.extractToken(bearerToken);
         User principal = jwtUtil.parseToken(token);
         if (!principal.getRole().equals("ADMIN"))
+            throw new RuntimeException("User can't perform this operation");
+    }
+
+    private void authenticateManager(String bearerToken) {
+        String token = jwtUtil.extractToken(bearerToken);
+        User principal = jwtUtil.parseToken(token);
+        if (!principal.getRole().equals("MANAGER"))
             throw new RuntimeException("User can't perform this operation");
     }
 }

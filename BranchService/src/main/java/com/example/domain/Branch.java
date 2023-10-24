@@ -16,7 +16,7 @@ public class Branch {
     private Long branchId;
     private String branchName;
     private Long branchManagerId;
-
+    private String branchManagerName;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Address address;
 

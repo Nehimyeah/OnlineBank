@@ -10,12 +10,12 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 
-public class BankServiceApplications
+public class BankServiceApplication
 {
     public static void main( String[] args )
     {
 
-        ConfigurableApplicationContext context =  SpringApplication.run(BankServiceApplications.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(BankServiceApplication.class, args);
 
         ApplicationContextProvider.setContext(context);
 
