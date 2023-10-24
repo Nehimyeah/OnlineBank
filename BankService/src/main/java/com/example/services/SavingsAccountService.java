@@ -45,7 +45,7 @@ public class SavingsAccountService {
                 if (!optionalAnnualAPY.isPresent()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APY id has not been provided");
                 }
-                ((SavingsAccount) savingsAccount).setAnnualAPY(optionalAnnualAPY.get().getAnnualAPY());
+                ((SavingsAccount) savingsAccount).setAnnualRate(optionalAnnualAPY.get().getAnnualAPY());
             }
             savingsAccount.setUserId(userId);
             savingsAccount.setBranchId(accountRequest.getBranchId());
@@ -61,8 +61,6 @@ public class SavingsAccountService {
         try {
             Account savingsAccount = getByAccountNumber(accountUpdateRequest.getAccnumber());
             savingsAccount.setAccountStatus(accountUpdateRequest.getAccountStatus());
-//            savingsAccount.setIsDeleted(savingsAccountRequest.getIsDeleted());
-//            savingsAccount.setDeletedBy(savingsAccountRequest.getDeletedBy());
             savingsAccount.setDeletedDate(LocalDateTime.now());
             accountRepository.save(savingsAccount);
             return ResponseEntity.status(HttpStatus.OK).body("Savings account has been updated successfully");
@@ -81,23 +79,18 @@ public class SavingsAccountService {
     }
 
 
-    public ResponseModel<Account> withdraw(OperationRequest operationRequest) {
-        ResponseModel<Account> responseModel = new ResponseModel<>();
+    public ResponseEntity<?> withdraw(OperationRequest operationRequest) {
         try {
             Account savingsAccount;
             Optional<Account> checkingAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
             if (!checkingAccountOptional.isPresent()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Account doesn't exist");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             savingsAccount = checkingAccountOptional.get();
 
             // validate account
             if (!Util.validate(savingsAccount, operationRequest.getAmount())) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Balance is not sufficient ");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Balance is not sufficient ");
             }
             BigDecimal previousBalance = savingsAccount.getBalance();
             savingsAccount.setBalance(previousBalance.subtract(operationRequest.getAmount()));
@@ -112,35 +105,24 @@ public class SavingsAccountService {
 
             ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
             if (!response.getSuccess()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Transaction was not created");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction is not created.");
             }
-
             savingsAccount.getTransactions().add(response.getData());
-            savingsAccount = accountRepository.save(savingsAccount);
+            accountRepository.save(savingsAccount);
 
-            responseModel.setSuccess(true);
-            responseModel.setData(savingsAccount);
-            responseModel.setMessage("Withdraw successfull");
-            return responseModel;
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
-            responseModel.setSuccess(false);
-            responseModel.setMessage("Withdraw failed");
-            return responseModel;
+            return ResponseEntity.internalServerError().build();
         }
 
     }
 
-    public ResponseModel<Account> deposit(OperationRequest operationRequest) {
+    public ResponseEntity<?> deposit(OperationRequest operationRequest) {
         Account savings;
-        ResponseModel<Account> responseModel = new ResponseModel<>();
         try {
             Optional<Account> savingsAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
             if (!savingsAccountOptional.isPresent()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Account doesn't exist");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             savings = savingsAccountOptional.get();
             BigDecimal previousBalance = savings.getBalance();
@@ -156,23 +138,14 @@ public class SavingsAccountService {
 
             ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
             if (!response.getSuccess()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Transaction was not created");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction is not created.");
             }
             savings.getTransactions().add(response.getData());
-            savings = accountRepository.save(savings);
+            accountRepository.save(savings);
+            return ResponseEntity.status(HttpStatus.OK).build();
 
         } catch (Exception e) {
-            responseModel.setSuccess(false);
-            responseModel.setMessage("Deposit failed");
-            return responseModel;
+            return ResponseEntity.internalServerError().build();
         }
-        responseModel.setSuccess(true);
-        responseModel.setData(savings);
-        responseModel.setMessage("Deposit successfull");
-        return responseModel;
-
-
     }
 }

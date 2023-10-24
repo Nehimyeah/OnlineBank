@@ -10,5 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StatusRequest {
-    private String accountStatus;
+    private String status;
 }

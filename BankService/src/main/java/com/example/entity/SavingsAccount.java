@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter
 @Entity
 public class SavingsAccount extends Account{
-    private Double annualAPY;
+    private Double annualRate;
 }

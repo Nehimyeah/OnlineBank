@@ -32,16 +32,16 @@ public class TransactionService {
             transaction.setCreatedDate(LocalDateTime.now());
             transaction.setInfo(transactionCreateRequest.getInfo());
             transaction = transactionRepository.save(transaction);
+            responseModel.setSuccess(true);
+            responseModel.setMessage("Transaction has been saved");
+            responseModel.setData(transaction);
+            return responseModel;
 
         } catch (Exception e) {
             responseModel.setSuccess(false);
             responseModel.setException(e);
             return responseModel;
         }
-        responseModel.setSuccess(true);
-        responseModel.setMessage("Transaction has been saved");
-        responseModel.setData(transaction);
-        return responseModel;
     }
 
     public List<Transaction> getAllTransactionsByAccountNum(String accountNumber) {

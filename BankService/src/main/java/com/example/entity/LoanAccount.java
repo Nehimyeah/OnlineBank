@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoanAccount extends Account{
-    private Double annualAPR;
+    private Double annualRate;
 
 }

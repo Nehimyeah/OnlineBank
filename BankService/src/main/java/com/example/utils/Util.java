@@ -37,6 +37,7 @@ public class Util {
 
             return User.builder()
                     .email(body.getSubject())
+                    .id(Long.parseLong((String) body.get("id")))
                     .firstName((String) body.get("firstName"))
                     .lastName((String) body.get("lastName"))
                     .role(Role.valueOf((String)body.get("role")))

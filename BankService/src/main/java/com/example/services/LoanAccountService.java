@@ -46,7 +46,7 @@ public class LoanAccountService {
                 if (!optionalAnnualAPR.isPresent()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APR id has not been provided");
                 }
-                ((LoanAccount) loanAccount).setAnnualAPR(optionalAnnualAPR.get().getAnnualAPR());
+                ((LoanAccount) loanAccount).setAnnualRate(optionalAnnualAPR.get().getAnnualAPR());
             }
             loanAccount.setUserId(userId);
             loanAccount.setBranchId(accountRequest.getBranchId());
@@ -67,15 +67,13 @@ public class LoanAccountService {
             }
             Account loanAccount = loanAccountOptional.get();
             loanAccount.setAccountStatus(accountUpdateRequest.getAccountStatus());
-        //  loanAccount.setIsDeleted(accountUpdateRequest.getIsDeleted());
-        //  loanAccount.setDeletedBy(loanAccountRequest.getDeletedBy());
             loanAccount.setDeletedDate(LocalDateTime.now());
             if (accountUpdateRequest.getInterestRateId() != null) {
                 Optional<AnnualAPR> optionalAnnualAPR = aprRepository.findById(accountUpdateRequest.getInterestRateId());
                 if (!optionalAnnualAPR.isPresent()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Annual APR id has not been provided");
                 }
-                ((LoanAccount) loanAccount).setAnnualAPR(optionalAnnualAPR.get().getAnnualAPR());
+                ((LoanAccount) loanAccount).setAnnualRate(optionalAnnualAPR.get().getAnnualAPR());
             }
             accountRepository.save(loanAccount);
             return ResponseEntity.status(HttpStatus.OK).body("Loan account has been updated successfully");
@@ -84,24 +82,19 @@ public class LoanAccountService {
         }
 
     }
-    public ResponseModel<Account> withdraw(OperationRequest operationRequest) {
-        ResponseModel<Account> responseModel = new ResponseModel<>();
+    public ResponseEntity<?> withdraw(OperationRequest operationRequest) {
         try {
             Account loanAccount;
             Optional<Account> loanAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
             if (!loanAccountOptional.isPresent()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Account doesn't exist");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
 
             loanAccount = loanAccountOptional.get();
 
             // validate account
             if (!Util.validate(loanAccount, operationRequest.getAmount())) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Balance is not sufficient ");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Balance is not sufficient");
             }
             BigDecimal previousBalance = loanAccount.getBalance();
             loanAccount.setBalance(previousBalance.subtract(operationRequest.getAmount()));
@@ -111,36 +104,26 @@ public class LoanAccountService {
             transactionCreateRequest.setAmount(operationRequest.getAmount());
             transactionCreateRequest.setPreviousBalance(previousBalance);
             transactionCreateRequest.setTransactionType(TransactionType.WITHDRAW);
-
             ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
             if (!response.getSuccess()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Transaction failed");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction is not created.");
             }
+
             loanAccount.getTransactions().add(response.getData());
-            loanAccount = accountRepository.save(loanAccount);
-            responseModel.setSuccess(true);
-            responseModel.setData(loanAccount);
-            responseModel.setMessage("Withdraw successfull");
-            return responseModel;
+            accountRepository.save(loanAccount);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
-            responseModel.setSuccess(false);
-            responseModel.setMessage("Withdraw failed");
-            return responseModel;
+            return ResponseEntity.internalServerError().build();
         }
 
     }
 
-    public ResponseModel<Account> deposit(OperationRequest operationRequest) {
+    public ResponseEntity<?> deposit(OperationRequest operationRequest) {
         Account loanAccount;
-        ResponseModel<Account> responseModel = new ResponseModel<>();
         try {
             Optional<Account> loanAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
             if (!loanAccountOptional.isPresent()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Account doesn't exist");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             loanAccount = loanAccountOptional.get();
             BigDecimal previousBalance = loanAccount.getBalance();
@@ -157,22 +140,16 @@ public class LoanAccountService {
 
             ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
             if (!response.getSuccess()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Transaction was not created");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction is not created.");
             }
             loanAccount.getTransactions().add(response.getData());
-            loanAccount = accountRepository.save(loanAccount);
+            accountRepository.save(loanAccount);
+            return ResponseEntity.status(HttpStatus.OK).build();
 
         } catch (Exception e) {
-            responseModel.setSuccess(false);
-            responseModel.setMessage("Deposit failed");
-            return responseModel;
+            return ResponseEntity.internalServerError().build();
         }
-        responseModel.setSuccess(true);
-        responseModel.setData(loanAccount);
-        responseModel.setMessage("Deposit succussfull");
-        return responseModel;
+
     }
 
 }

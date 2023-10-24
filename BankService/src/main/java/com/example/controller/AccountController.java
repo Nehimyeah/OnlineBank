@@ -3,10 +3,12 @@ package com.example.controller;
 
 import com.example.dto.ResponseModel;
 import com.example.dto.StatusRequest;
+import com.example.dto.account.AccountResponse;
 import com.example.dto.account.AccountTransferRequest;
 import com.example.dto.request.OperationRequest;
 import com.example.dto.account.AccountRequest;
 import com.example.dto.account.AccountUpdateRequest;
+import com.example.enums.AccountStatus;
 import com.example.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,19 +35,19 @@ public class AccountController {
         return accountService.update(accountUpdateRequest,token);
     }
     @PostMapping("/withdraw")
-    public ResponseModel<?> withdraw(@RequestBody OperationRequest operationRequest,@RequestHeader("Authorization") String token){
+    public ResponseEntity<?> withdraw(@RequestBody OperationRequest operationRequest,@RequestHeader("Authorization") String token){
         return accountService.withdraw(operationRequest,token);
     }
     @PostMapping("/deposit")
-    public ResponseModel<?> deposit(@RequestBody OperationRequest operationRequest,@RequestHeader("Authorization") String token){
+    public ResponseEntity<?> deposit(@RequestBody OperationRequest operationRequest,@RequestHeader("Authorization") String token){
         return accountService.deposit(operationRequest,token);
     }
     @PostMapping("/transfer")
-    public ResponseModel<?> transferMoney(@RequestBody AccountTransferRequest accountTransferRequest, @RequestHeader("Authorization") String token){
+    public ResponseEntity<?> transferMoney(@RequestBody AccountTransferRequest accountTransferRequest, @RequestHeader("Authorization") String token){
         return accountService.transferMoney(accountTransferRequest,token);
     }
     @GetMapping("/{accnum}")
-    public ResponseModel<?> getAccountByAccNumber(@PathVariable String accnum,@RequestHeader("Authorization") String token){
+    public ResponseEntity<AccountResponse> getAccountByAccNumber(@PathVariable String accnum, @RequestHeader("Authorization") String token){
         return accountService.getAccountByAccNumber(accnum,token);
     }
     @GetMapping("/list")
@@ -56,10 +58,5 @@ public class AccountController {
     public ResponseEntity<?> accountStatus(@PathVariable String accountNumber, @RequestBody StatusRequest statusRequest, @RequestHeader("Authorization") String token){
         return accountService.approveAccount(accountNumber,statusRequest, token);
     }
-    @PutMapping("/verify/{accountNumber}")
-    public ResponseEntity<?> verifyAccount(@PathVariable String accountNumber, @RequestHeader("Authorization") String token){
-        return accountService.verifyAccount(accountNumber, token);
-    }
-
 
 }

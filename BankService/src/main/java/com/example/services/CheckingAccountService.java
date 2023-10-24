@@ -68,23 +68,18 @@ public class CheckingAccountService {
         }
     }
 
-    public ResponseModel<Account> withdraw(OperationRequest operationRequest) {
-        ResponseModel<Account> responseModel = new ResponseModel<>();
+    public ResponseEntity<?> withdraw(OperationRequest operationRequest) {
         try {
             Account checkingAccount;
             Optional<Account> checkingAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
             if (!checkingAccountOptional.isPresent()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Account doesn't exist");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             checkingAccount = checkingAccountOptional.get();
 
             // validate account
             if (!Util.validate(checkingAccount, operationRequest.getAmount())) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Balance is not sufficient ");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Balance is not sufficient");
             }
             BigDecimal previousBalance = checkingAccount.getBalance();
             checkingAccount.setBalance(previousBalance.subtract(operationRequest.getAmount()));
@@ -99,35 +94,24 @@ public class CheckingAccountService {
 
             ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
             if (!response.getSuccess()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Transaction was not created");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction was not created");
             }
 
             checkingAccount.getTransactions().add(response.getData());
-            checkingAccount = accountRepository.save(checkingAccount);
-
-            responseModel.setSuccess(true);
-            responseModel.setData(checkingAccount);
-            responseModel.setMessage("Withdraw successfull");
-            return responseModel;
+            accountRepository.save(checkingAccount);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
-            responseModel.setSuccess(false);
-            responseModel.setMessage("Withdraw failed");
-            return responseModel;
+            return ResponseEntity.internalServerError().build();
         }
 
     }
 
-    public ResponseModel<Account> deposit(OperationRequest operationRequest) {
+    public ResponseEntity<?> deposit(OperationRequest operationRequest) {
         Account checkingAccount;
-        ResponseModel<Account> responseModel = new ResponseModel<>();
         try {
             Optional<Account> checkingAccountOptional = accountRepository.findByAccountNumber(operationRequest.getAccountNum());
             if (!checkingAccountOptional.isPresent()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Account doesn't exist");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             checkingAccount = checkingAccountOptional.get();
             BigDecimal previousBalance = checkingAccount.getBalance();
@@ -143,51 +127,53 @@ public class CheckingAccountService {
 
             ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
             if (!response.getSuccess()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Transaction was not created");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction is not created.");
             }
             checkingAccount.getTransactions().add(response.getData());
-            checkingAccount = accountRepository.save(checkingAccount);
-            responseModel.setSuccess(true);
-            responseModel.setData(checkingAccount);
-            responseModel.setMessage("Deposit successfull");
-            return responseModel;
+            accountRepository.save(checkingAccount);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
-            responseModel.setSuccess(false);
-            responseModel.setMessage("Deposit failed");
-            return responseModel;
+            return ResponseEntity.internalServerError().build();
         }
 
 
 
     }
-    public ResponseModel<Account> transferMoney(AccountTransferRequest accountTransferRequest) {
+    public ResponseEntity<?> transferMoney(AccountTransferRequest accountTransferRequest) {
         ResponseModel<Account> responseModel = new ResponseModel<>();
         try {
             Account fromAccount;
             Optional<Account> fromAccountOptional = accountRepository.findByAccountNumber(accountTransferRequest.getFromAccountNum());
             if (!fromAccountOptional.isPresent()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Account doesn't exist");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             fromAccount = fromAccountOptional.get();
+            if(!(fromAccount instanceof CheckingAccount)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sender is not a checking account");
+            }
+            else if (!(String.valueOf(fromAccount.getAccountStatus()).equalsIgnoreCase("active"))){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sender account is not active");
+            }
+
+
 
             Account toAccount;
             Optional<Account> toAccountOptional = accountRepository.findByAccountNumber(accountTransferRequest.getToAccountNum());
             if (!toAccountOptional.isPresent()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Account doesn't exist");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
+            toAccount = toAccountOptional.get();
+            if(!(toAccount instanceof CheckingAccount)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Receiver is not a checking account");
+            } else if (!(String.valueOf(toAccount.getAccountStatus()).equalsIgnoreCase("active"))){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Receiver account is not active");
+            }
+
             toAccount = toAccountOptional.get();
 
             // validate account
             if (!Util.validate(fromAccount, accountTransferRequest.getAmount())) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("Balance is not sufficient in Account: "+ fromAccount.getAccountNumber());
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Balance is not sufficient in Account: "+ fromAccount.getAccountNumber());
             }
             BigDecimal previousFromAccountBalance = fromAccount.getBalance();
             fromAccount.setBalance(previousFromAccountBalance.subtract(accountTransferRequest.getAmount()));
@@ -207,9 +193,7 @@ public class CheckingAccountService {
 
             ResponseModel<Transaction> fromAccountresponse = transactionService.save(fromAccountTransactionCreateRequest);
             if (!fromAccountresponse.getSuccess()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("FromAccount sender transaction was not created");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FromAccount sender transaction was not created");
             }
             TransactionCreateRequest toAccountTransactionCreateRequest = new TransactionCreateRequest();
             toAccountTransactionCreateRequest.setAccountNumber(toAccount.getAccountNumber());
@@ -221,9 +205,7 @@ public class CheckingAccountService {
 
             ResponseModel<Transaction> toAccountresponse = transactionService.save(toAccountTransactionCreateRequest);
             if (!toAccountresponse.getSuccess()) {
-                responseModel.setSuccess(false);
-                responseModel.setMessage("FromAccount sender transaction was not created");
-                return responseModel;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ToAccount receiver transaction was not created");
             }
 
             fromAccount.getTransactions().add(fromAccountresponse.getData());
@@ -231,14 +213,9 @@ public class CheckingAccountService {
 
             toAccount.getTransactions().add(toAccountresponse.getData());
             toAccount = accountRepository.save(toAccount);
-
-            responseModel.setSuccess(true);
-            responseModel.setMessage("Money transfer was successful");
-            return responseModel;
+            return ResponseEntity.status(HttpStatus.OK).body("Money transfer was successful");
         } catch (Exception e) {
-            responseModel.setSuccess(false);
-            responseModel.setMessage("Money transfer failed");
-            return responseModel;
+            return ResponseEntity.internalServerError().body(e);
         }
 
     }
