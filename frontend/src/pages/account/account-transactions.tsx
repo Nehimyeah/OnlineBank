@@ -1,14 +1,19 @@
 import DashboardLayout from "../../components/layouts/dashboard-layout";
 import {useEffect, useState} from "react";
-import {axiosPrivateBranch as axiosPrivate} from "../../service/axios.service";
+import {axiosPrivateBank} from "../../service/axios.service";
+import {useParams} from "react-router-dom";
+import TransactionsList from "../../components/accounts/TransactionsList";
 
-const BranchAccounts = () => {
+const AccountTransactions = () => {
 
     const [accounts, setAccounts] = useState([]);
 
+    const {id} = useParams();
+
     const fetchData = () => {
+        console.log(id)
         try {
-            axiosPrivate.get("branches/1/accounts").then((res) => {
+            axiosPrivateBank.get(`transaction/list/${id}`).then((res) => {
                 setAccounts(res.data);
             })
         } catch (err) {
@@ -22,11 +27,9 @@ const BranchAccounts = () => {
     
     return (
         <DashboardLayout>
-            <div>
-                hello
-            </div>
+            <TransactionsList accountNumber={id} transactions={accounts} />
         </DashboardLayout>
     )
 }
 
-export default BranchAccounts;
+export default AccountTransactions;

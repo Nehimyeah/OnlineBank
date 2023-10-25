@@ -30,9 +30,25 @@ export type BranchDetails = {
     }
 }
 
+export type Account = {
+    accountNumber: string,
+    accountStatus: string,
+    accountType: string,
+    balance: number
+}
+
 export interface RolePolicy {
     "CUSTOMER": string[],
     "MANAGER": string[],
     "TELLER": string[],
     "ADMIN": string[]
+}
+
+export type Transactions = {
+    amount: number,
+    createdDate: string,
+    id: number,
+    info: string| null
+    previousBalance:number
+    transactionType:string
 }
