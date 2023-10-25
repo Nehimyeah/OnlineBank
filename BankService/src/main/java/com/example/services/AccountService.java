@@ -238,7 +238,7 @@ public class AccountService {
         try{
             User loggedInUser = Util.getPrincipal(token);
 
-            if(!Role.MANAGER.equals(loggedInUser.getRole())){
+            if(!Role.MANAGER.equals(loggedInUser.getRole()) && !Role.ADMIN.equals(loggedInUser.getRole())){
 
                 throw new RuntimeException("No sufficient access for this operation");
             }
