@@ -16,7 +16,7 @@ import DepositMoney from "./pages/account/deposit-money";
 import {useEffect} from "react";
 import Cookie from "js-cookie";
 import WelcomePage from "./pages/welcome";
-import BranchAccounts from "./pages/branches/branch-accounts";
+import AccountTransactions from "./pages/account/account-transactions";
 import {ToastContainer} from "react-toastify";
 import Loans from "./pages/loan/loans";
 
@@ -42,7 +42,7 @@ function App() {
           <Route path="users/create" element={<CreateManager />} />
           <Route path="branches" element={<BranchPage />} />
           <Route path="branches/create" element={<CreateBranch />} />
-          <Route path="branches/:branchId" element={<BranchAccounts />} />
+          <Route path="accounts/:id/transactions" element={<AccountTransactions />} />
           <Route path="accounts" element={<AccountsList />} />
           <Route path="accounts/create" element={<AccountCreate />} />
           <Route path="accounts/transfer" element={<TransferMoney />} />

@@ -43,16 +43,12 @@ public class AccountService {
         if (!Role.CUSTOMER.equals(loggedInUser.getRole()))
             throw new RuntimeException("No sufficient Access for this operation");
 
-        switch (accountRequest.getAccountType()) {
-            case "checking":
-                return checkingAccountService.create(accountRequest, userId);
-            case "loan":
-                return loanAccountService.create(accountRequest, userId);
-            case "savings":
-                return savingsAccountService.create(accountRequest, userId);
-            default:
-                return ResponseEntity.badRequest().body("Account type is not correct ");
-        }
+        return switch (accountRequest.getAccountType()) {
+            case "checking" -> checkingAccountService.create(accountRequest, userId);
+            case "loan" -> loanAccountService.create(accountRequest, userId);
+            case "savings" -> savingsAccountService.create(accountRequest, userId);
+            default -> ResponseEntity.badRequest().body("Account type is not correct ");
+        };
     }
 
     public ResponseEntity<?> update(AccountUpdateRequest accountUpdateRequest, String token) {
