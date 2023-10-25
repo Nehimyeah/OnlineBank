@@ -7,9 +7,9 @@ import FormFieldError from "../../components/auth/form/form-field-error";
 import Button from "../../components/elements/button";
 import DashboardLayout from "../../components/layouts/dashboard-layout";
 import {useNavigate} from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {withdrawSchema} from "../../components/mixins/userRelatedFunctions";
+import {depositSchema} from "../../components/mixins/userRelatedFunctions";
 
 const WithrawMoney = () => {
     const [optionUsers, setOptionUsers] = useState([])
@@ -18,7 +18,7 @@ const WithrawMoney = () => {
         try {
             axiosPrivateBank.get(`/account/list`).then((res) => {
 
-                const tempUsers = res.data.list.map((u) => {
+                const tempUsers = res.data.map((u) => {
                     return {
                         label: u.accountNumber,
                         value: u.accountNumber,
@@ -48,7 +48,7 @@ const WithrawMoney = () => {
         register,
         resetField,
         formState: { errors },
-    } = useForm({ resolver: yupResolver(withdrawSchema) });
+    } = useForm({ resolver: yupResolver(depositSchema) });
     const { ref: amountRef, ...amountRest } = register("amount");
     const notify = () => toast("Money successfully deposited!");
 
@@ -110,6 +110,7 @@ const WithrawMoney = () => {
                     ""
                 )}
                 <div className="flex flex-col space-y-6">
+                    <label>Deposit amount</label>
                     <div className="flex flex-col space-y-3">
                         <ClientInput
                             placeholder="Deposit amount"
@@ -122,6 +123,7 @@ const WithrawMoney = () => {
                             ""
                         )}
                     </div>
+                    <label>Select account to deposit</label>
                     <div className="flex flex-col space-y-3 custom-select">
                         <select
                             name="format" id="format"
@@ -145,18 +147,6 @@ const WithrawMoney = () => {
                     </Button>
                 </div>
             </form>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </DashboardLayout>
     );
 };

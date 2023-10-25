@@ -17,6 +17,8 @@ import {useEffect} from "react";
 import Cookie from "js-cookie";
 import WelcomePage from "./pages/welcome";
 import BranchAccounts from "./pages/branches/branch-accounts";
+import {ToastContainer} from "react-toastify";
+import Loans from "./pages/loan/loans";
 
 function App() {
   const navigate = useNavigate();
@@ -46,8 +48,21 @@ function App() {
           <Route path="accounts/transfer" element={<TransferMoney />} />
           <Route path="accounts/withdraw" element={<WithdrawMoney />} />
           <Route path="accounts/deposit" element={<DepositMoney />} />
+          <Route path="loans" element={<Loans />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+        />
       </MainLayout>
     </Provider>
   );

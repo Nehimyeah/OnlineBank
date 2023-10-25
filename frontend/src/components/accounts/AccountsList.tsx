@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import {BranchDetails} from "../type/types";
-const Accounts = (props:{accounts: Array<BranchDetails>, totalBalance: number} ) => {
+const Accounts = (props:{accounts: Array<BranchDetails>} ) => {
 
 
     return (
@@ -40,12 +40,13 @@ const Accounts = (props:{accounts: Array<BranchDetails>, totalBalance: number} )
                                             Account number
                                         </th>
                                         <th className="px-6 py-3 text-left font-medium">
+                                            Account type
+                                        </th>
+                                        <th className="px-6 py-3 text-left font-medium">
                                             Status
                                         </th>
                                         <th className="px-6 py-3 text-left font-medium">
                                             Balance
-                                        </th>
-                                        <th className="px-6 py-3 text-left font-medium">
                                         </th>
                                     </tr>
                                     </thead>
@@ -55,6 +56,11 @@ const Accounts = (props:{accounts: Array<BranchDetails>, totalBalance: number} )
                                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                                 <div className="text-sm leading-5 text-gray-900">
                                                     {branch.accountNumber}
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <div className="text-sm leading-5 text-gray-900 capitalize">
+                                                    {branch.accountType}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -76,12 +82,6 @@ const Accounts = (props:{accounts: Array<BranchDetails>, totalBalance: number} )
                                                     $ {branch.balance}
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                                                <a href="#"
-                                                   className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline" >
-                                                    Delete
-                                                </a>
-                                            </td>
                                         </tr>
                                     ))}
                                     </tbody>
@@ -89,7 +89,6 @@ const Accounts = (props:{accounts: Array<BranchDetails>, totalBalance: number} )
                             </div>
                         </div>
                     </div>
-                    <p className="mt-3">Total balance: ${props.totalBalance}</p>
                 </div>
             </div>
         </>

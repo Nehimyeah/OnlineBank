@@ -18,7 +18,7 @@ const TransferMoney = () => {
         try {
             axiosPrivateBank.get(`/account/list`).then((res) => {
 
-                const tempUsers = res.data.list.map((u) => {
+                const tempUsers = res.data.map((u) => {
                     return {
                         label: u.accountNumber,
                         value: u.accountNumber,
@@ -52,6 +52,7 @@ const TransferMoney = () => {
         formState: { errors },
     } = useForm({ resolver: yupResolver(withdrawSchema) });
     const { ref: amountRef, ...amountRest } = register("amount");
+    const { ref: toAccountNumRef, ...toAccountNumRest } = register("toAccountNum");
     const notify = () => toast("Money successfully deposited!");
 
 
@@ -68,6 +69,10 @@ const TransferMoney = () => {
                     setTimeout(() => {
                         navigate("/accounts")
                     }, 1000);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                    toast(err.response.data);
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -112,6 +117,7 @@ const TransferMoney = () => {
                     ""
                 )}
                 <div className="flex flex-col space-y-6">
+                    <label>Transfer amount</label>
                     <div className="flex flex-col space-y-3">
                         <ClientInput
                             placeholder="Transfer amount"
@@ -125,6 +131,7 @@ const TransferMoney = () => {
                         )}
                     </div>
                     <div className="flex flex-col space-y-3 custom-select">
+                        <label>Select account</label>
                         <select
                             name="format" id="format"
                             className="round"
@@ -140,18 +147,15 @@ const TransferMoney = () => {
                             ""
                         )}
                     </div>
-                    <div className="flex flex-col space-y-3 custom-select">
-                        <select
-                            name="format" id="format"
-                            className="round"
-                            value={selectedOption1}
-                            onChange={e => setSelectedOption1(e.target.value)}>
-                            {optionUsers.map(o => (
-                                <option key={o.label} value={o.value}>{o.label}</option>
-                            ))}
-                        </select>
-                        {errors.branchManagerId?.message ? (
-                            <FormFieldError errorMessage={errors.branchManagerId.message} />
+                    <div className="flex flex-col space-y-3">
+                        <label>Transfer account number</label>
+                        <ClientInput
+                            placeholder="Transfer account number"
+                            reference={toAccountNumRef}
+                            {...toAccountNumRest}
+                        />
+                        {errors.toAccountNum?.message ? (
+                            <FormFieldError errorMessage={errors.toAccountNum.message} />
                         ) : (
                             ""
                         )}
@@ -163,18 +167,6 @@ const TransferMoney = () => {
                     </Button>
                 </div>
             </form>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </DashboardLayout>
     );
 };
