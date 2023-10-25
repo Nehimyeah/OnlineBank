@@ -47,3 +47,11 @@ export const selectUser = (state: RootState) => {
   }
   return ''
 };
+
+export const getUserRole = (state: RootState) => {
+  const user = <string>Cookie.get("user");
+  if (user) {
+    const decodedUser:AuthStore = JSON.parse(user);
+    return decodedUser.role;
+  }
+};

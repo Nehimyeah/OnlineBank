@@ -105,3 +105,14 @@ select.round:focus {
   border-color: green;
   outline: 0;
 }
+
+.welcome p{
+  font-size:80px;
+}
+
+.welcome > :last-child {
+  transform: rotatex(180deg) translatey(15px);
+  -webkit-mask-image: linear-gradient(transparent 40%, white 90%);
+  mask-image: linear-gradient(transparent 50%, white 90%);
+  opacity: 0.7;
+}
