@@ -10,6 +10,7 @@ import com.example.entity.Account;
 import com.example.entity.LoanAccount;
 import com.example.entity.SavingsAccount;
 import com.example.enums.AccountStatus;
+import com.example.enums.AccountType;
 import com.example.enums.Role;
 import com.example.repository.AccountRepository;
 import com.example.utils.Util;
@@ -18,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -106,11 +109,9 @@ public class AccountService {
                 return ResponseEntity.badRequest().body("Account type is not correct");
 
         }
-
     }
 
     public ResponseEntity<AccountResponse> getAccountByAccNumber(String accountNumber, String token) {
-        ResponseModel<AccountResponse> responseModel = new ResponseModel<>();
         try {
             Optional<Account> accountOptional = accountRepository.findByAccountNumber(accountNumber);
             if (!accountOptional.isPresent()) {
@@ -201,6 +202,7 @@ public class AccountService {
             AccountResponse accountResponse = new AccountResponse();
             accountResponse.setAccountStatus(String.valueOf(account.getAccountStatus()));
             accountResponse.setAccountNumber(account.getAccountNumber());
+            accountResponse.setBranchId(account.getBranchId());
             accountResponse.setBalance(account.getBalance());
             if (account instanceof LoanAccount) {
                 accountResponse.setInterestRate(((LoanAccount) account).getAnnualRate());
@@ -230,4 +232,54 @@ public class AccountService {
         BranchDto branchDto = restTemplate.postForObject("http://localhost:8081/branch", httpEntity, BranchDto.class);
         return branchDto;
     }
+
+    public ResponseEntity<?> getAllAccountByBranch(Long branchId, String token) {
+
+        try{
+            User loggedInUser = Util.getPrincipal(token);
+
+            if(!Role.MANAGER.equals(loggedInUser.getRole())){
+
+                throw new RuntimeException("No sufficient access for this operation");
+            }
+
+            List<Account> branchAccounts = accountRepository.findByBranchId(branchId);
+
+            if (branchAccounts.isEmpty()) {
+                throw new RuntimeException("No accounts in the specified branch");
+            } else {
+
+                List<AccountResponse> list = convertToAccountResponseList(branchAccounts);
+                return ResponseEntity.ok(list);
+
+            }
+        }
+        catch (Exception e) {
+            log.info("exception: " + e.getMessage());
+            return new ResponseEntity<>("Error in getting list of accounts" + e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+//    public ResponseEntity<?> getLoansByBranch(Long branchId, String token){
+//
+//        try{
+//            User loggedInUser = Util.getPrincipal(token);
+//
+//            if(!Role.MANAGER.equals(loggedInUser.getRole())){
+//
+//                throw new RuntimeException("No sufficient access for this operation");
+//            }
+//
+//            List<Account> branchAccounts = accountRepository.findByBranchId(branchId);
+//
+//            if (branchAccounts.isEmpty()) {
+//                throw new RuntimeException("No accounts in the specified branch");
+//            }
+//
+//            else{
+//
+//            }
+//
+//        }
+
 }

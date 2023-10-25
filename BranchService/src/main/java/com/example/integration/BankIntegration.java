@@ -1,35 +1,44 @@
-package com.example.integration;
+    package com.example.integration;
 
-import com.example.domain.Branch;
-import com.example.dto.ResponseAccountInfo;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+    import com.example.domain.Branch;
+    import com.example.dto.ResponseAccountInfo;
+    import lombok.RequiredArgsConstructor;
+    import org.springframework.core.ParameterizedTypeReference;
+    import org.springframework.http.*;
+    import org.springframework.stereotype.Component;
+    import org.springframework.web.client.RestTemplate;
 
-@Component
-@RequiredArgsConstructor
-public class BankIntegration {
+    import java.util.Collections;
+    import java.util.List;
 
-    private final RestTemplate restTemplate;
+    @Component
+    @RequiredArgsConstructor
+    public class BankIntegration {
 
-    public ResponseAccountInfo getAccountNumber(Long id, String token) {
+        private final RestTemplate restTemplate;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", token);
+        public List<ResponseAccountInfo> getAccountNumber(Long id, String token) {
 
-        HttpEntity<?> entity = new HttpEntity<>(id, headers);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", token);
 
-        String bankUrl = "http://localhost:8181/account/list/" + id;
+            HttpEntity<?> entity = new HttpEntity<>(headers);
 
-        return restTemplate.exchange(
-                bankUrl,
-                HttpMethod.GET,
-                entity,
-                ResponseAccountInfo.class
-        ).getBody();
+            String bankUrl = "http://localhost:8181/account/list/" + id;
+
+            ResponseEntity<List<ResponseAccountInfo>> response = restTemplate.exchange(
+                    bankUrl,
+                    HttpMethod.GET,
+                    entity,
+                    new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return response.getBody();
+            } else {
+                // Handle error or return an empty list
+                return Collections.emptyList();
+            }
+        }
+
     }
-
-}

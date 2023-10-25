@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AccountResponse {
+
+    private Long branchId;
     private String accountNumber;
     private String accountStatus;
     private BigDecimal balance;

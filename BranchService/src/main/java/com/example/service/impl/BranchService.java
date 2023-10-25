@@ -79,7 +79,7 @@ public class BranchService implements IBranchService {
     }
 
     @Override
-    public ResponseAccountInfo getAllAccountsByBranch(Long id, String token) {
+    public List<ResponseAccountInfo> getAllAccountsByBranch(Long id, String token) {
 
         Optional<Branch> branch = branchRepository.findById(id);
 
@@ -90,8 +90,8 @@ public class BranchService implements IBranchService {
 
         Branch branchInfo = branch.get();
 
-        ResponseAccountInfo responseAccountInfo = bankIntegration.getAccountNumber(branchInfo.getBranchId(), token);
-        responseAccountInfo.setBranchName(branchInfo.getBranchName());
+        List<ResponseAccountInfo> responseAccountInfo = bankIntegration.getAccountNumber(branchInfo.getBranchId(), token);
+//        responseAccountInfo.setBranchName(branchInfo.getBranchName());
         return responseAccountInfo;
     }
 
