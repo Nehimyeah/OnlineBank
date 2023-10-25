@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import {UserDetails} from "../type/types";
+import {getUserRole} from "../../app/authSlice";
+import {useSelector} from "react-redux";
+
 const ManagersList = (props: { users: UserDetails[]; onUserChanged: any}) => {
+    let role = useSelector(getUserRole);
 
     const enableDisable = (userId: number) => {
         props.onUserChanged(userId)
@@ -17,10 +21,13 @@ const ManagersList = (props: { users: UserDetails[]; onUserChanged: any}) => {
                                 <h1 className="text-3xl font-bolder leading-tight text-gray-900 mt-5">Users List</h1>
                             </div>
                             <div className="flex items-center py-2">
-                                <Link to={"/managers/create"}
-                                   className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
-                                    Create User
-                                </Link>
+                                {!(role === 'MANAGER') &&
+                                    (
+                                        <Link to={"/managers/create"}
+                                              className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
+                                            Create User
+                                        </Link>
+                                    )}
                             </div>
                         </div>
                         <div className="-my-2 py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">

@@ -10,8 +10,10 @@ const AccountsList = () => {
     const fetchData = () => {
         try {
             axiosPrivateBank.get(`/account/list`).then((res) => {
-                setBranches(res.data.list);
-                setTotalBalance(res.data.total)
+                setBranches([]);
+                if (res.data) {
+                    setBranches(res.data);
+                }
             })
         } catch (err) {
             console.error(err);
@@ -24,7 +26,7 @@ const AccountsList = () => {
 
     return (
         <DashboardLayout>
-            <Accounts totalBalance={totalBalance} accounts={accounts}/>
+            <Accounts accounts={accounts}/>
         </DashboardLayout>
     )
 }

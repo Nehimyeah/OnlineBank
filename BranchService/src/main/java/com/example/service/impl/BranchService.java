@@ -45,7 +45,6 @@ public class BranchService implements IBranchService {
 
     @Override
     public List<Branch> getAllBranches(String bearerToken) {
-        authenticateManager(bearerToken);
         return branchRepository.findAll();
     }
 

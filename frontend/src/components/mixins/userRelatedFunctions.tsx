@@ -36,5 +36,14 @@ export const branchSchema = yup
 export const withdrawSchema = yup
     .object({
         amount: yup.number().required(),
+        toAccountNum: yup.string().required()
+            .min(7, 'Must be exactly 7 digits')
+            .max(7, 'Must be exactly 7 digits'),
+    })
+    .required();
+
+export const depositSchema = yup
+    .object({
+        amount: yup.string().required()
     })
     .required();
