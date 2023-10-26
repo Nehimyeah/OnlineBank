@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.domain.Branch;
+import com.example.dto.LoanResponseDto;
 import com.example.dto.ResponseAccountInfo;
 
 import java.util.List;
@@ -20,4 +21,7 @@ public interface IBranchService {
     void saveInternal(Branch branch);
 
     List<ResponseAccountInfo> getAllAccountsByBranch(Long id, String token);
+
+    LoanResponseDto getLoanAccountsByBranch(Long id, String token);
+
 }

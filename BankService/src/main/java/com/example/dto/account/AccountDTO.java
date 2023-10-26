@@ -1,9 +1,11 @@
 package com.example.dto.account;
 
+import com.example.entity.Account;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -11,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AccountDTO {
 
-    private List<AccountResponse> accountResponseList;
+    private BigDecimal total;
+    private List<AccountResponse> loanList;
 
 }
