@@ -12,7 +12,10 @@ import java.math.BigDecimal;
 public class RequestAccountInfo {
 
     private Long branchId;
+    private String accountNumber;
+    private String accountStatus;
+    private BigDecimal balance;
     private String accountType;
-    private Long interestRateId;
+    private BigDecimal total;
 
 }

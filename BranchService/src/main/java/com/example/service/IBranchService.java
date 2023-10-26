@@ -20,7 +20,7 @@ public interface IBranchService {
 
     void saveInternal(Branch branch);
 
-    List<ResponseAccountInfo> getAllAccountsByBranch(Long id, String token);
+    ResponseAccountInfo getAllAccountsByBranch(Long id, String token);
 
     LoanResponseDto getLoanAccountsByBranch(Long id, String token);
 
