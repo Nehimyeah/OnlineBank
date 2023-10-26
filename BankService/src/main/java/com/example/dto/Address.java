@@ -1,17 +1,19 @@
-package com.example.dto.request.account;
+package com.example.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AccountRequest {
-    private Long userId;
-    private Long branchId;
-    private String accountType;
-    private Long interestRateId;
+public class Address {
+    private int id;
+    private String city;
+    private String state;
+    private String street1;
+    private String street2;
+    private int zip;
 }

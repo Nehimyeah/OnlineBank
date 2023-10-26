@@ -10,6 +10,9 @@ import com.example.repository.BranchRepository;
 import com.example.service.IBranchService;
 import com.example.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -108,6 +111,16 @@ public class BranchService implements IBranchService {
         LoanResponseDto responseAccountInfo = bankIntegration.getAllLoansByBranch(branchInfo.getBranchId(), token);
         return responseAccountInfo;
 
+    }
+
+    @Override
+    public ResponseEntity<?> getBranchByManagerId(Long id, String token) {
+        authenticateManager(token);
+        Optional<Branch> branchOptional = branchRepository.findBranchByBranchManagerId(id);
+        if(branchOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(branchOptional.get());
     }
 
     private void authenticate(String bearerToken) {

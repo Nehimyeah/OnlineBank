@@ -52,8 +52,8 @@ public class UserController {
     }
 
     @GetMapping("/teams")
-    public Iterable<User> getAllManagers() {
-        return userService.getAllManagers();
+    public Iterable<User> getAllTeam() {
+        return userService.getAllTeam();
     }
 
     @PutMapping("/{userId}/disable")

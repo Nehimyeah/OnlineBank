@@ -20,7 +20,6 @@
         <module>BranchService</module>
         <module>Gateway</module>
         <module>ServiceDiscovery</module>
-        <module>BankServiceFinal</module>
         <module>ReportService</module>
     </modules>
     <properties>

@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface BranchRepository extends JpaRepository<Branch, Long> {
     Optional<Branch> findByBranchName(String branchName);
+    Optional<Branch> findBranchByBranchManagerId(Long id);
 
 }

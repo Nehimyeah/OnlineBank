@@ -16,8 +16,12 @@ import com.example.enums.Role;
 import com.example.enums.TransactionType;
 import com.example.repository.AccountRepository;
 import com.example.utils.Util;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -35,6 +39,8 @@ public class AccountService {
     private final LoanAccountService loanAccountService;
     private final SavingsAccountService savingsAccountService;
     private final RestTemplate restTemplate;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public ResponseEntity<?> create(AccountRequest accountRequest, String token) {
 
@@ -143,9 +149,16 @@ public class AccountService {
             if (Role.CUSTOMER.equals(loggedInUser.getRole())) {
                 List<Account> accounts = accountRepository.findByUserId(id);
                 list = convertToAccountResponseList(accounts);
-            } else {
+            } else if(Role.MANAGER.equals(loggedInUser.getRole())) {
+                BranchDto branchDto = getBranchByManagerId(id,token);
+                List<Account> accounts = accountRepository
+                        .findByBranchId(branchDto.getBranchId());
+                list = convertToAccountResponseList(accounts);
+            } else if (Role.ADMIN.equals(loggedInUser.getRole())) {
                 List<Account> accounts = accountRepository.findAll();
                 list = convertToAccountResponseList(accounts);
+            }else{
+                throw new RuntimeException("User has no permission");
             }
             return ResponseEntity.ok(list);
         } catch (Exception e) {
@@ -154,7 +167,7 @@ public class AccountService {
         }
     }
 
-    public ResponseEntity<?> approveAccount(String accountNumber, StatusRequest statusRequest, String token) {
+    public ResponseEntity<?> accountStatus(String accountNumber, StatusRequest statusRequest, String token) {
         try {
             User loggedInUser = Util.getPrincipal(token);
             if (Role.CUSTOMER.equals(loggedInUser.getRole()))
@@ -220,13 +233,19 @@ public class AccountService {
             throw new RuntimeException("No sufficient Access for this operation");
     }
 
-    public BranchDto getBranch(Long id) {
+    public BranchDto getBranchByManagerId(Long id,String token) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Long> httpEntity = new HttpEntity<>(id, headers);
+        headers.set("Authorization",token);
+        //headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
 
-        BranchDto branchDto = restTemplate.postForObject("http://localhost:8081/branch", httpEntity, BranchDto.class);
-        return branchDto;
+        ResponseEntity<?> response = restTemplate.exchange("http://localhost:3300/branches/get/"+id,HttpMethod.GET,httpEntity, new ParameterizedTypeReference<>() {});
+        response.getBody();
+        if(response.getStatusCode().isSameCodeAs(HttpStatus.NOT_FOUND) || response.getStatusCode().isSameCodeAs(HttpStatus.INTERNAL_SERVER_ERROR)){
+            throw new RuntimeException("Couldnt get the branch object");
+        }
+
+        return modelMapper.map(response.getBody(),BranchDto.class);
     }
 
     public ResponseEntity<?> getAllAccountByBranch(Long branchId, String token) {
@@ -251,7 +270,15 @@ public class AccountService {
                             total = total.subtract(transaction.getAmount());
                         }
                         else if(transaction.getTransactionType() == TransactionType.DEPOSIT){
+                            total = total.add(transaction.getAmount());
+                        }
 
+                        else if(transaction.getTransactionType() == TransactionType.SEND){
+
+                            total = total.subtract(transaction.getAmount());
+                        }
+
+                        else if(transaction.getTransactionType() == TransactionType.RECEIVE){
                             total = total.add(transaction.getAmount());
                         }
                     }
@@ -269,8 +296,6 @@ public class AccountService {
             return new ResponseEntity<>("Error in getting list of accounts" + e, HttpStatus.BAD_REQUEST);
         }
     }
-
-
 
     public ResponseEntity<?> getLoansByBranch(Long branchId, String token) {
         try {
