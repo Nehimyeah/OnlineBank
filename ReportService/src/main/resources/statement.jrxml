@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SampleReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<!--    <parameter name="username" class="java.lang.String" isForPrompting="false"/>-->
+<!--    <field name="username" class="java.lang.String"/>-->
+    <parameter name="accountNumber" class="java.lang.String" isForPrompting="false"/>
+
+    <field name="createdDate" class="java.time.LocalDateTime"/>
+    <field name="info" class="java.lang.String"/>
+    <field name="previousBalance" class="java.math.BigDecimal"/>
+    <field name="amount" class="java.math.BigDecimal"/>
+    <field name="transactionType" class="java.lang.String"/>
+
+
+
+    <title>
+        <band height="50">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Bank Statement]]></text>
+            </staticText>
+<!--            <textField>-->
+<!--                <reportElement x="200" y="0" width="200" height="30"/>-->
+<!--                <textElement/>-->
+<!--                <textFieldExpression class="java.lang.String"><![CDATA[$P{username}]]></textFieldExpression>-->
+<!--            </textField>-->
+        </band>
+    </title>
+
+    <pageHeader>
+        <band height="60">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="15"/>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Username:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="75" y="0" width="425" height="15"/>
+
+                <textFieldExpression><![CDATA[$P{username}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="30" width="555" height="15"/>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[User Email:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="75" y="30" width="555" height="15"/>
+                <textFieldExpression><![CDATA[$P{email}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageHeader>
+
+
+    <columnHeader>
+        <band height="20">
+            <staticText>
+                <reportElement x="0" y="0" width="111" height="20"/>
+                <text><![CDATA[Date]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="111" y="0" width="111" height="20"/>
+                <text><![CDATA[Transaction Type]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="222" y="0" width="111" height="20"/>
+                <text><![CDATA[Previous Balance]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="333" y="0" width="111" height="20"/>
+                <text><![CDATA[Transaction Amount]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="444" y="0" width="111" height="20"/>
+                <text><![CDATA[Remark]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="111" height="20"/>
+                <textFieldExpression><![CDATA[$F{createdDate}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="111" y="0" width="111" height="20"/>
+                <textFieldExpression><![CDATA[$F{transactionType}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="222" y="0" width="111" height="20"/>
+                <textFieldExpression><![CDATA[$F{previousBalance}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="333" y="0" width="111" height="20"/>
+                <textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="444" y="0" width="111" height="20"/>
+                <textFieldExpression><![CDATA[$F{info}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+</jasperReport>
