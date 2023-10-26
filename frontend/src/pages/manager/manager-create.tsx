@@ -123,6 +123,7 @@ const CreateManager = () => {
                             )}
                         </div>
                         <div className="flex flex-col space-y-3">
+                            <label>Email</label>
                             <ClientInput
                                 placeholder="Email"
                                 reference={emailRef}
@@ -135,6 +136,7 @@ const CreateManager = () => {
                             )}
                         </div>
                         <div className="flex flex-col space-y-1">
+                            <label>Password</label>
                             <ClientInput
                                 type={"password"}
                                 placeholder="Password"
@@ -148,6 +150,7 @@ const CreateManager = () => {
                             )}
                         </div>
                         <div className="flex flex-col space-y-1">
+                            <label>Confirm Password</label>
                             <ClientInput
                                 type={"password"}
                                 placeholder="Confirm Password"
@@ -161,6 +164,7 @@ const CreateManager = () => {
                             )}
                         </div>
                         <div className="flex flex-col space-y-1">
+                            <label>Street Address 1</label>
                             <ClientInput
                                 placeholder="Street 1"
                                 reference={street1Ref}
@@ -173,6 +177,7 @@ const CreateManager = () => {
                             )}
                         </div>
                         <div className="flex flex-col space-y-1">
+                            <label>Street Address 2</label>
                             <ClientInput
                                 placeholder="Street 2"
                                 reference={street2Ref}
@@ -185,6 +190,7 @@ const CreateManager = () => {
                             )}
                         </div>
                         <div className="flex flex-col space-y-1">
+                            <label>City</label>
                             <ClientInput
                                 placeholder="City"
                                 reference={cityRef}
@@ -197,6 +203,7 @@ const CreateManager = () => {
                             )}
                         </div>
                         <div className="flex flex-col space-y-1">
+                            <label>State</label>
                             <ClientInput
                                 placeholder="State"
                                 reference={stateRef}
@@ -209,6 +216,7 @@ const CreateManager = () => {
                             )}
                         </div>
                         <div className="flex flex-col space-y-1">
+                            <label>Zip</label>
                             <ClientInput
                                 placeholder="zip"
                                 reference={zipcodeRef}

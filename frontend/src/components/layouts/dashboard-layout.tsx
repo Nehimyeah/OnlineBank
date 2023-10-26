@@ -27,7 +27,7 @@ const DashboardLayout = ({ children }: IAuthLayoutProps) => {
         CUSTOMER: ['accounts'],
         ADMIN: ['users', 'branches'],
         TELLER: ['accounts'],
-        MANAGER: ['users', 'accounts', "loans"]
+        MANAGER: ['accounts', "loans"]
     })
     const [loggedInUserRole, setLoggedInUserRole] = useState<'MANAGER' | 'TELLER' | 'CUSTOMER' | 'ADMIN'>('ADMIN')
     useEffect(() => {
