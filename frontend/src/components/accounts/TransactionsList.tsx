@@ -1,17 +1,37 @@
-import { Link } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {Transactions} from "../type/types";
+import Button from "../elements/button";
+import {axiosPrivateReport} from "../../service/axios.service";
+import {toast} from "react-toastify";
 const TransactionsList = (props:{transactions: Array<Transactions>, accountNumber: string | undefined} ) => {
 
+    const {id} = useParams();
+    const generateReport = () => {
+        try {
+            axiosPrivateReport.get(`/report/bank-statement/${id}`, {
+                responseType: 'arraybuffer'
+            }).then((res) => {
+                toast("Downloaded successfully")
+                let blob = new Blob([res.data], { type: 'application/pdf' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `Report-${id}.pdf`
+                link.click()
+            })
+        } catch (err) {
+            toast("Error while downloading report")
+            console.error(err);
+        }
+    }
 
     return (
         <>
             <div className="w-full h-screen bg-gray-100">
                 <div className=" mx-auto sm:px-6 lg:px-8">
                     <div className="flex flex-col">
-                        <div className="-mb-2 py-4 flex flex-wrap justify-between flex-grow">
-                            <div className="mb-4">
-                                <h1 className="text-3xl font-bolder leading-tight text-gray-900 mt-5">Transactions List of Account number: {props.accountNumber}</h1>
-                            </div>
+                        <div className="-mb-2 py-4 flex justify-between mt-5">
+                            <h1 className="text-3xl font-bolder leading-tight text-gray-900">Transactions List of Account number: {props.accountNumber}</h1>
+                            <Button onClick={generateReport} value="Generate report" className="p-2 h-12 w-60" />
                         </div>
                         <div className="-my-2 py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                             <div className="align-middle inline-block w-full shadow overflow-x-auto sm:rounded-lg border-b border-gray-200">
