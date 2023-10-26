@@ -58,6 +58,7 @@ public class JwtUtil {
                     .email(body.getSubject())
                     .firstName((String) body.get("firstName"))
                     .lastName((String) body.get("lastName"))
+                    .isActive(Boolean.valueOf((String) body.get("isActive")))
                     .role(Role.valueOf((String)body.get("role")))
                     .build();
         } catch (Exception e) {
