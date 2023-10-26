@@ -251,7 +251,15 @@ public class AccountService {
                             total = total.subtract(transaction.getAmount());
                         }
                         else if(transaction.getTransactionType() == TransactionType.DEPOSIT){
+                            total = total.add(transaction.getAmount());
+                        }
 
+                        else if(transaction.getTransactionType() == TransactionType.TRANSFERTO){
+
+                            total = total.subtract(transaction.getAmount());
+                        }
+
+                        else if(transaction.getTransactionType() == TransactionType.RECEIVEFROM){
                             total = total.add(transaction.getAmount());
                         }
                     }
@@ -269,8 +277,6 @@ public class AccountService {
             return new ResponseEntity<>("Error in getting list of accounts" + e, HttpStatus.BAD_REQUEST);
         }
     }
-
-
 
     public ResponseEntity<?> getLoansByBranch(Long branchId, String token) {
         try {
