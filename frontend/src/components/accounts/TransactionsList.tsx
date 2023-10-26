@@ -8,8 +8,15 @@ const TransactionsList = (props:{transactions: Array<Transactions>, accountNumbe
     const {id} = useParams();
     const generateReport = () => {
         try {
-            axiosPrivateReport.get(`/report/bank-statement/${id}`).then((res) => {
+            axiosPrivateReport.get(`/report/bank-statement/${id}`, {
+                responseType: 'arraybuffer'
+            }).then((res) => {
                 toast("Downloaded successfully")
+                let blob = new Blob([res.data], { type: 'application/pdf' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `Report-${id}.pdf`
+                link.click()
             })
         } catch (err) {
             toast("Error while downloading report")
