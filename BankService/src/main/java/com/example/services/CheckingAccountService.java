@@ -185,7 +185,7 @@ public class CheckingAccountService {
             fromAccountTransactionCreateRequest.setPreviousBalance(previousFromAccountBalance);
             fromAccountTransactionCreateRequest.setCurrentBalance(fromAccount.getBalance());
             fromAccountTransactionCreateRequest.setInfo("Money transfer from Account: " + fromAccount.getAccountNumber() + " to Account: " + toAccount.getAccountNumber());
-            fromAccountTransactionCreateRequest.setTransactionType(TransactionType.TRANSFERTO);
+            fromAccountTransactionCreateRequest.setTransactionType(TransactionType.SEND);
 
             ResponseModel<Transaction> fromAccountresponse = transactionService.save(fromAccountTransactionCreateRequest);
             if (!fromAccountresponse.getSuccess()) {
@@ -197,7 +197,7 @@ public class CheckingAccountService {
             toAccountTransactionCreateRequest.setPreviousBalance(previoustoAccountBalance);
             toAccountTransactionCreateRequest.setCurrentBalance(toAccount.getBalance());
             toAccountTransactionCreateRequest.setInfo("Money received from Account: " + fromAccount.getAccountNumber());
-            toAccountTransactionCreateRequest.setTransactionType(TransactionType.RECEIVEFROM);
+            toAccountTransactionCreateRequest.setTransactionType(TransactionType.RECEIVE);
 
             ResponseModel<Transaction> toAccountresponse = transactionService.save(toAccountTransactionCreateRequest);
             if (!toAccountresponse.getSuccess()) {

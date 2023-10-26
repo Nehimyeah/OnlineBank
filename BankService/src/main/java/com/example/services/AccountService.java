@@ -273,12 +273,12 @@ public class AccountService {
                             total = total.add(transaction.getAmount());
                         }
 
-                        else if(transaction.getTransactionType() == TransactionType.TRANSFERTO){
+                        else if(transaction.getTransactionType() == TransactionType.SEND){
 
                             total = total.subtract(transaction.getAmount());
                         }
 
-                        else if(transaction.getTransactionType() == TransactionType.RECEIVEFROM){
+                        else if(transaction.getTransactionType() == TransactionType.RECEIVE){
                             total = total.add(transaction.getAmount());
                         }
                     }
