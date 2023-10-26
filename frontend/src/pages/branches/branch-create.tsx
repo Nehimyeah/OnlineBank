@@ -11,15 +11,21 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {BranchDetails, UserDetails} from "../../components/type/types";
 import {branchSchema} from "../../components/mixins/userRelatedFunctions";
+import managersList from "../../components/managers/ManagersList";
 
 const CreateBranch = () => {
     const [optionUsers, setOptionUsers] = useState([])
+    const [optionManagers, setOptionManagers] = useState([])
 
     const fetchData = () => {
         try {
             axiosPrivate.get("/users/teams").then((res) => {
 
-                const tempUsers = res.data.map((u: UserDetails) => {
+                setOptionManagers(res.data);
+
+                const managers = res.data.filter((el:UserDetails) => el.role == 'MANAGER');
+
+                const tempUsers = managers.map((u: UserDetails) => {
                     return {
                         label: u.firstName + " " + u.lastName,
                         value: u.id
@@ -64,6 +70,14 @@ const CreateBranch = () => {
         setIsLoading(true);
 
         data.branchManagerId = selectedOption;
+
+        console.log(selectedOption, data.branchManagerId);
+        console.log(optionManagers);
+        const tempManager:UserDetails | undefined  = optionManagers.find((el:UserDetails) => el.id == selectedOption);
+        console.log(tempManager);
+        if (tempManager) {
+            data.branchManagerName = tempManager.firstName + " " + tempManager.lastName;
+        }
 
         try {
             await axiosPrivateBranch.post("/branches", data)
@@ -116,6 +130,7 @@ const CreateBranch = () => {
                     ""
                 )}
                 <div className="flex flex-col space-y-6">
+                    <label>Branch name</label>
                     <div className="flex flex-col space-y-3">
                         <ClientInput
                             placeholder="Branch name"
@@ -129,6 +144,7 @@ const CreateBranch = () => {
                         )}
                     </div>
                     <div className="flex flex-col space-y-3 custom-select">
+                        <label>Select manager</label>
                         <select
                             name="format" id="format"
                             className="round"
@@ -145,6 +161,7 @@ const CreateBranch = () => {
                         )}
                     </div>
                     <div className="flex flex-col space-y-1">
+                        <label>Address street 1</label>
                         <ClientInput
                             placeholder="Street 1"
                             reference={street1Ref}
@@ -157,6 +174,7 @@ const CreateBranch = () => {
                         )}
                     </div>
                     <div className="flex flex-col space-y-1">
+                        <label>Address street 2</label>
                         <ClientInput
                             placeholder="Street 2"
                             reference={street2Ref}
@@ -169,6 +187,7 @@ const CreateBranch = () => {
                         )}
                     </div>
                     <div className="flex flex-col space-y-1">
+                        <label>City name</label>
                         <ClientInput
                             placeholder="City"
                             reference={cityRef}
@@ -181,6 +200,7 @@ const CreateBranch = () => {
                         )}
                     </div>
                     <div className="flex flex-col space-y-1">
+                        <label>State</label>
                         <ClientInput
                             placeholder="State"
                             reference={stateRef}
@@ -193,6 +213,7 @@ const CreateBranch = () => {
                         )}
                     </div>
                     <div className="flex flex-col space-y-1">
+                        <label>Zipcode</label>
                         <ClientInput
                             placeholder="zip"
                             reference={zipcodeRef}
