@@ -19,6 +19,7 @@ import WelcomePage from "./pages/welcome";
 import AccountTransactions from "./pages/account/account-transactions";
 import {ToastContainer} from "react-toastify";
 import Loans from "./pages/loan/loans";
+import BranchAccounts from "./pages/branches/branch-accounts";
 
 function App() {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ function App() {
           <Route path="users" element={<HomePage />} />
           <Route path="users/create" element={<CreateManager />} />
           <Route path="branches" element={<BranchPage />} />
+          <Route path="branches/:id/accounts" element={<BranchAccounts />} />
           <Route path="branches/create" element={<CreateBranch />} />
           <Route path="accounts/:id/transactions" element={<AccountTransactions />} />
           <Route path="accounts" element={<AccountsList />} />
