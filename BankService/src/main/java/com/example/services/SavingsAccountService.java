@@ -38,7 +38,7 @@ public class SavingsAccountService {
             Account savingsAccount = new SavingsAccount();
 
             savingsAccount.setAccountNumber(Util.generateAccountNum());
-            savingsAccount.setAccountStatus(AccountStatus.PENDING);
+            savingsAccount.setAccountStatus(AccountStatus.ACTIVE);
             savingsAccount.setBalance(savingsAccount.getBalance()==null? BigDecimal.ZERO:savingsAccount.getBalance());
             if (accountRequest.getInterestRateId() != null) {
                 Optional<AnnualAPY> optionalAnnualAPY = apyRepository.findById(accountRequest.getInterestRateId());

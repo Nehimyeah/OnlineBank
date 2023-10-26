@@ -181,11 +181,13 @@ public class AccountService {
             //ACTIVE, PENDING, BLOCKED, NOT_ACTIVE
 
             if(statusRequest.getStatus().equalsIgnoreCase("ACTIVE")){
-                account.setAccountStatus(AccountStatus.ACTIVE);
+                account.setAccountStatus(AccountStatus.BLOCKED);
             } else if (statusRequest.getStatus().equalsIgnoreCase("BLOCKED")) {
+                account.setAccountStatus(AccountStatus.ACTIVE);
+            } else if (statusRequest.getStatus().equalsIgnoreCase("DISABLED")) {
                 account.setAccountStatus(AccountStatus.BLOCKED);
             } else if (statusRequest.getStatus().equalsIgnoreCase("NOT_ACTIVE")) {
-                account.setAccountStatus(AccountStatus.NOT_ACTIVE);
+                account.setAccountStatus(AccountStatus.ACTIVE);
             }
             accountRepository.save(account);
 

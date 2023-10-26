@@ -38,8 +38,8 @@ public class BranchServiceApplication implements CommandLineRunner{
                 .street1("1000 N 4th St")
                 .build();
         Branch branch = Branch.builder()
-                .branchManagerId(10L)
-                .branchManagerName("Henry Steinfeld")
+                .branchManagerId(3L)
+                .branchManagerName("Manager")
                 .branchName("Fairfield")
                 .address(address)
                 .build();

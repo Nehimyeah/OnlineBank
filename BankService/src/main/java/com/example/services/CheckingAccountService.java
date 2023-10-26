@@ -37,7 +37,7 @@ public class CheckingAccountService {
         try {
             Account checkingAccount = new CheckingAccount();
             checkingAccount.setAccountNumber(Util.generateAccountNum());
-            checkingAccount.setAccountStatus(AccountStatus.PENDING);
+            checkingAccount.setAccountStatus(AccountStatus.ACTIVE);
             checkingAccount.setBalance(checkingAccount.getBalance() == null ? BigDecimal.ZERO : checkingAccount.getBalance());
             checkingAccount.setUserId(userId);
             checkingAccount.setBranchId(accountRequest.getBranchId());
