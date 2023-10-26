@@ -97,6 +97,7 @@ const CreateManager = () => {
                 )}
                     <div className="flex flex-col space-y-6">
                         <div className="flex flex-col space-y-3">
+                            <label>First name</label>
                             <ClientInput
                                 placeholder="First name"
                                 reference={firstnameRef}
@@ -109,6 +110,7 @@ const CreateManager = () => {
                             )}
                         </div>
                         <div className="flex flex-col space-y-3">
+                            <label>Last name</label>
                             <ClientInput
                                 placeholder="Last name"
                                 reference={lastnameRef}

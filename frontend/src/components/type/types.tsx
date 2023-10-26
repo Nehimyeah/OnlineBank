@@ -17,6 +17,7 @@ export type UserDetails = {
 };
 
 export type BranchDetails = {
+    branchManagerName: string;
     branchId: number,
     branchName: string,
     branchManagerId: number | undefined,
