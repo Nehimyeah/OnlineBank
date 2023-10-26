@@ -3,9 +3,6 @@ package com.example.service;
 import com.example.dto.TokenData;
 import com.example.dto.UserCredentials;
 import com.example.model.User;
-import org.springframework.http.ResponseEntity;
-
-import java.util.Optional;
 
 public interface UserService {
     void save(User user);
@@ -25,5 +22,5 @@ public interface UserService {
     void enable(long userId, String token);
 
 
-    Iterable<User> getAllManagers();
+    Iterable<User> getAllTeam();
 }

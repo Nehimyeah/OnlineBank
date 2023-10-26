@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Iterable<User> getAllManagers() {
-        return repository.getAllByRole(Role.MANAGER);
+    public Iterable<User> getAllTeam() {
+        return repository.getAllByRoleNot(Role.CUSTOMER);
     }
 }
