@@ -56,7 +56,7 @@ public class AccountController {
     }
     @PutMapping("/status/{accountNumber}")
     public ResponseEntity<?> accountStatus(@PathVariable String accountNumber, @RequestBody StatusRequest statusRequest, @RequestHeader("Authorization") String token){
-        return accountService.approveAccount(accountNumber,statusRequest, token);
+        return accountService.accountStatus(accountNumber,statusRequest, token);
     }
 
     @GetMapping("/list/{id}")

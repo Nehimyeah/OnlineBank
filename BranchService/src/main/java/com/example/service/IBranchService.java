@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.domain.Branch;
 import com.example.dto.LoanResponseDto;
 import com.example.dto.ResponseAccountInfo;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -24,4 +25,5 @@ public interface IBranchService {
 
     LoanResponseDto getLoanAccountsByBranch(Long id, String token);
 
+    ResponseEntity<?> getBranchByManagerId(Long id, String token);
 }

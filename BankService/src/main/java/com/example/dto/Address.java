@@ -1,8 +1,6 @@
 package com.example.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,10 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BranchDto {
-    private Boolean status;
-    private Long branchId;
-    private String branchName;
-    private String branchManagerName;
-
+public class Address {
+    private int id;
+    private String city;
+    private String state;
+    private String street1;
+    private String street2;
+    private int zip;
 }

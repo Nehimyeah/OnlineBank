@@ -37,7 +37,7 @@ public class CheckingAccountService {
         try {
             Account checkingAccount = new CheckingAccount();
             checkingAccount.setAccountNumber(Util.generateAccountNum());
-            checkingAccount.setAccountStatus(AccountStatus.ACTIVE);
+            checkingAccount.setAccountStatus(AccountStatus.PENDING);
             checkingAccount.setBalance(checkingAccount.getBalance() == null ? BigDecimal.ZERO : checkingAccount.getBalance());
             checkingAccount.setUserId(userId);
             checkingAccount.setBranchId(accountRequest.getBranchId());
@@ -87,6 +87,7 @@ public class CheckingAccountService {
             transactionCreateRequest.setAmount(operationRequest.getAmount());
             transactionCreateRequest.setPreviousBalance(previousBalance);
             transactionCreateRequest.setCurrentBalance(checkingAccount.getBalance());
+            transactionCreateRequest.setInfo("$"+operationRequest.getAmount()+" withdrawn");
             transactionCreateRequest.setTransactionType(TransactionType.WITHDRAW);
 
             ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
@@ -120,6 +121,7 @@ public class CheckingAccountService {
             transactionCreateRequest.setAmount(operationRequest.getAmount());
             transactionCreateRequest.setPreviousBalance(previousBalance);
             transactionCreateRequest.setCurrentBalance(checkingAccount.getBalance());
+            transactionCreateRequest.setInfo("$"+operationRequest.getAmount() + " deposited");
             transactionCreateRequest.setTransactionType(TransactionType.DEPOSIT);
 
             ResponseModel<Transaction> response = transactionService.save(transactionCreateRequest);
@@ -137,7 +139,6 @@ public class CheckingAccountService {
 
     }
     public ResponseEntity<?> transferMoney(AccountTransferRequest accountTransferRequest) {
-        ResponseModel<Account> responseModel = new ResponseModel<>();
         try {
             Account fromAccount;
             Optional<Account> fromAccountOptional = accountRepository.findByAccountNumber(accountTransferRequest.getFromAccountNum());
@@ -151,8 +152,6 @@ public class CheckingAccountService {
             else if (!(String.valueOf(fromAccount.getAccountStatus()).equalsIgnoreCase("active"))){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sender account is not active");
             }
-
-
 
             Account toAccount;
             Optional<Account> toAccountOptional = accountRepository.findByAccountNumber(accountTransferRequest.getToAccountNum());
