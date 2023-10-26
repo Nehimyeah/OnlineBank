@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import {Account} from "../type/types";
+import {useSelector} from "react-redux";
+import {getUserRole} from "../../app/authSlice";
 const Accounts = (props:{accounts: Array<Account>} ) => {
-
+    let role = useSelector(getUserRole);
 
     return (
         <>
@@ -12,24 +14,28 @@ const Accounts = (props:{accounts: Array<Account>} ) => {
                             <div className="mb-4">
                                 <h1 className="text-3xl font-bolder leading-tight text-gray-900 mt-5">Accounts List</h1>
                             </div>
-                            <div className="flex flex-row-reverse items-center py-2 gap-2">
-                                <Link to={"/accounts/create"}
-                                      className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
-                                    Create Account
-                                </Link>
-                                <Link to={"/accounts/withdraw"}
-                                      className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
-                                    Withdraw
-                                </Link>
-                                <Link to={"/accounts/deposit"}
-                                      className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
-                                    Deposit
-                                </Link>
-                                <Link to={"/accounts/transfer"}
-                                      className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
-                                    Transfer
-                                </Link>
-                            </div>
+                            {(role === 'CUSTOMER') &&
+                                (
+                                    <div className="flex flex-row-reverse items-center py-2 gap-2">
+                                        <Link to={"/accounts/create"}
+                                              className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
+                                            Create Account
+                                        </Link>
+                                        <Link to={"/accounts/withdraw"}
+                                              className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
+                                            Withdraw
+                                        </Link>
+                                        <Link to={"/accounts/deposit"}
+                                              className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
+                                            Deposit
+                                        </Link>
+                                        <Link to={"/accounts/transfer"}
+                                              className="inline-block px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline">
+                                            Transfer
+                                        </Link>
+                                    </div>
+                                )
+                            }
                         </div>
                         <div className="-my-2 py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                             <div className="align-middle inline-block w-full shadow overflow-x-auto sm:rounded-lg border-b border-gray-200">
