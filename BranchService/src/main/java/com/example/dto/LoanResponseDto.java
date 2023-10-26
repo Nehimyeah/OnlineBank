@@ -6,17 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BankBranchItemDTO {
+public class LoanResponseDto {
 
-    private Long branchId;
-    private String accountNumber;
-    private String accountStatus;
-    private BigDecimal balance;
-    private Double interestRate;
-    private String accountType;
+
+    private BigDecimal total;
+    private List<LoanRequestDto> loanList;
 }

@@ -1,6 +1,7 @@
     package com.example.integration;
 
     import com.example.domain.Branch;
+    import com.example.dto.LoanResponseDto;
     import com.example.dto.ResponseAccountInfo;
     import lombok.RequiredArgsConstructor;
     import org.springframework.core.ParameterizedTypeReference;
@@ -41,4 +42,22 @@
             }
         }
 
+        public LoanResponseDto getAllLoansByBranch(Long id, String token){
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", token);
+
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+
+            String bankUrl = "http://localhost:8181/account/loan/" + id;
+
+            ResponseEntity<LoanResponseDto> response = restTemplate.exchange(
+                    bankUrl,
+                    HttpMethod.GET,
+                    entity,
+                    new ParameterizedTypeReference<>() {
+                    });
+
+           return response.getBody();
+        }
     }
