@@ -27,9 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Slf4j
@@ -251,27 +249,50 @@ public class AccountService {
     }
 
     public ResponseEntity<?> getAllAccountByBranch(Long branchId, String token) {
-
-        try{
+        try {
             User loggedInUser = Util.getPrincipal(token);
 
-            if(!Role.MANAGER.equals(loggedInUser.getRole()) && !Role.ADMIN.equals(loggedInUser.getRole())){
-
-                throw new RuntimeException("No sufficient access for this operation");
+            if (!Role.MANAGER.equals(loggedInUser.getRole()) && !Role.ADMIN.equals(loggedInUser.getRole())) {
+                return new ResponseEntity<>("No sufficient access for this operation", HttpStatus.FORBIDDEN);
             }
 
             List<Account> branchAccounts = accountRepository.findByBranchId(branchId);
 
             if (branchAccounts.isEmpty()) {
-                throw new RuntimeException("No accounts in the specified branch");
+                return new ResponseEntity<>("No accounts in the specified branch", HttpStatus.NOT_FOUND);
             } else {
+                BigDecimal total = BigDecimal.ZERO;
                 List<AccountResponse> list = convertToAccountResponseList(branchAccounts);
-                return ResponseEntity.ok(list);
 
+                for (Account account : branchAccounts) {
+                    for (Transaction transaction : account.getTransactions()) {
+                        if (transaction.getTransactionType() == TransactionType.WITHDRAW) {
+                            total = total.subtract(transaction.getAmount());
+                        }
+                        else if(transaction.getTransactionType() == TransactionType.DEPOSIT){
+                            total = total.add(transaction.getAmount());
+                        }
+
+                        else if(transaction.getTransactionType() == TransactionType.TRANSFERTO){
+
+                            total = total.subtract(transaction.getAmount());
+                        }
+
+                        else if(transaction.getTransactionType() == TransactionType.RECEIVEFROM){
+                            total = total.add(transaction.getAmount());
+                        }
+                    }
+                }
+
+                // Create a result object to store the total
+                Map<String, Object> result = new HashMap<>();
+                result.put("accountList", list);
+                result.put("total", total);
+
+                return ResponseEntity.ok(result);
             }
-        }
-        catch (Exception e) {
-            log.info("exception: " + e.getMessage());
+        } catch (Exception e) {
+            log.info("Exception: " + e.getMessage());
             return new ResponseEntity<>("Error in getting list of accounts" + e, HttpStatus.BAD_REQUEST);
         }
     }

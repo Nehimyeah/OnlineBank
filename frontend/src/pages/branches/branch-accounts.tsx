@@ -14,7 +14,8 @@ const BranchAccounts = () => {
             axiosPrivateBranch.get(`/branches/${id}/accounts`).then((res) => {
                 setBranches([]);
                 if (res.data) {
-                    setBranches(res.data);
+                    setBranches(res.data.accountList);
+                    setTotalBalance(res.data.total)
                 }
             })
         } catch (err) {
@@ -28,7 +29,7 @@ const BranchAccounts = () => {
 
     return (
         <DashboardLayout>
-            <Accounts accounts={accounts}/>
+            <Accounts accounts={accounts} totalBalance={totalBalance}/>
         </DashboardLayout>
     )
 }

@@ -17,11 +17,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseAccountInfo {
 
-    private Long branchId;
-    private String accountNumber;
-    private String accountStatus;
-    private BigDecimal balance;
-    private String accountType;
     private BigDecimal total;
+    private List<RequestAccountInfo> accountList;
 
 }

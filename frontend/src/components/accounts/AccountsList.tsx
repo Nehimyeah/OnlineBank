@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import {Account} from "../type/types";
 import {useSelector} from "react-redux";
 import {getUserRole} from "../../app/authSlice";
-const Accounts = (props:{accounts: Array<Account>} ) => {
+const Accounts = (props:{accounts: Array<Account>, totalBalance?: number} ) => {
     let role = useSelector(getUserRole);
 
     return (
@@ -91,12 +91,13 @@ const Accounts = (props:{accounts: Array<Account>} ) => {
                                                 </div>
                                             </td>
                                             <td>
-                                                <Link to={`/accounts/${account.accountNumber}/transactions`} className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline">View</Link>
+                                                <Link to={`/accounts/${account.accountNumber}/transactions`} className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline">Transactions</Link>
                                             </td>
                                         </tr>
                                     ))}
                                     </tbody>
                                 </table>
+                                <p className="m-2">Total balance: ${props.totalBalance}</p>
                             </div>
                         </div>
                     </div>

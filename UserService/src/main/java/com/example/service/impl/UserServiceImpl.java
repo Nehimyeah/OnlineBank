@@ -99,26 +99,38 @@ public class UserServiceImpl implements UserService {
     public void disable(long userId, String token) {
         User principal = getPrincipal(token);
         System.out.println(principal);
-        if (!principal.getRole().equals(Role.MANAGER))
-            throw new RuntimeException("No sufficient privilege for this operation");
-        User user = repository.findUserById(userId).orElseThrow(() -> new RuntimeException("Invalid User"));
-        user.disable();
-        repository.save(user);
+        if (principal.isActive()) {
+            if (principal.getRole().equals(Role.MANAGER) || principal.getRole().equals(Role.ADMIN)){
+                User user = repository.findUserById(userId).orElseThrow(() -> new RuntimeException("Invalid User"));
+                user.disable();
+                repository.save(user);
+            } else {
+                new RuntimeException("No sufficient privilege to perform the required action");
+            }
+        } else {
+            throw new RuntimeException("Inactive user cannot perform operation");
+        }
     }
 
     @Override
     public void enable(long userId, String token) {
         User principal = getPrincipal(token);
         System.out.println(principal);
-        if (!principal.getRole().equals(Role.MANAGER))
-            throw new RuntimeException("No sufficient privilege for this operation");
-        User user = repository.findUserById(userId).orElseThrow(() -> new RuntimeException("Invalid User"));
-        user.enable();
-        repository.save(user);
+        if (principal.isActive()) {
+            if (principal.getRole().equals(Role.MANAGER) || principal.getRole().equals(Role.ADMIN)){
+                User user = repository.findUserById(userId).orElseThrow(() -> new RuntimeException("Invalid User"));
+                user.enable();
+                repository.save(user);
+            } else {
+                new RuntimeException("No sufficient privilege to perform the required action");
+            }
+        } else {
+            throw new RuntimeException("Inactive user cannot perform operation");
+        }
     }
 
     @Override
-    public Iterable<User> getAllManagers() {
-        return repository.getAllByRole(Role.MANAGER);
+    public Iterable<User> getAllTeam() {
+        return repository.getAllByRoleNot(Role.CUSTOMER);
     }
 }

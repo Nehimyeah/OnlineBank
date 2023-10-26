@@ -18,7 +18,7 @@
 
         private final RestTemplate restTemplate;
 
-        public List<ResponseAccountInfo> getAccountNumber(Long id, String token) {
+        public ResponseAccountInfo getAccountNumber(Long id, String token) {
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", token);
@@ -27,19 +27,14 @@
 
             String bankUrl = "http://localhost:8181/account/list/" + id;
 
-            ResponseEntity<List<ResponseAccountInfo>> response = restTemplate.exchange(
+            ResponseEntity<ResponseAccountInfo> response = restTemplate.exchange(
                     bankUrl,
                     HttpMethod.GET,
                     entity,
                     new ParameterizedTypeReference<>() {
                     });
 
-            if (response.getStatusCode() == HttpStatus.OK) {
-                return response.getBody();
-            } else {
-                // Handle error or return an empty list
-                return Collections.emptyList();
-            }
+            return response.getBody();
         }
 
         public LoanResponseDto getAllLoansByBranch(Long id, String token){

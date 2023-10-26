@@ -17,6 +17,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/report")
 @RequiredArgsConstructor
+@CrossOrigin(
+        origins = "http://127.0.0.1:5173/",
+        allowedHeaders = "*", maxAge = 3600,
+        allowCredentials = "true"
+)
 public class ReportController {
     private final ReportService reportService;
 
