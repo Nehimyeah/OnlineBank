@@ -9,9 +9,11 @@ import com.example.dto.User;
 import com.example.entity.Account;
 import com.example.entity.LoanAccount;
 import com.example.entity.SavingsAccount;
+import com.example.entity.Transaction;
 import com.example.enums.AccountStatus;
 import com.example.enums.AccountType;
 import com.example.enums.Role;
+import com.example.enums.TransactionType;
 import com.example.repository.AccountRepository;
 import com.example.utils.Util;
 import lombok.RequiredArgsConstructor;
@@ -244,7 +246,6 @@ public class AccountService {
             if (branchAccounts.isEmpty()) {
                 throw new RuntimeException("No accounts in the specified branch");
             } else {
-
                 List<AccountResponse> list = convertToAccountResponseList(branchAccounts);
                 return ResponseEntity.ok(list);
 
@@ -256,26 +257,66 @@ public class AccountService {
         }
     }
 
-//    public ResponseEntity<?> getLoansByBranch(Long branchId, String token){
-//
-//        try{
-//            User loggedInUser = Util.getPrincipal(token);
-//
-//            if(!Role.MANAGER.equals(loggedInUser.getRole())){
-//
-//                throw new RuntimeException("No sufficient access for this operation");
-//            }
-//
-//            List<Account> branchAccounts = accountRepository.findByBranchId(branchId);
-//
-//            if (branchAccounts.isEmpty()) {
-//                throw new RuntimeException("No accounts in the specified branch");
-//            }
-//
-//            else{
-//
-//            }
-//
-//        }
+    public ResponseEntity<?> getLoansByBranch(Long branchId, String token) {
+        try {
+            User loggedInUser = Util.getPrincipal(token);
+
+            if (!Role.MANAGER.equals(loggedInUser.getRole())) {
+                return new ResponseEntity<>("No sufficient access for this operation", HttpStatus.FORBIDDEN);
+            }
+
+            List<Account> branchAccounts = accountRepository.findByBranchId(branchId);
+
+            if (branchAccounts.isEmpty()) {
+                return new ResponseEntity<>("No accounts in the specified branch", HttpStatus.NOT_FOUND);
+            }
+
+            BigDecimal total = BigDecimal.ZERO;
+            AccountDTO accountDTO = new AccountDTO();
+            List<AccountResponse> accountResponseList = new ArrayList<>();
+
+            for (Account account : branchAccounts) {
+                if (account instanceof LoanAccount) {
+                    AccountResponse accountResponse = getAccountResponse(account);
+
+                    for (Transaction transactionService : account.getTransactions()) {
+
+                        if(transactionService.getTransactionType().equals(TransactionType.WITHDRAW)){
+
+                            total = total.subtract(transactionService.getAmount());
+                        }
+
+                        else if(transactionService.getTransactionType().equals(TransactionType.DEPOSIT)){
+                            total = total.add(transactionService.getAmount());
+                        }
+
+                    }
+
+                    accountResponseList.add(accountResponse);
+                }
+            }
+
+            accountDTO.setLoanList(accountResponseList);
+            accountDTO.setTotal(total);
+
+            return ResponseEntity.ok(accountDTO);
+
+        } catch (Exception e) {
+            log.error("Exception: " + e.getMessage());
+            return new ResponseEntity<>("Error in getting list of accounts", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private static AccountResponse getAccountResponse(Account account) {
+        AccountResponse accountResponse = new AccountResponse();
+        accountResponse.setAccountType("loan");
+        accountResponse.setBranchId(account.getBranchId());
+        accountResponse.setAccountNumber(account.getAccountNumber());
+        accountResponse.setInterestRate(((LoanAccount) account).getAnnualRate());
+        accountResponse.setBalance(account.getBalance());
+        accountResponse.setAccountStatus(String.valueOf(account.getAccountStatus()));
+        return accountResponse;
+    }
+
 
 }

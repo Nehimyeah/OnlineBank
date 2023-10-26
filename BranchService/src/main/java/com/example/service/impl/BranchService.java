@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.example.domain.Branch;
+import com.example.dto.LoanResponseDto;
 import com.example.dto.RequestAccountInfo;
 import com.example.dto.ResponseAccountInfo;
 import com.example.dto.User;
@@ -90,8 +91,23 @@ public class BranchService implements IBranchService {
         Branch branchInfo = branch.get();
 
         List<ResponseAccountInfo> responseAccountInfo = bankIntegration.getAccountNumber(branchInfo.getBranchId(), token);
-//        responseAccountInfo.setBranchName(branchInfo.getBranchName());
         return responseAccountInfo;
+    }
+
+    @Override
+    public LoanResponseDto getLoanAccountsByBranch(Long id, String token) {
+
+        Optional<Branch> branch = branchRepository.findById(id);
+
+        if(branch.isEmpty()){
+
+            throw new RuntimeException("Branch does not exist");
+        }
+
+        Branch branchInfo = branch.get();
+        LoanResponseDto responseAccountInfo = bankIntegration.getAllLoansByBranch(branchInfo.getBranchId(), token);
+        return responseAccountInfo;
+
     }
 
     private void authenticate(String bearerToken) {

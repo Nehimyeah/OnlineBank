@@ -64,4 +64,10 @@ public class BranchController {
 
         return ResponseEntity.ok(branchService.getAllAccountsByBranch(id, token));
     }
+
+    @GetMapping("/{id}/loan")
+    public ResponseEntity<?> getAllLoanAccounts(@PathVariable Long id, @RequestHeader("Authorization") String token){
+
+        return ResponseEntity.ok(branchService.getLoanAccountsByBranch(id, token));
+    }
 }
