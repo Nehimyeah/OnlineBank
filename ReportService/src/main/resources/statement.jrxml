@@ -30,29 +30,29 @@
     </title>
 
     <pageHeader>
-        <band height="60">
+        <band height="30">
+<!--            <staticText>-->
+<!--                <reportElement x="0" y="0" width="555" height="15"/>-->
+<!--                <textElement>-->
+<!--                    <font isBold="true"/>-->
+<!--                </textElement>-->
+<!--                <text><![CDATA[Username:]]></text>-->
+<!--            </staticText>-->
+<!--            <textField>-->
+<!--                <reportElement x="75" y="0" width="425" height="15"/>-->
+
+<!--                <textFieldExpression><![CDATA[$P{username}]]></textFieldExpression>-->
+<!--            </textField>-->
             <staticText>
                 <reportElement x="0" y="0" width="555" height="15"/>
                 <textElement>
                     <font isBold="true"/>
                 </textElement>
-                <text><![CDATA[Username:]]></text>
+                <text><![CDATA[User Account:]]></text>
             </staticText>
             <textField>
-                <reportElement x="75" y="0" width="425" height="15"/>
-
-                <textFieldExpression><![CDATA[$P{username}]]></textFieldExpression>
-            </textField>
-            <staticText>
-                <reportElement x="0" y="30" width="555" height="15"/>
-                <textElement>
-                    <font isBold="true"/>
-                </textElement>
-                <text><![CDATA[User Email:]]></text>
-            </staticText>
-            <textField>
-                <reportElement x="75" y="30" width="555" height="15"/>
-                <textFieldExpression><![CDATA[$P{email}]]></textFieldExpression>
+                <reportElement x="75" y="0" width="555" height="15"/>
+                <textFieldExpression><![CDATA[$P{accountNumber}]]></textFieldExpression>
             </textField>
         </band>
     </pageHeader>
