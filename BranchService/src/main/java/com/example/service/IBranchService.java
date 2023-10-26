@@ -19,5 +19,5 @@ public interface IBranchService {
 
     void saveInternal(Branch branch);
 
-    ResponseAccountInfo getAllAccountsByBranch(Long id, String token);
+    List<ResponseAccountInfo> getAllAccountsByBranch(Long id, String token);
 }

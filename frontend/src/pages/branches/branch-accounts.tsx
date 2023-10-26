@@ -1,15 +1,21 @@
 import DashboardLayout from "../../components/layouts/dashboard-layout";
 import {useEffect, useState} from "react";
-import {axiosPrivateBranch as axiosPrivate} from "../../service/axios.service";
-
+import {axiosPrivateBank, axiosPrivateBranch} from "../../service/axios.service";
+import Accounts from "../../components/accounts/AccountsList";
+import {useParams} from "react-router-dom";
 const BranchAccounts = () => {
 
-    const [accounts, setAccounts] = useState([]);
+    const [accounts, setBranches] = useState([]);
+    const [totalBalance, setTotalBalance] = useState(0);
+    const {id} = useParams();
 
     const fetchData = () => {
         try {
-            axiosPrivate.get("branches/1/accounts").then((res) => {
-                setAccounts(res.data);
+            axiosPrivateBranch.get(`/branches/${id}/accounts`).then((res) => {
+                setBranches([]);
+                if (res.data) {
+                    setBranches(res.data);
+                }
             })
         } catch (err) {
             console.error(err);
@@ -19,12 +25,10 @@ const BranchAccounts = () => {
     useEffect(() => {
         fetchData()
     }, []);
-    
+
     return (
         <DashboardLayout>
-            <div>
-                hello
-            </div>
+            <Accounts accounts={accounts}/>
         </DashboardLayout>
     )
 }

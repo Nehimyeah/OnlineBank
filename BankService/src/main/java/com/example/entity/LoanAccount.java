@@ -9,5 +9,4 @@ import lombok.Setter;
 @Setter
 public class LoanAccount extends Account{
     private Double annualRate;
-
 }
