@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import {Account} from "../type/types";
 import {useSelector} from "react-redux";
 import {getUserRole} from "../../app/authSlice";
-const Accounts = (props:{accounts: Array<Account>, totalBalance?: number} ) => {
+import Button from "../elements/button";
+const Accounts = (props:{accounts: Array<Account>, onStatusChange: any, totalBalance?: number} ) => {
     let role = useSelector(getUserRole);
+    console.log(props)
 
     return (
         <>
@@ -56,11 +58,13 @@ const Accounts = (props:{accounts: Array<Account>, totalBalance?: number} ) => {
                                         </th>
                                         <th className="px-6 py-3 text-left font-medium">
                                         </th>
+                                        <th className="px-6 py-3 text-left font-medium">
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody className="bg-white">
                                     {props.accounts.map((account) => (
-                                        <tr>
+                                        <tr key={account.accountNumber}>
                                             <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                                 <div className="text-sm leading-5 text-gray-900">
                                                     {account.accountNumber}
@@ -89,6 +93,9 @@ const Accounts = (props:{accounts: Array<Account>, totalBalance?: number} ) => {
                                                 <div className="text-sm leading-5 text-gray-900">
                                                     $ {account.balance}
                                                 </div>
+                                            </td>
+                                            <td>
+                                                <button onClick={() => props.onStatusChange(account.accountNumber, account.accountStatus)} className="text-indigo-600 cursor-pointer hover:text-indigo-900 focus:outline-none focus:underline">{account.accountStatus === 'ACTIVE' ? 'Disable' : 'Enable'}</button>
                                             </td>
                                             <td>
                                                 <Link to={`/accounts/${account.accountNumber}/transactions`} className="text-indigo-600 hover:text-indigo-900 focus:outline-none focus:underline">Transactions</Link>

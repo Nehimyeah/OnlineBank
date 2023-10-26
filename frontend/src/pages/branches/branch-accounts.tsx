@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {axiosPrivateBank, axiosPrivateBranch} from "../../service/axios.service";
 import Accounts from "../../components/accounts/AccountsList";
 import {useParams} from "react-router-dom";
+import {toast} from "react-toastify";
 const BranchAccounts = () => {
 
     const [accounts, setBranches] = useState([]);
@@ -23,13 +24,27 @@ const BranchAccounts = () => {
         }
     }
 
+    const toggleAccountStatus = async (accountNumber:string, status: string):Promise<void> => {
+        console.log("here")
+        try {
+            axiosPrivateBank.put(`/account/status/${accountNumber}`, {
+                status: status
+            }).then((res) => {
+                fetchData();
+            })
+        } catch (err) {
+            console.error(err);
+            toast("Error while changing status")
+        }
+    }
+
     useEffect(() => {
         fetchData()
     }, []);
 
     return (
         <DashboardLayout>
-            <Accounts accounts={accounts} totalBalance={totalBalance}/>
+            <Accounts onStatusChange={toggleAccountStatus} accounts={accounts} totalBalance={totalBalance}/>
         </DashboardLayout>
     )
 }
